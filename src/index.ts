@@ -1,4 +1,7 @@
 import VueCompositionAPI from '@vue/composition-api';
+import Chat from './Chat';
+import Stream from './Stream';
+
 import type { VueConstructor } from 'vue';
 
 
@@ -7,6 +10,8 @@ function install (Vue: VueConstructor<Vue>) {
   if (install.installed) return;
   install.installed = true;
   Vue.use(VueCompositionAPI);
+  Vue.component('FChat', Chat);
+  Vue.component('FStream', Stream);
 }
 
 let GlobalVue;
