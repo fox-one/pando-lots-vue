@@ -12,7 +12,7 @@ setConsoleOptions({
   panelExclude: []
 });
 withOptions({
-  name: 'community-vue'
+  name: 'pando-lots-vue'
 });
 
 const req = require.context('../src/', true, /.stories.(ts|js)$/);

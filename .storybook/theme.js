@@ -2,7 +2,7 @@ import { create } from '@storybook/theming';
 
 export default create({
   base: 'light',
-  brandTitle: 'community-vue',
+  brandTitle: 'pando-lots-vue',
   // brandUrl: '',
   // brandImage: ''
 });

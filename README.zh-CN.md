@@ -1,22 +1,22 @@
-# community-vue
+# pando-lots-vue
 
 [English](./README.md) | 简体中文
 
-[示例](https://fox-one.github.io/community-vue/)
+[示例](https://fox-one.github.io/pando-lots-vue/)
 
 ## 快速开始
 ### 安装
 ```shell
-npm i -S @foxone/community-vue
+npm i -S @foxone/pando-lots-vue
 # 或者
-yarn add @foxone/community-vue
+yarn add @foxone/pando-lots-vue
 # 或者
-pnpm i -S @foxone/community-vue
+pnpm i -S @foxone/pando-lots-vue
 ```
 
 ### 使用
 ```js
-import UI from '@foxone/community-vue';
+import UI from '@foxone/pando-lots-vue';
 ```
 
 ## 开发

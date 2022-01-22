@@ -8,7 +8,7 @@ const Configuration = {
   rules: {
     'type-enum': [2, 'always', [
       '[OMNI-DOOR]',
-      '[COMMUNITY-VUE]',
+      '[PANDO-LOTS-VUE]',
       'feat',
       'feature',
       'fix',
