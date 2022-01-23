@@ -68,6 +68,12 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 /**
+  * vue-class-component v7.2.6
+  * (c) 2015-present Evan You
+  * @license MIT
+  */
+
+/**
  * Prism: Lightweight, robust, elegant syntax highlighting
  *
  * @license MIT <https://opensource.org/licenses/MIT>
