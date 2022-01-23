@@ -6,6 +6,9 @@ on:
 
     paths:
       - 'src/**'
+      - '*.md'
+      - '**/*.md'
+      - '.storybook/**'
 
 jobs:
   build-deploy:

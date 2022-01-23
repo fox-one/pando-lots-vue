@@ -25,8 +25,21 @@ module.exports = {
       },
       
       {
-        test: /.(css|scss|sass)$/,
+        test: /.(css|scss)$/,
         use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+
+      {
+        test: /.sass$/,
+        use: ['style-loader', 'css-loader', {
+          loader: 'sass-loader',
+          options: {
+            implementation: require('sass'),
+            sassOptions: {
+              indentedSyntax: true
+            },
+          }
+        }]
       }
 
     ],
