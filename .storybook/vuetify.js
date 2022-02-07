@@ -30,13 +30,11 @@ import Vuetify, {
   VTextarea
 } from 'vuetify/lib';
 import Uikit from '@foxone/uikit';
+import UikitLang from '@foxone/uikit/src/locales';
 
 import zh from 'vuetify/es5/locale/zh-Hans';
 import en from 'vuetify/es5/locale/en';
 import ja from 'vuetify/es5/locale/ja';
-import {
-  en as enUikit, ja as jaUikit, zh as zhUikit
-} from '@foxone/uikit/src/locales';
 
 Vue.use(Vuetify, {
   components: {
@@ -146,15 +144,15 @@ export default function () {
       locales: {
         zh: {
           ...zh,
-          ...zhUikit
+          ...UikitLang.zh
         },
         en: {
           ...en,
-          ...enUikit
+          ...UikitLang.en
         },
         ja: {
           ...ja,
-          ...jaUikit
+          ...UikitLang.ja
         },
       },
     },
