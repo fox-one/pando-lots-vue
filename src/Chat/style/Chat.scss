@@ -1,4 +1,6 @@
-.prefix-chat {
+@import '../../styles/variable.scss';
+
+.#{$prefix}-chat {
   display: block;
   color: green;
 }

@@ -1,7 +1,7 @@
 <template>
-  <v-layout :class="classes()">
-    {{ members }}
-  </v-layout>
+  <div :class="classes()">
+    <slot name="default" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -10,27 +10,22 @@ import {
   onMounted
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
-import { VLayout } from 'vuetify/lib';
-import { $t } from '@locale/index';
 
 export default defineComponent({
-  name: 'EntryCard',
-  components: {
-    VLayout,
-  },
+  name: 'EntryButton',
   props: {
     prefixCls: {
       type: String,
-      default: 'entrycard'
+      default: 'entrybutton'
     }
   },
   setup(props) {
     const classes = classnames(props.prefixCls);
     onMounted(() => {
-      console.info('EntryCard mounted!');
+      console.info('EntryButton mounted!');
     });
 
-    return { classes, members: `156 ${$t('members')}` };
+    return { classes };
   }
 });
 </script>

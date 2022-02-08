@@ -15,4 +15,4 @@ export const classnames = (_prefix_: string) => (_prefix?: string) => (
   );
 };
 
-export default classnames('prefix');
+export default classnames('pando-lots');

@@ -48,6 +48,8 @@ module.exports = {
   mode: 'development',
   resolve: {
     alias: {
+      '@assets': path.resolve(__dirname, '../src/assets'),
+      '@locale': path.resolve(__dirname, '../src/locale'),
       '@utils': path.resolve(__dirname, '../src/utils')
     },
     extensions: [".ts", ".tsx", ".js", ".jsx", ".md", ".scss", ".css", ".sass"]

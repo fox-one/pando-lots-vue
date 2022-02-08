@@ -1,4 +1,6 @@
-.prefix-entrycard {
+@import '../../styles/variable.scss';
+
+.#{$prefix}-entrycard {
   display: block;
-  color: green;
+  color: var(--v-greyscale_3-base);
 }
