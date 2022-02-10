@@ -1,6 +1,13 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-entrycard {
+  width: 320px;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--v-greyscale_5-base);
+  }
+
   &-chat {
     background-image: url(../../assets/images/svg/chat.svg);
   }

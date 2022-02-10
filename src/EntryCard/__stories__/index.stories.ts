@@ -21,5 +21,5 @@ storiesOf('EntryCard', module)
     components: {
       EntryCard
     },
-    template: `<EntryCard>{{'Hello EntryCard'}}</EntryCard>`
+    template: `<entry-card :members="{ total: 3233 }" />`
   }));

@@ -1,11 +1,12 @@
 <template>
-  <v-layout :class="classes()" row align-center>
+  <v-layout :class="classes(void 0, 'pa-4')" row align-center>
     <div :class="[classes('left', 'mr-4'), classes(type)].join(' ')" :style="`backgroundColor: ${themeColor};`" />
     <v-layout column align-start>
       <h3 :class="classes('title')">{{ title }}</h3>
       <div :class="classes('member', 'mt-3')">
         <v-avatar
           v-for="(url, index) in avatars"
+          v-show="index < 3"
           :key="index"
           :class="classes('member-avatar', index === 0 ? '' : 'ml-n4')"
           size="36"
@@ -28,6 +29,7 @@ import {
 import classnames from '@utils/classnames';
 import { VAvatar, VLayout, VImg } from 'vuetify/lib';
 import { $t } from '@locale/index';
+import { toThousandSeparator } from '@utils/number';
 
 export default defineComponent({
   name: 'EntryCard',
@@ -60,7 +62,7 @@ export default defineComponent({
     },
     type: {
       type: String,
-      default: 'chat',
+      default: 'stream',
     },
     prefixCls: {
       type: String,
@@ -76,8 +78,12 @@ export default defineComponent({
     onMounted(() => {
       console.info('EntryCard mounted!');
     });
+    const avatars = members.avatars || [];
+    while(avatars.length < 3) {
+      avatars.push('');
+    }
 
-    return { classes, memberTxt: `${members.total} ${$t('members')}`, avatars: members.avatars };
+    return { classes, memberTxt: `${toThousandSeparator(members.total)} ${$t('members')}`, avatars };
   }
 });
 </script>

@@ -21,5 +21,5 @@ storiesOf('EntryButton', module)
     components: {
       EntryButton
     },
-    template: `<EntryButton>{{'Hello EntryButton'}}</EntryButton>`
+    template: `<entry-button type='stream' :members="{ total: 2234 }" />`
   }));
