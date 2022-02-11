@@ -1,5 +1,5 @@
 <template>
-  <v-layout :class="classes(void 0, 'pa-4')" row align-center>
+  <v-layout :class="classes(void 0, 'pa-4')" row align-center @click="$emit('click')">
     <div :class="[classes('left', 'mr-4'), classes(type)].join(' ')" :style="`backgroundColor: ${themeColor};`" />
     <v-layout column align-start>
       <h3 :class="classes('title')">{{ title }}</h3>
@@ -62,7 +62,7 @@ export default defineComponent({
     },
     type: {
       type: String,
-      default: 'stream',
+      default: 'chat',
     },
     prefixCls: {
       type: String,

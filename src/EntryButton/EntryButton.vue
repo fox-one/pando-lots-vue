@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-center :class="classes(void 0, 'pa-3')">
+  <v-layout align-center :class="classes(void 0, 'pa-3')" @click="$emit('click')">
     <v-avatar
       v-for="(url, index) in avatars"
       v-show="index < 3"

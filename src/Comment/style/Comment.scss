@@ -1,0 +1,6 @@
+@import '../../styles/variable.scss';
+
+.#{$prefix}-comment {
+  display: block;
+  color: green;
+}

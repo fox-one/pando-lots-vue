@@ -1,0 +1,17 @@
+@import '../../styles/variable.scss';
+
+.#{$prefix}-wrapper {
+  &-pc {
+    &-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 100vw;
+      .v-menu__content {
+        left: auto !important;
+        right: 32px !important;
+      }
+    }
+  }
+}
