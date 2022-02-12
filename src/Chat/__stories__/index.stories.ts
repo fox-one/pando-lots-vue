@@ -17,7 +17,7 @@ storiesOf('Chat', module)
       defaultViewport: 'iphone6'
     }
   })
-  .add('with text', () => ({
+  .add('basic usage', () => ({
     components: {
       Chat
     },

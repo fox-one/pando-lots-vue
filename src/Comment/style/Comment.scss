@@ -1,6 +1,31 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-comment {
-  display: block;
-  color: green;
+  color: #000000;
+  &-input {
+    .v-input__slot {
+      margin: 0;
+      padding: 0 16px !important;
+      border-radius: 8px;
+      background-color: #F5F5F5 !important;
+      input {
+        font-weight: 500;
+        font-size: 16px;
+        &::placeholder {
+          color: #CCCCCC;
+        }
+      }
+    }
+    .v-text-field__details {
+      display: none;
+    }
+  }
+  &-btn {
+    width: 51px !important;
+    height: 51px !important;
+    background-color: #000000;
+    border-radius: 8px;
+    color: #FFFFFF;
+    cursor: pointer;
+  }
 }

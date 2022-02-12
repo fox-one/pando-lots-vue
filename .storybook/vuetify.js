@@ -76,11 +76,6 @@ export default function () {
   return new Vuetify({
     icons: {
       iconfont: "mdiSvg",
-      values: {
-        iconNavMe: {
-          component: "icon-nav-me",
-        },
-      },
     },
     theme: {
       dark: false,

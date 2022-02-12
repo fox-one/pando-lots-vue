@@ -17,9 +17,9 @@ storiesOf('Comment', module)
       defaultViewport: 'iphone6'
     }
   })
-  .add('with text', () => ({
+  .add('basic usage', () => ({
     components: {
       Comment
     },
-    template: `<Comment>{{'Hello Comment'}}</Comment>`
+    template: `<comment name='JonyChen95' />`
   }));
