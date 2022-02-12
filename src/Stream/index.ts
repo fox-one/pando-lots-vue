@@ -1,4 +1,4 @@
-import Stream from './Stream';
+import Stream from './Stream.vue';
 import type { defineComponent } from '@vue/composition-api';
 import type { VueConstructor } from 'vue';
 

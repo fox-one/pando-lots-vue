@@ -1,6 +1,12 @@
 <template>
   <div :class="classes()">
-    <slot name="default" />
+    <f-scroll
+      :pulldown="false"
+      :pullup="false"
+      :height="height"
+    >
+      <slot name="default" />
+    </f-scroll>
   </div>
 </template>
 
@@ -10,9 +16,14 @@ import {
   onMounted
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
+import { scrollWrapperHeight } from '@foxone/vue-scroll';
+import FScroll from '@foxone/vue-scroll/es/Scroll';
 
 export default defineComponent({
   name: 'Chat',
+  components: {
+    FScroll
+  },
   props: {
     prefixCls: {
       type: String,
@@ -26,6 +37,11 @@ export default defineComponent({
     });
 
     return { classes };
+  },
+  computed: {
+    height() {
+      return scrollWrapperHeight('50vh');
+    }
   }
 });
 </script>
