@@ -1,17 +1,56 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-wrapper {
+  &-mobile {
+    position: relative;
+    &-close {
+      position: absolute;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background-color: #F5F5F5;
+      top: 24px;
+      right: 24px;
+    }
+    .v-dialog {
+      position: relative;
+      padding-bottom: constant(safe-area-inset-bottom);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .v-bottom-sheet.v-dialog {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    .v-card.v-sheet {
+      border-radius: 0;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+  }
   &-pc {
-    &-menu {
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100vh;
-      width: 100vw;
-      .v-menu__content {
-        left: auto !important;
-        right: 32px !important;
-      }
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100vw;
+    &-close {
+      position: absolute;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background-color: #F5F5F5;
+      top: 24px;
+      right: 24px;
+    }
+    .v-menu__content {
+      border-radius: 0;
+      left: auto !important;
+      right: 32px !important;
+    }
+    .v-card.v-sheet {
+      border-radius: 0;
     }
   }
 }

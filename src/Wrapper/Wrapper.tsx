@@ -3,7 +3,13 @@ import {
   onMounted,
   ref
 } from '@vue/composition-api';
-import { VMenu, VBottomSheet } from 'vuetify/lib'
+import {
+  VMenu,
+  VBottomSheet,
+  VCard,
+  VCardText
+} from 'vuetify/lib'
+import { FIconClose4P } from "@foxone/icons";
 import classnames from '@utils/classnames';
 import { isMobile } from '@utils/ua';
 /* import types */
@@ -18,17 +24,21 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const pcDOM = ref(null);
+    const wapperPC = ref(null);
+    const wapperMobile = ref(null);
     const isShow = ref(false);
     const classes = classnames(props.prefixCls);
     onMounted(() => {
       console.info('Wrapper mounted!');
     });
-    const handleMenuClick = () => {
+    const handleActivatorClick = () => {
       isShow.value = !isShow.value;
     }
-
-    return { classes, pcDOM, isShow, handleMenuClick };
+    const handleClose = () => {
+      isShow.value = false;
+    }
+    
+    return { classes, wapperPC, wapperMobile, isShow, handleActivatorClick, handleClose };
   },
   render(h: CreateElement): VNode {
     const content = this.$slots.default;
@@ -36,27 +46,47 @@ export default defineComponent({
       activator: this.$scopedSlots.activator
     };
     return (
-      isMobile
-      ? <VBottomSheet
-        class={this.classes('mobile')}
-        scopedSlots={scopedSlots}
-      >
-        { content }
-      </VBottomSheet>
-      : <div class={this.classes('pc')}>
-        <div class={this.classes('pc-menu')} ref='pcDOM'>
-          <VMenu
-            vModel={this.isShow}
-            absoulte={true}
-            attach={this.pcDOM}
-            positionY={32}
-          >
-            { content }
-          </VMenu>
-        </div>
+      <div class={this.classes()}>
+        {
+        isMobile
+          ? <div class={this.classes('mobile')} ref='wapperMobile'>
+            <VBottomSheet
+              vModel={this.isShow}
+              overlayColor="#000000"
+              overlayOpacity={0.8}
+              attach={this.wapperMobile}
+            >
+              <VCard class={this.classes('mobile-content')}>
+                <i class={this.classes('mobile-close', 'd-flex align-center justify-center')} vOn:click={this.handleClose}>
+                  <FIconClose4P />
+                </i>
+                <VCardText>
+                  { content }
+                </VCardText>
+              </VCard>
+            </VBottomSheet>
+          </div>
+          : <div class={this.classes('pc')} ref='wapperPC'>
+            <VMenu
+              vModel={this.isShow}
+              absoulte={true}
+              attach={this.wapperPC}
+              positionY={32}
+            >
+              <VCard class={this.classes('pc-content')}>
+                <i class={this.classes('pc-close', 'd-flex align-center justify-center')} vOn:click={this.handleClose}>
+                  <FIconClose4P />
+                </i>
+                <VCardText>
+                  { content }
+                </VCardText>
+              </VCard>
+            </VMenu>
+          </div>
+        }
         { scopedSlots.activator?.({
           on: {
-            click: this.handleMenuClick,
+            click: this.handleActivatorClick,
             value: this.isShow
           }
         }) }
