@@ -40,6 +40,7 @@
   "dependencies": {
     "@foxone/vue-scroll": "~0.1.3",
     "classnames": "~2.2.6",
+    "dayjs": "~1.10.7",
     "peeler-js": "^0.4.2",
     "xgplayer": "~2.31.4",
     "xgplayer-hls.js": "~2.6.1",

@@ -1,6 +1,53 @@
 @import '../../styles/variable.scss';
 
-.#{$prefix}-chat {
-  display: block;
-  color: green;
+.#{$prefix}-chat-item {
+  &-avatar-wrapper {
+    position: relative;
+  }
+
+  &-avatar {
+    background-color: #F5F5F5 !important;
+    border-radius: 50%;
+  }
+
+  &-avatar-icon {
+    position: absolute;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    bottom: 0;
+    right: 0;
+    background: url(../../assets/images/png/mixin.png) no-repeat right bottom / 16px;
+    &-fennec {
+      background-image: url(../../assets/images/png/fennec.png);
+    }
+  }
+
+  &-content {
+    display: inline-block;
+    background-color: #F5F5F5;
+    border-radius: 8px;
+  }
+
+  &-name {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 26vw;
+    font-weight: 500;
+    font-size: 12px;
+    color: #8D8D8D;
+  }
+
+  &-time {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 15px;
+    font-weight: 500;
+    font-size: 12px;
+    color: #CCCCCC;
+  }
 }

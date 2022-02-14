@@ -1,0 +1,6 @@
+@import '../../styles/variable.scss';
+
+.#{$prefix}-hellomodel {
+  display: block;
+  color: green;
+}
