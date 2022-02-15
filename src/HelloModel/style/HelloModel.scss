@@ -1,6 +1,36 @@
 @import '../../styles/variable.scss';
 
-.#{$prefix}-hellomodel {
-  display: block;
-  color: green;
+.#{$prefix}-hello-model {
+  height: 100%;
+  font-weight: 500;
+  font-size: 14px;
+  &-title {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  &-desc {
+    font-size: 14px;
+    text-align: left;
+    color: #8D8D8D;
+  }
+
+  &-rule {
+    text-align: left;
+    background: url(../../assets/images/svg/warning.svg) no-repeat left top / 16px;
+  }
+
+  &-btn {
+    height: 56px;
+    line-height: 56px;
+    width: 164px;
+    text-align: center;
+    background-color: #000000;
+    border-radius: 100px;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
 }

@@ -1,6 +1,5 @@
 import {
   defineComponent,
-  onMounted,
   ref
 } from '@vue/composition-api';
 import {
@@ -17,20 +16,11 @@ import type { CreateElement, VNode } from 'vue';
 
 export default defineComponent({
   name: 'Wrapper',
-  props: {
-    prefixCls: {
-      type: String,
-      default: 'wrapper'
-    }
-  },
-  setup(props) {
+  setup() {
     const wapperPC = ref(null);
     const wapperMobile = ref(null);
     const isShow = ref(false);
-    const classes = classnames(props.prefixCls);
-    onMounted(() => {
-      console.info('Wrapper mounted!');
-    });
+    const classes = classnames('wrapper');
     const handleActivatorClick = () => {
       isShow.value = !isShow.value;
     }

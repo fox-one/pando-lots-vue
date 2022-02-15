@@ -15,7 +15,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  onMounted,
   PropType
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
@@ -41,17 +40,10 @@ export default defineComponent({
     chats: {
       type: Array as PropType<Chat[]>,
       default: () => []
-    },
-    prefixCls: {
-      type: String,
-      default: 'chat'
     }
   },
-  setup(props) {
-    const classes = classnames(props.prefixCls);
-    onMounted(() => {
-      console.info('Chat mounted!');
-    });
+  setup() {
+    const classes = classnames('chat');
 
     return { classes };
   },

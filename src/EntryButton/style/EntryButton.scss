@@ -1,12 +1,16 @@
 @import '../../styles/variable.scss';
 
-.#{$prefix}-entrybutton {
+.#{$prefix}-entry-button {
   width: 160px;
   border-radius: 100px;
   cursor: pointer;
   background-color: #000000;
   &:hover {
     background-color: #494949;
+  }
+
+  &-wrapper {
+    width: 160px;
   }
 
   &-avatar {

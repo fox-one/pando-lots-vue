@@ -29,7 +29,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  onMounted,
   ref
 } from '@vue/composition-api';
 import { VLayout, VTextField } from 'vuetify/lib';
@@ -54,19 +53,12 @@ export default defineComponent({
     name: {
       type: String,
       default: ''
-    },
-    prefixCls: {
-      type: String,
-      default: 'comment'
     }
   },
-  setup(props) {
-    const classes = classnames(props.prefixCls);
+  setup() {
+    const classes = classnames('comment');
     const placeholder = $t('chat_placeholder');
     const isFocus = ref(false);
-    onMounted(() => {
-      console.info('Comment mounted!');
-    });
 
     return { classes, placeholder, isFocus };
   }

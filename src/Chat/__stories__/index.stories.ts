@@ -36,6 +36,19 @@ const chats =
             create_at: Date.now() + 10000,
             content: `Hello~I’m from Fennec`,
             origin: 'fennec'
+          },
+          {
+            name: '0x22E8uu823eysc43ff746f08',
+            create_at: Date.now() + 40500,
+            content: `Hello~I’m from Home`,
+            origin: 'self'
+          },
+          {
+            name: 'Lrytt23dsdsa',
+            create_at: Date.now() + 60200,
+            content: '',
+            origin: 'mixin',
+            only_mixin: true
           }
         ]
       }),

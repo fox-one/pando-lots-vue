@@ -19,17 +19,13 @@ export default defineComponent({
     urls: {
       type: Object,
       default: () => ({})
-    },
-    prefixCls: {
-      type: String,
-      default: 'stream'
     }
   },
   setup(props, ctx) {
     const { urls } = props;
     const url = urls['hls'] || '';
     const player = ref<HlsPlayer | null>(null);
-    const classes = classnames(props.prefixCls);
+    const classes = classnames('stream');
     const videoId = 'pando-lots-video';
     onMounted(() => {
       player.value = new HlsPlayer({
