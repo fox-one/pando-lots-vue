@@ -22,6 +22,7 @@ import {
   PropType
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
+import { setGroupId } from '@utils/request';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
@@ -47,8 +48,8 @@ export default defineComponent({
       default: 'card'
     },
     groupId: {
-      type: Number,
-      default: NaN
+      type: String,
+      default: ''
     },
     themeColor: {
       type: String,
@@ -56,7 +57,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { type } = props;
+    const { type, groupId } = props;
+    setGroupId(groupId);
     const classes = classnames();
     const loading = ref(true);
     const showChat = ref(false);

@@ -10,6 +10,11 @@ module.exports = {
           {loader: 'babel-loader'}
         ],
         exclude: /node_modules/
+        // include: [
+        //   path.resolve(__dirname, "../src"),
+        //   path.resolve(__dirname, "../node_modules/@foxone/uikit"),
+        //   path.resolve(__dirname, "../node_modules/vuetify"),
+        // ]
       },
       {
         test: /.(woff|woff2|eot|ttf|svg|jpg|png|gif)$/,
@@ -48,6 +53,7 @@ module.exports = {
   mode: 'development',
   resolve: {
     alias: {
+      '@apis': path.resolve(__dirname, '../src/apis'),
       '@assets': path.resolve(__dirname, '../src/assets'),
       '@locale': path.resolve(__dirname, '../src/locale'),
       '@utils': path.resolve(__dirname, '../src/utils')

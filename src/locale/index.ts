@@ -1,5 +1,6 @@
 const defaultLocales = {
   en: {
+    install: 'Install',
     members: 'members',
     learn_more: 'Learn more',
     chat_title: 'Community’s Mixin id is {number}',
@@ -15,8 +16,11 @@ const defaultLocales = {
     hello_rules_2: 'Only the most recent 100 messages are kept. To view the full chat history, you can join the corresponding Mixin community.',
     hello_rules_3: 'This is a community for everyone. Please be kind.',
     hello_button: 'I Understand',
+    fennec_not_installed: 'Fennec not installed',
+    fennec_introduction: 'Fennec is a Mixin network browser wallet, you need to install Fennec before the connection.'
   },
   zh: {
+    install: '安裝',
     members: '人',
     learn_more: '了解更多',
     chat_title: '该社区的 Mixin id 是 {number}',
@@ -32,8 +36,11 @@ const defaultLocales = {
     hello_rules_2: '只保留最近的100条信息。要查看完整的聊天历史，你可以加入相应的Mixin社区。',
     hello_rules_3: '这是一个为所有人服务的社区。请友善一些。',
     hello_button: '我已了解',
+    fennec_not_installed: '沒有安裝',
+    fennec_introduction: 'Fennec 是一個 Mixin 網絡瀏覽器錢包，連接前需要安裝 Fennec。'
   },
   ja: {
+    install: 'Install',
     members: '成員',
     learn_more: '詳細はこちら',
     chat_title: 'Communityの Mixin ID は {number}',
@@ -49,6 +56,8 @@ const defaultLocales = {
     hello_rules_2: '直近の100件のメッセージのみが保存されます。全てのチャット履歴を見るには、対応する Mixin コミュニティに参加することができます。',
     hello_rules_3: 'ここはみんなのコミュニティです。親切にお願いします。',
     hello_button: 'ヴォイ・イ・ランジ',
+    fennec_not_installed: 'Fennec not installed',
+    fennec_introduction: 'Fennec is a Mixin network browser wallet, you need to install Fennec before the connection.'
   },
 };
 

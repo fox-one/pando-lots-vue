@@ -26,6 +26,9 @@ module.exports = {
   },
 
   moduleNameMapper: {
+    '^@apis(.*)$': '<rootDir>/src/apis$1',
+    '^@assets(.*)$': '<rootDir>/src/assets$1',
+    '^@locale(.*)$': '<rootDir>/src/locale$1',
     '^@utils(.*)$': '<rootDir>/src/utils$1',
     '^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
   },
