@@ -1,10 +1,13 @@
 <template>
   <component
-    :is="Popup"
+    :is="popup"
     v-model="show"
+    max-width="600"
+    overlay-opacity="0.46"
+    overlay-color="rgb(33, 33, 33)"
   >
-    <template #activator>
-      <slot name="activator" :on="{ click: onClick }"/>
+    <template #activator="{ on }">
+      <slot name="activator" :on="{ ...on, click: onClick }"/>
     </template>
 
     <div
@@ -52,6 +55,10 @@ export default defineComponent({
     AuthStep2
   },
   props: {
+    clientId: {
+      type: String,
+      default: ''
+    },
     fennec: {
       type: Boolean,
       default: false
@@ -59,12 +66,16 @@ export default defineComponent({
   },
   setup(props) {
     const classes = classnames('connect-wallet');
-    const Popup = isMobile ? VBottomSheet : VDialog;
     const show = ref(false);
     const step = ref(1);
     const select = ref('');
 
-    return { classes, isMobile, Popup, show, step, select };
+    return { classes, isMobile, show, step, select };
+  },
+  computed: {
+    popup() {
+      return isMobile ? VBottomSheet : VDialog;
+    }
   },
   watch: {
     show(val) {
@@ -77,7 +88,11 @@ export default defineComponent({
   methods: {
     onClick() {
       if (bridge.isMixin) {
-        this.$emit('auth', 'mixin');
+        bridge.login({
+          profile: true,
+          messages: true,
+          phone: true
+        }, { client_id: this.clientId });
       } else {
         this.show = true;
       }

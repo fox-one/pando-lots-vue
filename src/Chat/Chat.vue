@@ -26,7 +26,7 @@ export interface Chat {
   avatar_url: string;
   content: string;
   name: string;
-  create_at: string;
+  created_at: string;
   origin: string;
 }
 

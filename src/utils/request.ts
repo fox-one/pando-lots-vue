@@ -10,7 +10,7 @@ export function setGroupId(id: string) {
   groupId = id;
 }
 
-const request = async function (opts): Promise<any> {
+const request = async function <T extends Record<string, any>>(opts): Promise<T> {
   const token = getToken(groupId);
   let headers = {} as Record<string, any>;
   if (token) {
@@ -20,26 +20,19 @@ const request = async function (opts): Promise<any> {
     headers = Object.assign(headers, opts.headers);
   }
 
-  let resp: any = null;
+  // let resp: any = null;
   try {
-    resp = await axios({
+    const res = await axios({
       method: opts.method || 'get',
       baseURL: API_BASE || '',
       url: opts.url || '',
       data: opts.data || {},
       headers,
     });
+    return Promise.resolve(res as any);
   } catch (e) {
-    return new Promise(function (resolve, reject) {
-      reject(e);
-    });
+    return Promise.reject(e);
   }
-  return new Promise(function (resolve, reject) {
-    if (resp.data) {
-      return resolve(resp.data);
-    }
-    return reject(resp);
-  });
 };
 
 axios.interceptors.response.use(

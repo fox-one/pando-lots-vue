@@ -1,8 +1,8 @@
 <template>
-  <div class="f-auth-step2">
+  <div :class="classes()">
     <component :is="component" />
 
-    <span class="f-auth-step2__back" @click="handleBack">
+    <span :class="classes('back')" @click="handleBack">
       <v-icon color="white">$back</v-icon>
     </span>
   </div>
@@ -12,6 +12,7 @@
 import { Component, Vue, Prop, PropSync } from 'vue-property-decorator';
 import AuthFennecInstall from './AuthFennecInstall.vue';
 import { VIcon } from 'vuetify/lib';
+import classnames from '@utils/classnames';
 
 @Component({
   name: 'FAuthStep2',
@@ -25,6 +26,8 @@ class FAuthStep2 extends Vue {
   @PropSync('step') protected bindStep;
 
   @Prop() protected select;
+
+  protected classes = classnames('auth-step2')
 
   protected get component() {
     return this.select === 'fennec' ? 'AuthFennecInstall' : '';

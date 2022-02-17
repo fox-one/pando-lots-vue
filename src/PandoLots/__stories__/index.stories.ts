@@ -21,5 +21,5 @@ storiesOf('PandoLots', module)
     components: {
       PandoLots
     },
-    template: `<PandoLots>{{'Hello PandoLots'}}</PandoLots>`
+    template: `<pando-lots group-id="7000103413" />`
   }));

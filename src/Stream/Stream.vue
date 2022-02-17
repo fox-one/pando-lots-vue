@@ -30,7 +30,7 @@ export default defineComponent({
     onMounted(() => {
       player.value = new HlsPlayer({
         url,
-        id: `#${videoId}`,
+        id: videoId,
         isLive: true,
         airplay: true,
         fluid: true,

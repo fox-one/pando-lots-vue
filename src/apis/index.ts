@@ -1,24 +1,24 @@
 import { setToken } from '@utils/auth';
 import request from '@utils/request';
 
-const getMessages = async function (groupId: string) {
-  return await request({
+export const getMessages = async function (groupId: string) {
+  return await request<API.Message[]>({
     method: 'get',
     url: 'lots/latest_messages',
-    header: {
+    headers: {
       group_id: groupId
     }
   });
 };
 
-const getGroupInfo = async function (groupId: string) {
-  return await request({
+export const getGroupInfo = async function (groupId: string) {
+  return await request<API.GroupInfo>({
     method: 'get',
     url: `/groups/${groupId}/public`
   });
 };
 
-const sendMessage = async function (data: { category: API.MessageType, data: string }) {
+export const sendMessage = async function (data: { category: API.MessageType, data: string }) {
   return await request({
     method: 'post',
     url: '/lots/messages',
@@ -26,7 +26,7 @@ const sendMessage = async function (data: { category: API.MessageType, data: str
   });
 };
 
-const authFennec = async function (groupId: string, token: string) {
+export const authFennec = async function (groupId: string, token: string) {
   return await request({
     method: 'post',
     url: `/groups/${groupId}/auth/fennec`,
@@ -39,7 +39,7 @@ const authFennec = async function (groupId: string, token: string) {
   });
 };
 
-const authMixin = async function (groupId: string, code: string) {
+export const authMixin = async function (groupId: string, code: string) {
   return await request({
     method: 'post',
     url: `/groups/${groupId}/auth/mixin`,
@@ -52,8 +52,8 @@ const authMixin = async function (groupId: string, code: string) {
   });
 };
 
-const getUserInfo = async function () {
-  return request({
+export const getUserInfo = async function () {
+  return request<API.User>({
     method: 'get',
     url: '/users/me',
   });

@@ -1,5 +1,4 @@
 import VueCompositionAPI from '@vue/composition-api';
-import ConnectWallet from './ConnectWallet';
 import PandoLots from './PandoLots';
 
 import type { VueConstructor } from 'vue';
@@ -11,7 +10,6 @@ function install(Vue: VueConstructor<Vue>) {
   install.installed = true;
   Vue.use(VueCompositionAPI);
   Vue.component('PandoLots', PandoLots);
-  Vue.component('ConnectWallet', ConnectWallet);
 }
 
 let GlobalVue;

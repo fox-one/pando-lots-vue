@@ -5,6 +5,7 @@
         <component
           :is="Entry"
           :loading="loading"
+          :members="members"
           :theme-color="themeColor"
           v-on="on"
         />
@@ -23,6 +24,7 @@ import {
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import { setGroupId } from '@utils/request';
+import { getGroupInfo, getMessages } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
@@ -56,7 +58,7 @@ export default defineComponent({
       default: '#F5F5F5',
     }
   },
-  setup(props) {
+  setup(props, ctx) {
     const { type, groupId } = props;
     setGroupId(groupId);
     const classes = classnames();
@@ -64,42 +66,54 @@ export default defineComponent({
     const showChat = ref(false);
     const groupInfo = ref({});
     const Entry = type === 'button' ? EntryButton : EntryCard;
-    const chats = [
-      {
-        name: 'Luong Danh',
-        create_at: Date.now(),
-        content: 'please help me to get the wallet address, i can\'t find it in fennec wallet',
-        origin: 'mixin'
-      },
-      {
-        name: '0x22E8uu823eysc43ff746f08',
-        create_at: Date.now() + 10000,
-        content: 'Hello~I’m from Fennec',
-        origin: 'fennec'
-      },
-      {
-        name: '0x22E8uu823eysc43ff746f08',
-        create_at: Date.now() + 40500,
-        content: 'Hello~I’m from Home',
-        origin: 'self'
-      },
-      {
-        name: 'Lrytt23dsdsa',
-        create_at: Date.now() + 60200,
-        content: '',
-        origin: 'mixin',
-        only_mixin: true
-      }
-    ];
+    const chats = [] as any[];
+    const members = {
+      avatars: [] as string[],
+      total: 0
+    };
+    const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
 
-    onMounted(() => {
-      console.info('PandoLots mounted!');
-      setTimeout(() => {
+    onMounted(async () => {
+      try {
+        const [info, messages] = await Promise.all([
+          getGroupInfo(groupId),
+          getMessages(groupId)
+        ]);
+        messages.forEach(m => {
+          chats.push({
+            name: m.speaker_name,
+            avatar_url: m.speaker_avatar,
+            created_at: m.created_at,
+            content: m.text,
+            origin: 'mixin',
+            only_mixin: !!~supportMessages.indexOf(m.category)
+          });
+        });
+        for (let i = 0; i < messages.length; i++) {
+          const msg = messages[i];
+          chats.push({
+            name: msg.speaker_name,
+            avatar_url: msg.speaker_avatar,
+            created_at: msg.created_at,
+            content: msg.text,
+            origin: 'mixin',
+            only_mixin: !!~supportMessages.indexOf(msg.category)
+          });
+          if (i >= messages.length - 3) {
+            members.avatars.push(msg.speaker_avatar || '');
+          }
+        }
+        while(members.avatars.length < 3) {
+          members.avatars.push('');
+        }
+        members.total = info.members_count.paid;
         loading.value = false;
-      }, 2000);
+      } catch (e) {
+        ctx.emit('error', e);
+      }
     });
 
-    return { classes, loading, showChat, groupInfo, Entry, chats };
+    return { classes, loading, showChat, groupInfo, Entry, chats, members };
   }
 });
 </script>

@@ -52,7 +52,7 @@ export default defineComponent({
   },
   setup(props) {
     const classes = classnames('chat-item');
-    const createAt = dayjs(props.chat?.create_at).format('MM/DD HH:mm');
+    const createAt = dayjs(props.chat?.created_at).format('MM/DD HH:mm');
     const onlyMixinMsg = $t('chat_only_mixin', { learn_more: `<a class=${classes('learn-more')}>${$t('learn_more')}</a>` });
 
     return { classes, createAt, onlyMixinMsg };

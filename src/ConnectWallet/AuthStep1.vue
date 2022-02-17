@@ -1,23 +1,23 @@
 <template>
-  <div class="f-auth-step1">
-    <div class="text-center f-auth-methods__title">{{ labels[0] }}</div>
+  <div :class="classes()">
+    <div :class="classes('title', 'text-center')" class="text-center f-auth-methods__title">{{ labels[0] }}</div>
 
-    <div class="text-center greyscale_3--text f-auth-methods__subtitle">
+    <div :class="classes('subtitle', 'text-center greyscale_3--text')">
       {{ labels[1] }}
     </div>
 
-    <div class="f-auth-methods">
+    <div :class="classes('methods')">
       <div
         v-for="(item, index) in items"
         :key="index"
-        class="f-auth-method"
+        :class="classes('method')"
         @click="handleAuth(item)"
       >
         <span class="mb-3">
           <v-img width="88" height="68" :src="item.logo" />
         </span>
 
-        <span class="f-auth-method__label">{{ item.title }}</span>
+        <span :class="classes('method-label')">{{ item.title }}</span>
       </div>
     </div>
   </div>

@@ -1525,6 +1525,23 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@foxone/fennec-base@0.5.4":
+  version "0.5.4"
+  resolved "https://registry.npmjs.org/@foxone/fennec-base/-/fennec-base-0.5.4.tgz#d9c1c7ad6771af52d85852dc204ddf55ac8beccc"
+  integrity sha512-P3vLALmjFhe51hP+b1NUVpWor4r571+5TDKYZacageZvJVmJbCMQ16lIq7QT1jhOceSmR7N2MhldzKuwzVvLnA==
+  dependencies:
+    browser-passworder "^2.0.3"
+    extensionizer "^1.0.1"
+    lodash "^4.17.21"
+    rxjs "^6.6.3"
+
+"@foxone/fennec-dapp@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.npmjs.org/@foxone/fennec-dapp/-/fennec-dapp-0.5.4.tgz#dbc6d636ecd79dee00bb2c52f51054676b47cfe5"
+  integrity sha512-yxDTexp+/G7JdcleAefx/pc8fZg0z08A59V9ZEPCYme+4jiYf8wtizKZtEczy3XduWLFp5dXe5J6pBncB1nSwQ==
+  dependencies:
+    "@foxone/fennec-base" "0.5.4"
+
 "@foxone/icons@3.0.1-53":
   version "3.0.1-53"
   resolved "https://registry.npmjs.org/@foxone/icons/-/icons-3.0.1-53.tgz#3df1c65b5791e7b1fe53831913d6663134758d56"
@@ -4935,6 +4952,13 @@ brorand@^1.0.1, brorand@^1.1.0:
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
 
+browser-passworder@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/browser-passworder/-/browser-passworder-2.0.3.tgz#6fdd2082e516a176edbcb3dcee0b7f9fce4f7917"
+  integrity sha1-b90gguUWoXbtvLPc7gt/n85PeRc=
+  dependencies:
+    browserify-unibabel "^3.0.0"
+
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz#3c9b4b7d782c8121e56f10106d84c0d0ffc94626"
@@ -4998,6 +5022,11 @@ browserify-sign@^4.0.0:
     parse-asn1 "^5.1.5"
     readable-stream "^3.6.0"
     safe-buffer "^5.2.0"
+
+browserify-unibabel@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/browserify-unibabel/-/browserify-unibabel-3.0.0.tgz#5a6b8f0f704ce388d3927df47337e25830f71dda"
+  integrity sha1-WmuPD3BM44jTkn30czfiWDD3Hdo=
 
 browserify-zlib@^0.2.0:
   version "0.2.0"
@@ -6883,6 +6912,11 @@ dotenv-webpack@^1.7.0:
   dependencies:
     dotenv-defaults "^1.0.2"
 
+dotenv@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.0.0.tgz#c619001253be89ebb638d027b609c75c26e47411"
+  integrity sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==
+
 dotenv@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
@@ -7673,6 +7707,11 @@ extend@^3.0.0, extend@~3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
+
+extensionizer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/extensionizer/-/extensionizer-1.0.1.tgz#504544239a7610ba8404b15c1832091a37768d09"
+  integrity sha512-UES5CSOYqshNsWFrpORcQR47+ph6UvQK25mguD44IyeMemt40CG+LTZrH1PgpGUHX3w7ACtNQnmM0J+qEe8G0Q==
 
 external-editor@^3.0.3:
   version "3.1.0"
@@ -15396,7 +15435,7 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxjs@^6.3.3, rxjs@^6.4.0, rxjs@^6.6.0:
+rxjs@^6.3.3, rxjs@^6.4.0, rxjs@^6.6.0, rxjs@^6.6.3:
   version "6.6.7"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
   integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==

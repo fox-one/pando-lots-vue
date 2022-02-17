@@ -31,7 +31,8 @@
 <script lang="ts">
 import {
   defineComponent,
-  PropType
+  PropType,
+  watchEffect
 } from '@vue/composition-api';
 import { ContentLoader } from 'vue-content-loader';
 import classnames from '@utils/classnames';
@@ -81,13 +82,14 @@ export default defineComponent({
   setup(props) {
     const { members } = props;
     const classes = classnames('entry-card');
-
     const avatars = members.avatars || [];
-    while(avatars.length < 3) {
-      avatars.push('');
-    }
 
-    return { classes, memberTxt: `${toThousandSeparator(members.total)} ${$t('members')}`, avatars };
+    return { classes, avatars };
+  },
+  computed: {
+    memberTxt(): string {
+      return `${toThousandSeparator(this.members.total)} ${$t('members')}`;
+    }
   }
 });
 </script>
