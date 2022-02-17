@@ -39,7 +39,7 @@ module.exports = {
 
     preflight: {
       typescript: true, // 构建时是否处理ts或tsx文件 (whether or not process the ts or tsx files)
-      test: true, // 构建时是否进行单元测试 (whether or not process unit-test)
+      test: false, // 构建时是否进行单元测试 (whether or not process unit-test)
       eslint: true, // 构建时是否进行eslint检测 (whether or not process eslint checking)
       prettier: true, // 构建时是否进行prettier检测 (whether or not process prettier checking)
       stylelint: true, // 构建时是否进行stylelint检测 (whether or not process stylelint checking)
@@ -54,13 +54,13 @@ module.exports = {
     autoTag: false,
 
     // 发布的git仓库地址 (project git repo url)
-    git: '',
+    git: 'git@github.com:fox-one/pando-lots-vue.git',
 
     // 发布的npm仓库地址 (npm depository url)
     npm: '',
 
     preflight: {
-      test: true, // 发布前是否进行单元测试 (whether or not process unit-test)
+      test: false, // 发布前是否进行单元测试 (whether or not process unit-test)
       eslint: true, // 发布前是否进行eslint检测 (whether or not process eslint checking)
       prettier: true, // 发布前是否进行prettier检测 (whether or not process prettier checking)
       stylelint: true, // 发布前是否进行stylelint检测 (whether or not process stylelint checking)
