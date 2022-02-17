@@ -65,13 +65,13 @@ export default defineComponent({
         avatars: string[];
         total: number;
       }>,
-      default: {
+      default: () => ({
         avatars: ['', '', ''],
         total: 0,
       } as {
         avatars: string[];
         total: number;
-      },
+      })
     },
     themeColor: {
       type: String,

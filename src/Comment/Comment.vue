@@ -2,7 +2,7 @@
   <v-layout :class="classes(void 0, 'pa-6')" column>
     <v-layout class="mb-6" justify-space-between align-center>
       <v-text-field
-        v-model="value"
+        v-model="val"
         filled
         rounded
         :placeholder="placeholder"
@@ -29,7 +29,8 @@
 <script lang="ts">
 import {
   defineComponent,
-  ref
+  ref,
+  watch
 } from '@vue/composition-api';
 import { VLayout, VTextField } from 'vuetify/lib';
 import { FIconSetting, FIconPicture, FIconSendFill } from '@foxone/icons';
@@ -53,14 +54,27 @@ export default defineComponent({
     name: {
       type: String,
       default: ''
+    },
+    value: {
+      type: String,
+      default: ''
     }
   },
-  setup() {
+  setup(props, ctx) {
     const classes = classnames('comment');
     const placeholder = $t('chat_placeholder');
     const isFocus = ref(false);
+    const val = ref('');
+    watch(val, () => {
+      ctx.emit('input', val.value);
+    });
 
-    return { classes, placeholder, isFocus };
+    return { classes, placeholder, isFocus, val };
+  },
+  watch: {
+    value: function (val) {
+      if (val !== this.val) this.val = val;
+    }
   }
 });
 </script>

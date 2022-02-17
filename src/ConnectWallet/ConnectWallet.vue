@@ -52,9 +52,9 @@ export default defineComponent({
     AuthStep2
   },
   props: {
-    prefixCls: {
-      type: String,
-      default: 'connect-wallet'
+    fennec: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
@@ -64,7 +64,7 @@ export default defineComponent({
     const step = ref(1);
     const select = ref('');
 
-    return { classes, isMobile, Popup, show, step };
+    return { classes, isMobile, Popup, show, step, select };
   },
   watch: {
     show(val) {
@@ -81,6 +81,9 @@ export default defineComponent({
       } else {
         this.show = true;
       }
+    },
+    handleClose() {
+      this.show = false;
     }
   }
 });

@@ -7,7 +7,7 @@ Vue.use(VueCompositionAPI);
 
 describe('Stream', () => {
   it('renders correctly', () => {
-    const wrapper = shallowMount(Stream);
+    const wrapper = mount(Stream);
     expect(wrapper).toMatchSnapshot();
   });
 });
