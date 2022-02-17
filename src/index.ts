@@ -1,17 +1,17 @@
 import VueCompositionAPI from '@vue/composition-api';
-import Chat from './Chat';
-import Stream from './Stream';
+import ConnectWallet from './ConnectWallet';
+import PandoLots from './PandoLots';
 
 import type { VueConstructor } from 'vue';
 
 
 install.installed = false;
-function install (Vue: VueConstructor<Vue>) {
+function install(Vue: VueConstructor<Vue>) {
   if (install.installed) return;
   install.installed = true;
   Vue.use(VueCompositionAPI);
-  Vue.component('FChat', Chat);
-  Vue.component('FStream', Stream);
+  Vue.component('PandoLots', PandoLots);
+  Vue.component('ConnectWallet', ConnectWallet);
 }
 
 let GlobalVue;
