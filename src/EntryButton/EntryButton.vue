@@ -65,12 +65,14 @@ export default defineComponent({
     const classes = classnames('entry-button');
 
     const avatars = members.avatars || [];
-    while(avatars.length < 2) {
-      avatars.push('');
-    }
     avatars.unshift('');
 
-    return { classes, total: toThousandSeparator(members.total), avatars };
+    return { classes, avatars };
+  },
+  computed: {
+    total(): string {
+      return toThousandSeparator(this.members.total);
+    }
   }
 });
 </script>

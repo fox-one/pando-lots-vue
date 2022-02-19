@@ -31,8 +31,7 @@
 <script lang="ts">
 import {
   defineComponent,
-  PropType,
-  watchEffect
+  PropType
 } from '@vue/composition-api';
 import { ContentLoader } from 'vue-content-loader';
 import classnames from '@utils/classnames';

@@ -1,7 +1,11 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-comment {
+  position: relative;
+  z-index: 2;
   color: #000;
+  background-color: #FFFFFF;
+  border-top: 1px solid #F5F5F5;
   &-input {
     .v-input__slot {
       margin: 0;

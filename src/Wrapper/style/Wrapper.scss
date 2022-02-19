@@ -34,6 +34,7 @@
     right: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 100;
     &-close {
       position: absolute;
       top: 24px;
@@ -43,11 +44,15 @@
       background-color: #F5F5F5;
       border-radius: 8px;
       cursor: pointer;
+      z-index: 10;
     }
     .v-menu__content {
       right: 32px !important;
       left: auto !important;
       border-radius: 0;
+    }
+    .v-card__text {
+      padding: 0;
     }
     .v-card.v-sheet {
       border-radius: 0;

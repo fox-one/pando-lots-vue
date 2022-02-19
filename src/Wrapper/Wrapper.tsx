@@ -39,7 +39,7 @@ export default defineComponent({
       <div class={this.classes()}>
         {
           isMobile
-            ? <div class={this.classes('mobile')} ref='wapperMobile'>
+            ? <div vShow={this.isShow} class={this.classes('mobile')} ref='wapperMobile'>
               <VBottomSheet
                 vModel={this.isShow}
                 overlayColor="#000000"
@@ -56,7 +56,7 @@ export default defineComponent({
                 </VCard>
               </VBottomSheet>
             </div>
-            : <div class={this.classes('pc')} ref='wapperPC'>
+            : <div vShow={this.isShow} class={this.classes('pc')} ref='wapperPC'>
               <VMenu
                 vModel={this.isShow}
                 absoulte={true}

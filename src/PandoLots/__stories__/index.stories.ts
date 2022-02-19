@@ -17,9 +17,15 @@ storiesOf('PandoLots', module)
       defaultViewport: 'iphone6'
     }
   })
-  .add('basic usage', () => ({
+  .add('card', () => ({
     components: {
       PandoLots
     },
-    template: `<pando-lots group-id="7000103413" />`
+    template: `<pando-lots group-id="7000103413" theme-color="#EE4596" />`
+  }))
+  .add('button', () => ({
+    components: {
+      PandoLots
+    },
+    template: `<pando-lots group-id="7000103413" type="button" />`
   }));

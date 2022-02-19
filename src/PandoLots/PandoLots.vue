@@ -10,7 +10,10 @@
           v-on="on"
         />
       </template>
-      <chat :chats="chats" />
+      <section @click.stop>
+        <chat :chats="chats" :group="groupInfo" />
+        <comment />
+      </section>
     </wrapper>
   </div>
 </template>
@@ -64,11 +67,15 @@ export default defineComponent({
     const classes = classnames();
     const loading = ref(true);
     const showChat = ref(false);
-    const groupInfo = ref({});
     const Entry = type === 'button' ? EntryButton : EntryCard;
     const chats = [] as any[];
     const members = {
       avatars: [] as string[],
+      total: 0
+    };
+    const groupInfo = {
+      id: '',
+      title: '',
       total: 0
     };
     const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
@@ -99,14 +106,17 @@ export default defineComponent({
             origin: 'mixin',
             only_mixin: !!~supportMessages.indexOf(msg.category)
           });
-          if (i >= messages.length - 3) {
+          if (i >= messages.length - (type === 'button' ? 2 : 3)) {
             members.avatars.push(msg.speaker_avatar || '');
           }
         }
-        while(members.avatars.length < 3) {
+        while(members.avatars.length < (type === 'button' ? 2 : 3)) {
           members.avatars.push('');
         }
         members.total = info.members_count.paid;
+        groupInfo.id = info.identity_number;
+        groupInfo.title = info.name;
+        groupInfo.total = info.members_count.paid;
         loading.value = false;
       } catch (e) {
         ctx.emit('error', e);

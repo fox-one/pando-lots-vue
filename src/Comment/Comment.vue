@@ -9,6 +9,7 @@
         :class="classes('input')"
         clear-icon="$close"
         clearable
+        height="50px"
         @focus="isFocus = true"
         @blur="isFocus = false"
       />
@@ -19,9 +20,9 @@
     <v-layout justify-space-between align-center>
       <v-layout align-center>
         {{ name }}
-        <f-icon-setting class="ml-2" @click="$emit('click:setting')" />
+        <f-icon-setting class="ml-2" style="width: 24px; height: 24px" @click="$emit('click:setting')" />
       </v-layout>
-      <f-icon-picture @click="$emit('click:picture')" />
+      <f-icon-picture style="width: 24px; height: 24px" @click="$emit('click:picture')" />
     </v-layout>
   </v-layout>
 </template>

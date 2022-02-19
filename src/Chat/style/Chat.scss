@@ -1,5 +1,33 @@
 @import '../../styles/variable.scss';
 
+.#{$prefix}-chat {
+  &-header {
+    position: relative;
+    z-index: 2;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #EBEBEB;
+    &-title {
+      color: #000000;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    &-total,
+    &-id {
+      font-weight: 500;
+      font-size: 14px;
+      color: #8D8D8D;
+    }
+
+    &-id {
+      &-link {
+        text-decoration: underline;
+        color: #8D8D8D !important;
+      }
+    }
+  }
+}
+
 .#{$prefix}-chat-item {
   &-self {
     justify-content: flex-end;
@@ -34,10 +62,10 @@
     z-index: 1;
     width: 16px;
     height: 16px;
-    background: url(../../assets/images/png/mixin.png) no-repeat right bottom / 16px;
-    &-fennec {
-      background-image: url(../../assets/images/png/fennec.png);
-    }
+    // background: url(../../assets/images/png/mixin.png) no-repeat right bottom / 16px;
+    // &-fennec {
+    //   background-image: url(../../assets/images/png/fennec.png);
+    // }
   }
 
   &-content {
