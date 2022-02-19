@@ -16,7 +16,7 @@ export default defineComponent({
   props: {
     prefixCls: {
       type: String,
-      default: 'testuikit'
+      default: 'test-uikit'
     }
   },
   setup(props) {
