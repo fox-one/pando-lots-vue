@@ -1,105 +1,47 @@
 <template>
-  <component
-    :is="popup"
-    v-model="show"
-    max-width="600"
-    overlay-opacity="0.46"
-    overlay-color="rgb(33, 33, 33)"
-  >
+  <f-auth-method-modal :fennec="fennec" @auth="handleAuth">
     <template #activator="{ on }">
-      <slot name="activator" :on="{ ...on, click: onClick }"/>
+      <div :class="classes(void 0, 'd-flex align-center justify-center')">
+        <f-button height="56" :class="classes('btn')" v-on="on"> {{ btnText }} </f-button>
+      </div>
     </template>
-
-    <div
-      :class="classes(void 0, isMobile ? classes('mobile') : '')"
-    >
-      <auth-step-1
-        v-if="step === 1"
-        :step.sync="step"
-        :select.sync="select"
-        :fennec="fennec"
-        v-bind="$attrs"
-        v-on="$listeners"
-        @close="handleClose"
-      />
-
-      <auth-step-2
-        v-if="step === 2"
-        :step.sync="step"
-        :select="select"
-        v-bind="$attrs"
-        v-on="$listeners"
-      />
-    </div>
-  </component>
+  </f-auth-method-modal>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref
-} from '@vue/composition-api';
-import bridge from '@utils/bridge';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { VIcon } from 'vuetify/lib';
 import classnames from '@utils/classnames';
-import { VDialog, VBottomSheet } from 'vuetify/lib';
-import { isMobile } from '@utils/ua';
-import AuthStep1 from './AuthStep1.vue';
-import AuthStep2 from './AuthStep2.vue';
+import bridge from '@utils/bridge';
+import { $t } from '@locale/index';
 
-export default defineComponent({
+@Component({
   name: 'ConnectWallet',
+  inheritAttrs: false,
   components: {
-    VDialog,
-    VBottomSheet,
-    AuthStep1,
-    AuthStep2
-  },
-  props: {
-    clientId: {
-      type: String,
-      default: ''
-    },
-    fennec: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props) {
-    const classes = classnames('connect-wallet');
-    const show = ref(false);
-    const step = ref(1);
-    const select = ref('');
+    VIcon
+  }
+})
+class ConnectWallet extends Vue {
+  @Prop({ type: Boolean, default: false }) protected fennec!: boolean;
 
-    return { classes, isMobile, show, step, select };
-  },
-  computed: {
-    popup() {
-      return isMobile ? VBottomSheet : VDialog;
-    }
-  },
-  watch: {
-    show(val) {
-      if (!val) {
-        this.step = 1;
-        this.select = '';
-      }
-    }
-  },
-  methods: {
-    onClick() {
-      if (bridge.isMixin) {
-        bridge.login({
-          profile: true,
-          messages: true,
-          phone: true
-        }, { client_id: this.clientId });
-      } else {
-        this.show = true;
-      }
-    },
-    handleClose() {
-      this.show = false;
+  @Prop({ type: String, default: '' }) protected clientId!: string;
+
+  protected classes = classnames('connect-wallet');
+
+  protected get btnText () {
+    return $t('chat_button');
+  }
+
+  protected handleAuth(type: string) {
+    if (type === 'mixin') {
+      bridge.login({
+        profile: true,
+        messages: true,
+        phone: true
+      }, { client_id: this.clientId });
     }
   }
-});
+}
+export default ConnectWallet;
 </script>

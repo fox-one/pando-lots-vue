@@ -32,6 +32,7 @@ import {
   ref
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
+import { isMobile } from '@utils/ua';
 import { toThousandSeparator } from '@utils/number';
 import { FIconCrowdFill, FIconHorn4PFill } from '@foxone/icons';
 import { VLayout } from 'vuetify/lib';
@@ -90,7 +91,7 @@ export default defineComponent({
   },
   computed: {
     height() {
-      return scrollWrapperHeight(32 + 32 + 155 + 153);
+      return scrollWrapperHeight(isMobile ? 56 + 155 + 153 : 32 + 32 + 155 + 153);
     }
   }
 });

@@ -67,3 +67,9 @@ export function removeAuth(groupId: string) {
   removeToken(groupId);
   removeUser(groupId);
 }
+
+export function isLogin(groupId: string) {
+  const tokens = getToken(groupId);
+  const user = getUser(groupId);
+  return !!tokens && !!user;
+}

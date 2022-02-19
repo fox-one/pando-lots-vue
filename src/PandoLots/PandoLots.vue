@@ -12,7 +12,8 @@
       </template>
       <section @click.stop>
         <chat :chats="chats" :group="groupInfo" />
-        <comment />
+        <comment v-if="isLogin" />
+        <connect-wallet v-else :fennec="fennec" :client-id="clientId" />
       </section>
     </wrapper>
   </div>
@@ -26,12 +27,15 @@ import {
   PropType
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
+import $fennec from '@utils/fennec';
 import { setGroupId } from '@utils/request';
+import { isLogin } from '@utils/auth';
 import { getGroupInfo, getMessages } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
 import Comment from '../Comment';
+import ConnectWallet from '../ConnectWallet';
 import Chat from '../Chat';
 import Stream from '../Stream';
 import HelloModel from '../HelloModel';
@@ -43,6 +47,7 @@ export default defineComponent({
     EntryButton,
     EntryCard,
     Comment,
+    ConnectWallet,
     Chat,
     Stream,
     HelloModel
@@ -67,6 +72,8 @@ export default defineComponent({
     const classes = classnames();
     const loading = ref(true);
     const showChat = ref(false);
+    const fennec = ref(false);
+    const clientId = ref('');
     const Entry = type === 'button' ? EntryButton : EntryCard;
     const chats = [] as any[];
     const members = {
@@ -81,6 +88,9 @@ export default defineComponent({
     const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
 
     onMounted(async () => {
+      setTimeout(() => {
+        fennec.value = $fennec?.isAvailable() ?? false;
+      }, 200);
       try {
         const [info, messages] = await Promise.all([
           getGroupInfo(groupId),
@@ -117,13 +127,25 @@ export default defineComponent({
         groupInfo.id = info.identity_number;
         groupInfo.title = info.name;
         groupInfo.total = info.members_count.paid;
+        clientId.value = info.client_id;
         loading.value = false;
       } catch (e) {
         ctx.emit('error', e);
       }
     });
 
-    return { classes, loading, showChat, groupInfo, Entry, chats, members };
+    return {
+      classes,
+      loading,
+      showChat,
+      groupInfo,
+      Entry,
+      chats,
+      members,
+      isLogin: isLogin(groupId),
+      fennec,
+      clientId
+    };
   }
 });
 </script>

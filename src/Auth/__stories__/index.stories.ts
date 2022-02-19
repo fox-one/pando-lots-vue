@@ -1,10 +1,10 @@
 import { storiesOf } from '@storybook/vue';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { themes } from '@storybook/theming';
-import ConnectWallet from '../';
+import Auth from '../';
 import '../style';
 
-storiesOf('ConnectWallet', module)
+storiesOf('Auth', module)
   .addParameters({
     readme: {
       sidebar: require('../README.md').default,
@@ -19,7 +19,11 @@ storiesOf('ConnectWallet', module)
   })
   .add('basic usage', () => ({
     components: {
-      ConnectWallet
+      Auth
     },
-    template: `<ConnectWallet>{{'Hello ConnectWallet'}}</ConnectWallet>`
+    template: `<auth>
+      <template #activator="{ on }">
+        <v-btn color="primary" v-on="on">Connect Wallet</v-btn>
+      </template>
+    </auth>`
   }));

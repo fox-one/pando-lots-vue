@@ -4,25 +4,25 @@
   &-header {
     position: relative;
     z-index: 2;
-    background-color: #FFFFFF;
+    background-color: #FFF;
     border-bottom: 1px solid #EBEBEB;
     &-title {
-      color: #000000;
+      color: #000;
       font-weight: bold;
       font-size: 20px;
     }
 
     &-total,
     &-id {
+      color: #8D8D8D;
       font-weight: 500;
       font-size: 14px;
-      color: #8D8D8D;
     }
 
     &-id {
       &-link {
-        text-decoration: underline;
         color: #8D8D8D !important;
+        text-decoration: underline;
       }
     }
   }
