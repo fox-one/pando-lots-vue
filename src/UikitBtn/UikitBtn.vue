@@ -12,17 +12,17 @@ import {
 import classnames from '@utils/classnames';
 
 export default defineComponent({
-  name: 'UiKitTest',
+  name: 'UikitBtn',
   props: {
     prefixCls: {
       type: String,
-      default: 'uikittest'
+      default: 'uikitbtn'
     }
   },
   setup(props) {
     const classes = classnames(props.prefixCls);
     onMounted(() => {
-      console.info('UiKitTest mounted!');
+      console.info('UikitBtn mounted!');
     });
 
     return { classes };

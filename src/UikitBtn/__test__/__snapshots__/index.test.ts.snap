@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UiKitTest renders correctly 1`] = `
+exports[`UikitBtn renders correctly 1`] = `
 VueWrapper {
   "_emitted": Object {
     "hook:beforeMount": Array [

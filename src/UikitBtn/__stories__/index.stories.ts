@@ -1,10 +1,10 @@
 import { storiesOf } from '@storybook/vue';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { themes } from '@storybook/theming';
-import UiKitTest from '../';
+import UikitBtn from '../';
 import '../style';
 
-storiesOf('UiKitTest', module)
+storiesOf('UikitBtn', module)
   .addParameters({
     readme: {
       sidebar: require('../README.md').default,
@@ -19,7 +19,7 @@ storiesOf('UiKitTest', module)
   })
   .add('basic usage', () => ({
     components: {
-      UiKitTest
+      UikitBtn
     },
-    template: `<UiKitTest>{{'Hello UiKitTest'}}</UiKitTest>`
+    template: `<UikitBtn>{{'Hello UikitBtn'}}</UikitBtn>`
   }));
