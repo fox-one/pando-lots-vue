@@ -1,7 +1,7 @@
 {
   "name": "@foxone/pando-lots-vue",
-  "version": "0.0.1-alpha.3",
-  "description": "",
+  "version": "0.0.1-alpha.5",
+  "description": "The vue components for commuity",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "lib/index.d.ts",

@@ -1,11 +1,11 @@
-# TestUikit
+# UiKitTest
 
 ## APIs
 
 ### Props
 | Name | Description | Type | Default |
 | --- | --- | --- | --- |
-| prefixCls(optional) | The classname prefix for wholly control the component style | string | `'testuikit'` | 
+| prefixCls(optional) | The classname prefix for wholly control the component style | string | `'uikittest'` | 
 
 ### Slots
 | Name | Description |
@@ -16,18 +16,18 @@
 
 ```vue
 <template>
-  <TestUikit>
-    {{ 'Hello TestUikit' }}
-  </TestUikit>
+  <UiKitTest>
+    {{ 'Hello UiKitTest' }}
+  </UiKitTest>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import { TestUikit } from './TestUikit';
+  import { UiKitTest } from './UiKitTest';
 
   @Component(
     components: {
-      TestUikit
+      UiKitTest
     }
   )
   export class App extends Vue {

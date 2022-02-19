@@ -31,7 +31,7 @@ jobs:
 
     - run: yarn --frozen-lockfile --non-interactive
 
-    - run: yarn build -n
+    - run: yarn build
 
     - name: Deploy Npm
       uses: JS-DevTools/npm-publish@v1

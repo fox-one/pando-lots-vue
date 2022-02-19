@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import VueCompositionAPI from '@vue/composition-api';
 import { shallowMount, mount } from '@vue/test-utils';
-import TestUikit from '../';
+import UiKitTest from '../';
 
 Vue.use(VueCompositionAPI);
 
-describe('TestUikit', () => {
+describe('UiKitTest', () => {
   it('renders correctly', () => {
-    const wrapper = shallowMount(TestUikit);
+    const wrapper = shallowMount(UiKitTest);
     expect(wrapper).toMatchSnapshot();
   });
 });
