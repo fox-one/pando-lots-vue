@@ -1,5 +1,7 @@
 import VueCompositionAPI from '@vue/composition-api';
+import Uikit from '@foxone/uikit';
 import PandoLots from './PandoLots';
+import TestUikit from './TestUikit';
 
 import type { VueConstructor } from 'vue';
 
@@ -9,7 +11,9 @@ function install(Vue: VueConstructor<Vue>) {
   if (install.installed) return;
   install.installed = true;
   Vue.use(VueCompositionAPI);
+  Vue.use(Uikit);
   Vue.component('PandoLots', PandoLots);
+  Vue.component('TestUikit', TestUikit);
 }
 
 let GlobalVue;
