@@ -13,14 +13,14 @@
         clearable
         height="50px"
       />
-      <div v-if="isShowSend" :class="classes('btn', 'ml-3 d-flex align-center justify-center')" @click="handleSend">
+      <div v-if="isShowSend" :class="classes('btn', 'ml-3 d-flex align-center justify-center flex-shrink-0')" @click="handleSend">
         <f-icon-send-fill />
       </div>
     </v-layout>
-    <v-layout justify-space-between align-center>
+    <v-layout ref="wrapper" justify-space-between align-center>
       <v-layout align-center>
         {{ name }}
-        <v-menu offset-x offset-y top right>
+        <v-menu :attach="wrapper" offset-x offset-y top right>
           <template #activator="{ on }">
             <i class="d-inline-flex" v-on="on" >
               <f-icon-setting class="ml-2" style="width: 24px; height: 24px; cursor: pointer" />
@@ -30,7 +30,7 @@
         </v-menu>
       </v-layout>
       <div :class="classes('upload', 'd-inline-flex')">
-        <input type="file" :class="classes('upload-input')" accept="image/*" @change="files => $emit('upload', files)" >
+        <input type="file" :class="classes('upload-input')" accept="image/*" @change="e => $emit('upload', e.target.files)" >
         <f-icon-picture style="width: 24px; height: 24px; cursor: pointer" />
       </div>
     </v-layout>
@@ -82,6 +82,7 @@ export default defineComponent({
     const placeholder = $t(disabled ? 'chat_only_operator_speak' : 'chat_placeholder');
     const isShowSend = ref(false);
     const val = ref(value);
+    const wrapper = ref(null);
     const settings = {
       disconnect: $t('disconnect_wallet')
     };
@@ -94,7 +95,7 @@ export default defineComponent({
       }
     });
 
-    return { classes, placeholder, isShowSend, val, settings };
+    return { classes, placeholder, isShowSend, val, wrapper, settings };
   },
   watch: {
     value: function (val) {
@@ -103,6 +104,7 @@ export default defineComponent({
   },
   methods: {
     handleSend() {
+      if (!this.val) return;
       this.$emit('send', this.val);
       this.val = '';
     }

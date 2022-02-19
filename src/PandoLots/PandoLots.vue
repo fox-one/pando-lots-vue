@@ -12,7 +12,7 @@
       </template>
       <section @click.stop>
         <chat :chats="chats" :group="groupInfo" />
-        <comment v-if="isLogin" />
+        <comment v-if="!isLogin" @send="handleSend" @upload="handleUpload" @disconnect="handleLogout" />
         <connect-wallet v-else :fennec="fennec" :client-id="clientId" />
       </section>
     </wrapper>
@@ -29,7 +29,7 @@ import {
 import classnames from '@utils/classnames';
 import $fennec from '@utils/fennec';
 import { setGroupId } from '@utils/request';
-import { isLogin } from '@utils/auth';
+import { isLogin, removeAuth } from '@utils/auth';
 import { getGroupInfo, getMessages } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
@@ -146,6 +146,18 @@ export default defineComponent({
       fennec,
       clientId
     };
+  },
+  methods: {
+    handleSend(val) {
+      console.info('handleSend', val);
+    },
+    handleUpload(files) {
+      console.info('handleUpload', files);
+    },
+    handleLogout() {
+      console.info('handleLogout');
+      removeAuth(this.groupId);
+    }
   }
 });
 </script>

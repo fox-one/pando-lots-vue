@@ -24,7 +24,7 @@ export function getStore(key: string) {
 export function removeStore(key: string) {
   try {
     const store = JSON.parse(storage.get(STORAGE_KEY) ?? '{}');
-    delete store[key];
+    delete store?.[key];
     return storage.set(STORAGE_KEY, JSON.stringify(store));
   } catch (e) {
     return null;
@@ -43,7 +43,7 @@ export function getToken(groupId: string) {
 
 export function removeToken(groupId: string) {
   const tokens = getStore('tokens');
-  delete tokens[groupId];
+  delete tokens?.[groupId];
   setStore('tokens', tokens);
 }
 
@@ -59,7 +59,7 @@ export function getUser(groupId: string) {
 
 export function removeUser(groupId: string) {
   const user = getStore('user');
-  delete user[groupId];
+  delete user?.[groupId];
   setStore('user', user);
 }
 
