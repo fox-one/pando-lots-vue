@@ -5,13 +5,13 @@
     position: relative;
     &-close {
       position: absolute;
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background-color: #F5F5F5;
       top: 24px;
       right: 24px;
+      width: 32px;
+      height: 32px;
+      background-color: #F5F5F5;
+      border-radius: 8px;
+      cursor: pointer;
     }
     .v-dialog {
       position: relative;
@@ -32,22 +32,22 @@
     position: fixed;
     top: 0;
     right: 0;
-    height: 100vh;
     width: 100vw;
+    height: 100vh;
     &-close {
       position: absolute;
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background-color: #F5F5F5;
       top: 24px;
       right: 24px;
+      width: 32px;
+      height: 32px;
+      background-color: #F5F5F5;
+      border-radius: 8px;
+      cursor: pointer;
     }
     .v-menu__content {
-      border-radius: 0;
-      left: auto !important;
       right: 32px !important;
+      left: auto !important;
+      border-radius: 0;
     }
     .v-card.v-sheet {
       border-radius: 0;

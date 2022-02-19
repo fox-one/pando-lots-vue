@@ -2,9 +2,9 @@
 
 .#{$prefix}-entry-button {
   width: 160px;
+  background-color: #000;
   border-radius: 100px;
   cursor: pointer;
-  background-color: #000000;
   &:hover {
     background-color: #494949;
   }
@@ -14,12 +14,12 @@
   }
 
   &-avatar {
-    background-color: #FFFFFF;
     position: relative;
+    background-color: #FFF;
     i {
       display: inline-block;
-      height: 32px;
       width: 32px;
+      height: 32px;
       border-radius: 50%;
     }
   }
@@ -27,7 +27,7 @@
   &-avatar:nth-of-type(1) {
     z-index: 3;
     i {
-      background-color: #FFFFFF;
+      background-color: #FFF;
       background-image: url(../../assets/images/svg/chat.svg);
       background-repeat: no-repeat;
       background-position: center;
@@ -43,7 +43,6 @@
   &-avatar:nth-of-type(2) {
     z-index: 2;
     i {
-
       background-color: var(--v-greyscale_5-base);
     }
   }
@@ -51,14 +50,13 @@
   &-avatar:nth-of-type(3) {
     z-index: 1;
     i {
-
       background-color: var(--v-greyscale_6-base);
     }
   }
 
   &-total {
+    color: #FFF;
     font-weight: 600;
     font-size: 16px;
-    color: #FFFFFF;
   }
 }

@@ -2,11 +2,11 @@
 
 .#{$prefix}-auth-step1 {
   &-title {
+    padding-top: 32px;
+    padding-bottom: 16px;
     font-weight: 600;
     font-size: 18px;
     line-height: 22px;
-    padding-top: 32px;
-    padding-bottom: 16px;
   }
 
   &-subtitle {
@@ -16,29 +16,29 @@
   }
 
   &-methods {
-    padding: 70px 0;
     display: flex;
     justify-content: space-evenly;
+    padding: 70px 0;
   }
 
   &-method {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     &-label {
-      font-size: 14px;
       font-weight: 600;
+      font-size: 14px;
       line-height: 17px;
     }
   }
 }
 
 .#{$prefix}-auth-fennec {
-  height: 324px;
   display: grid;
   grid-template-columns: 50% 50%;
+  height: 324px;
 
   &-right {
     padding: 40px;
@@ -54,10 +54,10 @@
   &-subtitle {
     margin-top: 20px;
     margin-bottom: 24px;
+    color: var(--v-greyscale_3-base);
     font-weight: 500;
     font-size: 14px;
     line-height: 19px;
-    color: var(--v-greyscale_3-base);
   }
 }
 

@@ -1,17 +1,17 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-connect-wallet {
-  height: 324px;
   position: relative;
+  height: 324px;
   &-close {
     position: absolute;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background-color: #F5F5F5;
     top: 24px;
     right: 24px;
+    width: 32px;
+    height: 32px;
+    background-color: #F5F5F5;
+    border-radius: 8px;
+    cursor: pointer;
   }
   .v-dialog {
     position: relative;

@@ -10,9 +10,9 @@
   }
 
   &-desc {
+    color: #8D8D8D;
     font-size: 14px;
     text-align: left;
-    color: #8D8D8D;
   }
 
   &-rule {
@@ -21,15 +21,15 @@
   }
 
   &-btn {
-    height: 56px;
-    line-height: 56px;
     width: 164px;
-    text-align: center;
-    background-color: #000000;
-    border-radius: 100px;
-    color: #FFFFFF;
+    height: 56px;
+    color: #FFF;
     font-weight: 600;
     font-size: 16px;
+    line-height: 56px;
+    text-align: center;
+    background-color: #000;
+    border-radius: 100px;
     cursor: pointer;
     user-select: none;
   }

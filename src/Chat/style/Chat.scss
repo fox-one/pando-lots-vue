@@ -14,7 +14,7 @@
   }
 
   &-self &-content {
-    background-color: #FFFFFF;
+    background-color: #FFF;
     border: 1px solid #EBEBEB;
   }
 
@@ -29,11 +29,11 @@
 
   &-avatar-icon {
     position: absolute;
+    right: 0;
+    bottom: 0;
     z-index: 1;
     width: 16px;
     height: 16px;
-    bottom: 0;
-    right: 0;
     background: url(../../assets/images/png/mixin.png) no-repeat right bottom / 16px;
     &-fennec {
       background-image: url(../../assets/images/png/fennec.png);
@@ -42,10 +42,10 @@
 
   &-content {
     display: inline-block;
-    background-color: #F5F5F5;
-    border-radius: 8px;
     font-weight: 500;
     font-size: 14px;
+    background-color: #F5F5F5;
+    border-radius: 8px;
 
     &-only-mixin {
       color: #8D8D8D;
@@ -54,30 +54,30 @@
 
   &-name {
     display: inline-block;
-    vertical-align: middle;
-    line-height: 15px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     max-width: 26vw;
+    overflow: hidden;
+    color: #8D8D8D;
     font-weight: 500;
     font-size: 12px;
-    color: #8D8D8D;
+    line-height: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
   }
 
   &-time {
     display: inline-block;
-    vertical-align: middle;
-    line-height: 15px;
+    color: #CCC;
     font-weight: 500;
     font-size: 12px;
-    color: #CCCCCC;
+    line-height: 15px;
+    vertical-align: middle;
   }
 
   &-learn-more {
     color: #8D8D8D !important;
-    text-decoration: underline;
     font-weight: 500;
     font-size: 14px;
+    text-decoration: underline;
   }
 }
