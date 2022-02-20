@@ -48,7 +48,7 @@ import {
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import $fennec from '@utils/fennec';
-import { setGroupId } from '@utils/request';
+import { setGroupId, setDev } from '@utils/request';
 import { isLogin, removeAuth } from '@utils/auth';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
@@ -86,11 +86,16 @@ export default defineComponent({
     themeColor: {
       type: String,
       default: '#F5F5F5',
+    },
+    dev: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, ctx) {
-    const { type, groupId } = props;
+    const { type, groupId, dev } = props;
     setGroupId(groupId);
+    setDev(dev);
     const classes = classnames();
     const loading = ref(true);
     const chatLoading = ref(false);

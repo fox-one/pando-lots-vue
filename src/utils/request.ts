@@ -1,30 +1,31 @@
 import axios from 'axios';
 import { getToken, removeAuth } from '@utils/auth';
-
-const API_BASE = process.env.APP_ENV === 'development' ? 'https://dev-courses-api.firesbox.com/v1' : 'https://courses-api.firesbox.com/v1';
-const AUTH_FAIL = 100401;
+import { API_BASE, AUTH_FAIL } from './constants';
 
 export let groupId;
+
+export let isDev = process.env.APP_ENV === 'development';
 
 export function setGroupId(id: string) {
   groupId = id;
 }
 
+export function setDev(dev: boolean) {
+  isDev = dev;
+}
+
 const request = async function <T extends Record<string, any>>(opts): Promise<T> {
+  if (process.env.APP_ENV === 'development') isDev = true;
+
   const token = getToken(groupId);
   let headers = {} as Record<string, any>;
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-  if (opts.headers) {
-    headers = Object.assign(headers, opts.headers);
-  }
+  if (token) headers.Authorization = `Bearer ${token}`;
+  if (opts.headers) headers = Object.assign(headers, opts.headers);
 
-  // let resp: any = null;
   try {
     const res = await axios({
       method: opts.method || 'get',
-      baseURL: API_BASE || '',
+      baseURL: API_BASE[isDev ? 'dev' : 'prod'] || '',
       url: opts.url || '',
       data: opts.data || {},
       headers,
