@@ -12,6 +12,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { VIcon } from 'vuetify/lib';
 import classnames from '@utils/classnames';
+import fennec from '@utils/fennec';
 import bridge from '@utils/bridge';
 import { $t } from '@locale/index';
 
@@ -40,6 +41,8 @@ class ConnectWallet extends Vue {
         messages: true,
         phone: true
       }, { client_id: this.clientId });
+    } else if (type === 'fennec') {
+      fennec.connect('Pando Lots');
     }
   }
 }

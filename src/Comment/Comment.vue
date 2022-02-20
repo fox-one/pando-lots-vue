@@ -41,7 +41,8 @@
 import {
   defineComponent,
   ref,
-  watch
+  watch,
+  PropType
 } from '@vue/composition-api';
 import { VLayout, VTextField, VMenu } from 'vuetify/lib';
 import { FIconSetting, FIconPicture, FIconSendFill } from '@foxone/icons';
@@ -71,13 +72,14 @@ export default defineComponent({
       type: String,
       default: ''
     },
-    disabled: {
-      type: Boolean,
-      default: false
+    status: {
+      type: String as PropType<'chat' | 'stream' | 'mute' | 'lecturing'>,
+      default: 'chat'
     },
   },
   setup(props, ctx) {
-    const { value, disabled } = props;
+    const { value, status } = props;
+    const disabled = ref(status === 'mute' || status === 'lecturing');
     const classes = classnames('comment');
     const placeholder = $t(disabled ? 'chat_only_operator_speak' : 'chat_placeholder');
     const isShowSend = ref(false);
@@ -95,7 +97,7 @@ export default defineComponent({
       }
     });
 
-    return { classes, placeholder, isShowSend, val, wrapper, settings };
+    return { disabled, classes, placeholder, isShowSend, val, wrapper, settings };
   },
   watch: {
     value: function (val) {

@@ -58,6 +58,7 @@ export default defineComponent({
             </div>
             : <div vShow={this.isShow} class={this.classes('pc')} ref='wapperPC'>
               <VMenu
+                class={this.classes('pc-menu')}
                 vModel={this.isShow}
                 absoulte={true}
                 attach={this.wapperPC}

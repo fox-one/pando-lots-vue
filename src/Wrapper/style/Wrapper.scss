@@ -48,16 +48,16 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    .v-menu__content {
+    &-menu + .v-menu__content {
       right: 32px !important;
       left: auto !important;
       border-radius: 0;
-    }
-    .v-card__text {
-      padding: 0;
-    }
-    .v-card.v-sheet {
-      border-radius: 0;
+      .v-card__text {
+        padding: 0;
+      }
+      .v-card.v-sheet {
+        border-radius: 0;
+      }
     }
   }
 }

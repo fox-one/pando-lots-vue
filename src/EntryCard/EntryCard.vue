@@ -6,9 +6,9 @@
       <rect x="96" y="56" rx="3" ry="3" width="240" height="24" /> 
     </content-loader>
     <v-layout v-else :class="classes(void 0, 'pa-4')" row align-center @click="$emit('click')">
-      <div :class="[classes('left', 'mr-4'), classes(type)].join(' ')" :style="`backgroundColor: ${themeColor};`" />
+      <div :class="[classes('left', 'mr-4'), classes(status)].join(' ')" :style="`backgroundColor: ${themeColor};`" />
       <v-layout column align-start>
-        <h3 :class="classes('title')">{{ title }}</h3>
+        <h3 :class="classes('title')">{{ `#${title}` }}</h3>
         <div :class="classes('member', 'mt-3')">
           <v-avatar
             v-for="(url, index) in avatars"
@@ -25,7 +25,6 @@
       </v-layout>
     </v-layout>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -52,13 +51,13 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    type: {
+    status: {
       type: String,
       default: 'chat',
     },
     title: {
       type: String,
-      default: '#XXX',
+      default: 'XXX',
     },
     members: {
       type: Object as PropType<{

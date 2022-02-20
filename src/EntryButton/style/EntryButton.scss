@@ -34,7 +34,7 @@
       background-size: 16px;
     }
   }
-  &-avatar:nth-of-type(1).#{$prefix}-entrybutton-stream {
+  &-avatar:nth-of-type(1).#{$prefix}-entry-button-stream {
     i {
       background-image: url(../../assets/images/svg/stream.svg);
     }

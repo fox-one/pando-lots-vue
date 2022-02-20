@@ -8,7 +8,7 @@
         v-for="(url, index) in avatars"
         v-show="index < 3"
         :key="index"
-        :class="classes('avatar', index === 0 ? classes(type) : 'ml-n4')"
+        :class="classes('avatar', index === 0 ? classes(status) : 'ml-n4')"
         size="36"
       >
         <v-img v-if="url" :src="url" />
@@ -42,7 +42,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    type: {
+    status: {
       type: String,
       default: 'chat',
     },

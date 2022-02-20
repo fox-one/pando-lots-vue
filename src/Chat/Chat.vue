@@ -1,14 +1,17 @@
 <template>
-  <div :class="classes()">
+  <div ref="menuParentRef"  :class="classes()" >
     <v-layout column :class="classes('header', 'pa-6')">
-      <h2 :class="classes('header-title')">{{ title }}</h2>
+      <h2 :class="classes('header-title', 'd-flex align-center')" @click="showMenu = !showMenu" >
+        {{ `#${group.name || ''}` }}
+        <f-icon-chevron-down style="width: 24px; height: 24px" :style="showMenu && 'transform: rotate(180deg)'" class="ml-2" />
+      </h2>
       <div :class="classes('header-total', 'd-flex align-center mt-6')">
         <f-icon-crowd-fill style="width: 16px; height: 16px" />
         <span class="ml-3">{{ total }}</span>
       </div>
       <div :class="classes('header-id', 'd-flex align-center mt-4')">
         <f-icon-horn-4-p-fill style="width: 16px; height: 16px" />
-        <span class="ml-3" v-html="communityId" />
+        <span class="ml-3" v-html="communityWithId" />
       </div>
     </v-layout>
     <f-scroll
@@ -18,18 +21,31 @@
       :height="height"
     >
       <section class="py-6">
+        <f-loading v-if="loading" :color="themeColor" :loading="loading" class="py-10" />
         <div :class="classes('chat-limit', 'd-flex align-top px-6 pb-6')">
           <i :class="classes('chat-limit-icon', 'flex-shrink-0')">
             <f-icon-bell />
           </i>
-          <a :href="download" :class="classes('chat-limit-txt', 'ml-4')">{{ chatLimit }}</a>
+          <span :class="classes('chat-limit-txt', 'ml-4')">{{ chatLimit }}</span>
         </div>
-        <item v-for="(chat, ind) in chats" :key="ind" :chat="chat" class="px-6 mt-6" />
+        <item v-for="(chat, ind) in chats" :key="ind" :chat="chat" :download="download" class="px-6 mt-6" />
       </section>
     </f-scroll>
+    <v-menu v-model="showMenu" :class="classes('menu-wrapper')" :attach="menuParentRef" nudge-top="-64">
+      <v-layout :class="classes('menu', 'px-4 py-2')" column align-start>
+        <div
+          v-for="(val, name) in groups"
+          :key="name"
+          :class="[classes('menu-item', 'py-3 d-flex justify-space-between align-center'), val.id === group.id ? classes('menu-item-active') : ''].join(' ')"
+          @click="$emit('select:group', val.id)"
+        >
+          <span>{{ `#${val.name}` }}</span>
+          <i v-if="val.id === group.id" :class="classes('menu-item-icon')" />
+        </div>
+      </v-layout>
+    </v-menu>
   </div>
 </template>
-
 <script lang="ts">
 import {
   defineComponent,
@@ -38,10 +54,10 @@ import {
   ref
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
-import { isMobile, isIOS } from '@utils/ua';
+import { isMobile } from '@utils/ua';
 import { toThousandSeparator } from '@utils/number';
-import { FIconCrowdFill, FIconHorn4PFill, FIconBell } from '@foxone/icons';
-import { VLayout } from 'vuetify/lib';
+import { FIconCrowdFill, FIconHorn4PFill, FIconBell, FIconChevronDown } from '@foxone/icons';
+import { VLayout, VMenu } from 'vuetify/lib';
 import { scrollWrapperHeight } from '@foxone/vue-scroll';
 import FScroll from '@foxone/vue-scroll/es/Scroll';
 import Item from './Item.vue';
@@ -61,30 +77,46 @@ export default defineComponent({
     FScroll,
     Item,
     VLayout,
+    VMenu,
     FIconCrowdFill,
     FIconHorn4PFill,
-    FIconBell
+    FIconBell,
+    FIconChevronDown
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     group: {
       type: Object as PropType<{
         id: string;
-        title: string;
+        name: string;
         total: number;
-        download_ios: string;
-        download_android: string;
+        download: string;
       }>,
+      default: () => ({})
+    },
+    groups: {
+      type: Object as PropType<Record<string, any>>,
       default: () => ({})
     },
     chats: {
       type: Array as PropType<Chat[]>,
       default: () => []
+    },
+    themeColor: {
+      type: String,
+      default: '#F5F5F5',
     }
   },
   setup(props) {
     const { group } = props;
     const classes = classnames('chat');
+    const download = group.download;
     const scroll = ref<any>(null);
+    const menuParentRef = ref<any>(null);
+    const showMenu = ref(false);
     onMounted(() => {
       setTimeout(() => {
         scroll.value.scrollTo(0, scroll.value.scroll.maxScrollY, 100);
@@ -93,17 +125,28 @@ export default defineComponent({
 
     return {
       classes,
-      title: `#${group.title ?? ''}`,
       scroll,
-      total: toThousandSeparator(group.total ?? 0), communityId: $t('chat_title', { id: `<a class="${classes('header-id-link')}">${group.id}</a>` }),
+      menuParentRef,
       chatLimit: $t('chat_limit'),
-      download: isIOS ? group.download_ios : group.download_android
+      download,
+      showMenu
     };
   },
   computed: {
     height() {
       return scrollWrapperHeight(isMobile ? 56 + 155 + 153 : 32 + 32 + 155 + 153);
+    },
+    total(): string {
+      return toThousandSeparator(this.group.total ?? 0);
+    },
+    communityWithId(): string {
+      return $t('chat_title', { id: `<a href="${this.download}" class="${this.classes('header-id-link')}">${this.group.id}</a>` });
     }
+  },
+  methods: {
+    refresh() {
+      this.scroll.refresh();
+    },
   }
 });
 </script>

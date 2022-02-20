@@ -4,16 +4,36 @@
       <template #activator="{ on }">
         <component
           :is="Entry"
+          :title="title"
+          :status="status"
           :loading="loading"
           :members="members"
           :theme-color="themeColor"
-          v-on="on"
+          @click="handleEntryClick(on.click)"
         />
       </template>
       <section @click.stop>
-        <chat :chats="chats" :group="groupInfo" />
-        <comment v-if="!isLogin" @send="handleSend" @upload="handleUpload" @disconnect="handleLogout" />
-        <connect-wallet v-else :fennec="fennec" :client-id="clientId" />
+        <chat
+          ref="chat"
+          :loading="chatLoading"
+          :chats="chats"
+          :group="groupInfo"
+          :groups="groups"
+          :theme-color="themeColor"
+          @select:group="handleGroupChange"
+        />
+        <comment
+          v-if="isLogin"
+          :status="status"
+          @send="handleSend"
+          @upload="handleUpload"
+          @disconnect="handleLogout"
+        />
+        <connect-wallet
+          v-else
+          :fennec="!fennec"
+          :client-id="groupInfo.client_id"
+        />
       </section>
     </wrapper>
   </div>
@@ -30,7 +50,9 @@ import classnames from '@utils/classnames';
 import $fennec from '@utils/fennec';
 import { setGroupId } from '@utils/request';
 import { isLogin, removeAuth } from '@utils/auth';
-import { getGroupInfo, getMessages } from '@apis/index';
+import { isIOS } from '@utils/ua';
+import { getGroups, setGroup } from '@utils/group';
+import { getGroupInfo, getMessages, sendMessage, getSettings, getStreams } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
@@ -71,46 +93,40 @@ export default defineComponent({
     setGroupId(groupId);
     const classes = classnames();
     const loading = ref(true);
+    const chatLoading = ref(false);
     const showChat = ref(false);
     const fennec = ref(false);
-    const clientId = ref('');
+    const chat = ref<null | any>(null);
+    const title = ref('');
+    const status = ref('chat');
+    const groups = ref(getGroups());
     const Entry = type === 'button' ? EntryButton : EntryCard;
-    const chats = [] as any[];
     const members = {
       avatars: [] as string[],
       total: 0
     };
-    const groupInfo = {
+    const login = isLogin(groupId);
+
+    const chats = ref<any[]>([]);
+    const groupInfo = ref({
+      name: '',
       id: '',
-      title: '',
       total: 0,
-      download_ios: '',
-      download_android: ''
-    };
+      download: '',
+      client_id: ''
+    });
     const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
 
-    onMounted(async () => {
-      setTimeout(() => {
-        fennec.value = $fennec?.isAvailable() ?? false;
-      }, 200);
+    const requestHandler = async (id: string) => {
       try {
         const [info, messages] = await Promise.all([
-          getGroupInfo(groupId),
-          getMessages(groupId)
+          getGroupInfo(id),
+          getMessages(id)
         ]);
-        messages.forEach(m => {
-          chats.push({
-            name: m.speaker_name,
-            avatar_url: m.speaker_avatar,
-            created_at: m.created_at,
-            content: m.text,
-            origin: 'mixin',
-            only_mixin: !!~supportMessages.indexOf(m.category)
-          });
-        });
+        chats.value = [];
         for (let i = 0; i < messages.length; i++) {
           const msg = messages[i];
-          chats.push({
+          chats.value.push({
             name: msg.speaker_name,
             avatar_url: msg.speaker_avatar,
             created_at: msg.created_at,
@@ -126,34 +142,80 @@ export default defineComponent({
           members.avatars.push('');
         }
         members.total = info.members_count.paid;
-        groupInfo.id = info.identity_number;
-        groupInfo.title = info.name;
-        groupInfo.total = info.members_count.paid;
-        groupInfo.download_ios = info.app_info.download_url_ios;
-        groupInfo.download_android = info.app_info.download_url_android;
-        clientId.value = info.client_id;
-        loading.value = false;
+        groupInfo.value = {
+          name: info.name,
+          id: info.identity_number,
+          total: info.members_count.paid,
+          download: isIOS ? info.app_info.download_url_ios : info.app_info.download_url_android,
+          client_id: info.client_id
+        };
+        return {
+          info,
+          messages
+        };
       } catch (e) {
         ctx.emit('error', e);
       }
+    };
+
+    onMounted(async () => {
+      setTimeout(() => {
+        fennec.value = $fennec?.isAvailable() ?? false;
+      }, 200);
+      const { info } = await requestHandler(groupId) ?? {};
+      const [data, stream, settings] = await Promise.all([
+        requestHandler(groupId),
+        getStreams(groupId),
+        login ? getSettings() : Promise.resolve({})
+      ]);
+
+      if (stream && !stream.disabled) {
+        status.value = 'stream';
+      } else {
+        switch(settings['group-mode']) {
+          case 'lecture':
+            status.value = 'lecturing';
+            break;
+          case 'mute':
+            status.value = 'mute';
+            break;
+        }
+      }
+      title.value = data?.info?.name ?? '';
+      loading.value = false;
     });
 
     return {
       classes,
       loading,
+      chatLoading,
       showChat,
       groupInfo,
+      groups,
       Entry,
+      chat,
       chats,
       members,
-      isLogin: isLogin(groupId),
+      isLogin: login,
       fennec,
-      clientId
+      title,
+      status,
+      requestHandler
     };
   },
   methods: {
-    handleSend(val) {
-      console.info('handleSend', val);
+    handleSend(val: string) {
+      if (!val) return;
+      sendMessage({
+        category: 'PLAIN_TEXT',
+        data: val
+      }).then(() => {
+        this.chats.push({
+          created_at: new Date().toISOString(),
+          content: val,
+          origin: 'self'
+        });
+      });
     },
     handleUpload(files) {
       console.info('handleUpload', files);
@@ -161,6 +223,17 @@ export default defineComponent({
     handleLogout() {
       console.info('handleLogout');
       removeAuth(this.groupId);
+    },
+    handleEntryClick(cb) {
+      setGroup(this.groupId, this.groupInfo);
+      this.groups = getGroups();
+      cb();
+    },
+    async handleGroupChange(id: string) {
+      this.chatLoading = true;
+      await this.requestHandler(id);
+      this.chatLoading = false;
+      this.chat?.refresh();
     }
   }
 });

@@ -1,6 +1,6 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix} {
+  position: relative;
   display: block;
-  color: green;
 }

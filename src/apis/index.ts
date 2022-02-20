@@ -59,6 +59,22 @@ export const getUserInfo = async function () {
   });
 };
 
+export const getSettings = async function () {
+  return request<API.GroupSettings>({
+    method: 'get',
+    url: '/settings/full'
+  });
+};
+
+export const getStreams = async function (groupId: string) {
+  return request<API.LiveStream>({
+    method: 'get',
+    url: '/stream/info',
+    headers: {
+      group_id: groupId
+    }
+  });
+};
 
 export default {
   request,
@@ -67,5 +83,7 @@ export default {
   sendMessage,
   authFennec,
   authMixin,
-  getUserInfo
+  getUserInfo,
+  getSettings,
+  getStreams
 };
