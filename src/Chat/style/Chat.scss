@@ -23,6 +23,31 @@
       &-link {
         color: #8D8D8D !important;
         text-decoration: underline;
+        &:hover {
+          color: #000 !important;
+        }
+      }
+    }
+  }
+  
+  &-chat-limit {
+    border-bottom: 1px solid #EBEBEB;
+    &-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      color: #FF9E29;
+      background-color: #FFF8EC;
+      border-radius: 50%;
+    }
+    &-txt {
+      cursor: pointer;
+      color: #8D8D8D !important;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }

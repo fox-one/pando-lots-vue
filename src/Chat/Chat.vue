@@ -17,8 +17,14 @@
       :pullup="false"
       :height="height"
     >
-      <section class="px-6 pb-6">
-        <item v-for="(chat, ind) in chats" :key="ind" :chat="chat" class="mt-6" />
+      <section class="py-6">
+        <div :class="classes('chat-limit', 'd-flex align-top px-6 pb-6')">
+          <i :class="classes('chat-limit-icon', 'flex-shrink-0')">
+            <f-icon-bell />
+          </i>
+          <a :href="download" :class="classes('chat-limit-txt', 'ml-4')">{{ chatLimit }}</a>
+        </div>
+        <item v-for="(chat, ind) in chats" :key="ind" :chat="chat" class="px-6 mt-6" />
       </section>
     </f-scroll>
   </div>
@@ -32,9 +38,9 @@ import {
   ref
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
-import { isMobile } from '@utils/ua';
+import { isMobile, isIOS } from '@utils/ua';
 import { toThousandSeparator } from '@utils/number';
-import { FIconCrowdFill, FIconHorn4PFill } from '@foxone/icons';
+import { FIconCrowdFill, FIconHorn4PFill, FIconBell } from '@foxone/icons';
 import { VLayout } from 'vuetify/lib';
 import { scrollWrapperHeight } from '@foxone/vue-scroll';
 import FScroll from '@foxone/vue-scroll/es/Scroll';
@@ -56,7 +62,8 @@ export default defineComponent({
     Item,
     VLayout,
     FIconCrowdFill,
-    FIconHorn4PFill
+    FIconHorn4PFill,
+    FIconBell
   },
   props: {
     group: {
@@ -64,6 +71,8 @@ export default defineComponent({
         id: string;
         title: string;
         total: number;
+        download_ios: string;
+        download_android: string;
       }>,
       default: () => ({})
     },
@@ -86,7 +95,9 @@ export default defineComponent({
       classes,
       title: `#${group.title ?? ''}`,
       scroll,
-      total: toThousandSeparator(group.total ?? 0), communityId: $t('chat_title', { id: `<a class="${classes('header-id-link')}">${group.id}</a>` })
+      total: toThousandSeparator(group.total ?? 0), communityId: $t('chat_title', { id: `<a class="${classes('header-id-link')}">${group.id}</a>` }),
+      chatLimit: $t('chat_limit'),
+      download: isIOS ? group.download_ios : group.download_android
     };
   },
   computed: {

@@ -83,7 +83,9 @@ export default defineComponent({
     const groupInfo = {
       id: '',
       title: '',
-      total: 0
+      total: 0,
+      download_ios: '',
+      download_android: ''
     };
     const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
 
@@ -127,6 +129,8 @@ export default defineComponent({
         groupInfo.id = info.identity_number;
         groupInfo.title = info.name;
         groupInfo.total = info.members_count.paid;
+        groupInfo.download_ios = info.app_info.download_url_ios;
+        groupInfo.download_android = info.app_info.download_url_android;
         clientId.value = info.client_id;
         loading.value = false;
       } catch (e) {
