@@ -19,6 +19,9 @@
           :chats="chats"
           :group="groupInfo"
           :groups="groups"
+          :status="status"
+          :source="source"
+          :is-login="isLogin"
           :theme-color="themeColor"
           @select:group="handleGroupChange"
         />
@@ -52,14 +55,13 @@ import { setGroupId, setDev } from '@utils/request';
 import { isLogin, removeAuth } from '@utils/auth';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
-import { getGroupInfo, getMessages, sendMessage, getSettings, getStreams } from '@apis/index';
+import { getGroupInfo, getMessages, sendMessage, getSettings, getStreams, getStreamInfo } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
 import Comment from '../Comment';
 import ConnectWallet from '../ConnectWallet';
 import Chat from '../Chat';
-import Stream from '../Stream';
 import HelloModel from '../HelloModel';
 
 export default defineComponent({
@@ -71,7 +73,6 @@ export default defineComponent({
     Comment,
     ConnectWallet,
     Chat,
-    Stream,
     HelloModel
   },
   props: {
@@ -105,6 +106,7 @@ export default defineComponent({
     const title = ref('');
     const status = ref('chat');
     const groups = ref(getGroups());
+    const source = ref<any[]>([]);
     const Entry = type === 'button' ? EntryButton : EntryCard;
     const members = {
       avatars: [] as string[],
@@ -167,26 +169,34 @@ export default defineComponent({
       setTimeout(() => {
         fennec.value = $fennec?.isAvailable() ?? false;
       }, 200);
-      const { info } = await requestHandler(groupId) ?? {};
-      const [data, stream, settings] = await Promise.all([
-        requestHandler(groupId),
-        getStreams(groupId),
-        login ? getSettings() : Promise.resolve({})
-      ]);
-
-      if (stream && !stream.disabled) {
-        status.value = 'stream';
-      } else {
-        switch(settings['group-mode']) {
-          case 'lecture':
-            status.value = 'lecturing';
-            break;
-          case 'mute':
-            status.value = 'mute';
-            break;
+      try {
+        const [data, urls, stream, settings] = await Promise.all([
+          requestHandler(groupId),
+          getStreams(groupId),
+          getStreamInfo(groupId),
+          login ? getSettings() : Promise.resolve({})
+        ]);
+        Object.keys(urls).forEach(k => {
+          if (~k.indexOf('hls')) {
+            source.value.push({ [k]: urls[k] });
+          }
+        });
+        if (stream && !stream.disabled && source.value.length) {
+          status.value = 'stream';
+        } else {
+          switch(settings['group-mode']) {
+            case 'lecture':
+              status.value = 'lecturing';
+              break;
+            case 'mute':
+              status.value = 'mute';
+              break;
+          }
         }
+        title.value = data?.info?.name ?? '';
+      } catch (e) {
+        ctx.emit('error', e);
       }
-      title.value = data?.info?.name ?? '';
       loading.value = false;
     });
 
@@ -205,6 +215,7 @@ export default defineComponent({
       fennec,
       title,
       status,
+      source,
       requestHandler
     };
   },

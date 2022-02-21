@@ -17,7 +17,6 @@
       color: #000;
       font-weight: bold;
       font-size: 20px;
-      cursor: pointer;
       user-select: none;
     }
 
@@ -52,7 +51,8 @@
       border-radius: 50%;
     }
     &-txt {
-      color: #8D8D8D
+      color: #8D8D8D;
+      user-select: none;
       // cursor: pointer;
       // color: #8D8D8D !important;
       // text-decoration: none;

@@ -1,9 +1,18 @@
 <template>
   <div ref="menuParentRef"  :class="classes()" >
-    <v-layout column :class="classes('header', 'pa-6')">
-      <h2 :class="classes('header-title', 'd-flex align-center')" @click="showMenu = !showMenu" >
+    <v-layout ref="topRef" column :class="classes('header', 'pa-6')">
+      <h2
+        :class="classes('header-title', 'd-flex align-center')"
+        :style="Object.keys(groups).length > 1 && 'cursor: pointer;'"
+        @click="() => { if(Object.keys(groups).length > 1) showMenu = !showMenu }"
+      >
         {{ `#${group.name || ''}` }}
-        <f-icon-chevron-down style="width: 24px; height: 24px" :style="showMenu && 'transform: rotate(180deg)'" class="ml-2" />
+        <f-icon-chevron-down
+          v-if="Object.keys(groups).length > 1"
+          style="width: 24px; height: 24px"
+          :style="showMenu && 'transform: rotate(180deg)'"
+          class="ml-2"
+        />
       </h2>
       <div :class="classes('header-total', 'd-flex align-center mt-6')">
         <f-icon-crowd-fill style="width: 16px; height: 16px" />
@@ -13,6 +22,7 @@
         <f-icon-horn-4-p-fill style="width: 16px; height: 16px" />
         <span class="ml-3" v-html="communityWithId" />
       </div>
+      <stream v-if="status === 'stream'" class="mt-6" />
     </v-layout>
     <f-scroll
       ref="scroll"
@@ -61,6 +71,7 @@ import { VLayout, VMenu } from 'vuetify/lib';
 import { scrollWrapperHeight } from '@foxone/vue-scroll';
 import FScroll from '@foxone/vue-scroll/es/Scroll';
 import Item from './Item.vue';
+import Stream from '../Stream';
 import { $t } from '@locale/index';
 
 export interface Chat {
@@ -76,6 +87,7 @@ export default defineComponent({
   components: {
     FScroll,
     Item,
+    Stream,
     VLayout,
     VMenu,
     FIconCrowdFill,
@@ -85,6 +97,10 @@ export default defineComponent({
   },
   props: {
     loading: {
+      type: Boolean,
+      default: false,
+    },
+    isLogin: {
       type: Boolean,
       default: false,
     },
@@ -101,6 +117,14 @@ export default defineComponent({
       type: Object as PropType<Record<string, any>>,
       default: () => ({})
     },
+    status: {
+      type: String,
+      default: 'chat',
+    },
+    source: {
+      type: Array as PropType<{[key: string]: string}[]>,
+      default: () => [],
+    },
     chats: {
       type: Array as PropType<Chat[]>,
       default: () => []
@@ -115,7 +139,8 @@ export default defineComponent({
     const classes = classnames('chat');
     const download = group.download;
     const scroll = ref<any>(null);
-    const menuParentRef = ref<any>(null);
+    const menuParentRef = ref<null | HTMLElement>(null);
+    const topRef = ref<null | HTMLElement>(null);
     const showMenu = ref(false);
     onMounted(() => {
       setTimeout(() => {
@@ -127,15 +152,18 @@ export default defineComponent({
       classes,
       scroll,
       menuParentRef,
+      topRef,
       chatLimit: $t('chat_limit'),
       download,
       showMenu
     };
   },
+  data: function() {
+    return {
+      height: '0',
+    };
+  },
   computed: {
-    height() {
-      return scrollWrapperHeight(isMobile ? 56 + 155 + 153 : 32 + 32 + 155 + 153);
-    },
     total(): string {
       return toThousandSeparator(this.group.total ?? 0);
     },
@@ -143,10 +171,19 @@ export default defineComponent({
       return $t('chat_title', { id: `<a href="${this.download}" class="${this.classes('header-id-link')}">${this.group.id}</a>` });
     }
   },
+  mounted() {
+    this.height = this.getHeight();
+  },
   methods: {
     refresh() {
       this.scroll.refresh();
     },
+    getHeight () {
+      const bottomHeight = this.isLogin ? 153 : 143;
+      const topHeight = this.topRef?.clientHeight ?? 0;
+      const gapHeight = isMobile ? 56 : 64;
+      return scrollWrapperHeight(gapHeight + topHeight + bottomHeight);
+    }
   }
 });
 </script>

@@ -66,7 +66,7 @@ export const getSettings = async function () {
   });
 };
 
-export const getStreams = async function (groupId: string) {
+export const getStreamInfo = async function (groupId: string) {
   return request<API.LiveStream>({
     method: 'get',
     url: '/stream/info',
@@ -75,6 +75,17 @@ export const getStreams = async function (groupId: string) {
     }
   });
 };
+
+export const getStreams = async function (groupId: string) {
+  return request<API.LiveStreamUrls>({
+    method: 'get',
+    url: '/stream/urls',
+    headers: {
+      group_id: groupId
+    }
+  });
+};
+
 
 export default {
   request,
@@ -85,5 +96,6 @@ export default {
   authMixin,
   getUserInfo,
   getSettings,
+  getStreamInfo,
   getStreams
 };

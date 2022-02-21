@@ -289,4 +289,16 @@ declare namespace API {
     state: 'RUNNING' | 'STARTING' | 'STOPPING' | 'IDLE';
     course_id: number;
   }
+
+  export interface LiveStreamUrls {
+    flv: string;
+    'flv@480p': string;
+    'flv@720p': string;
+    hls: string;
+    'hls@480p': string;
+    'hls@720p': string;
+    rtmp: string;
+    'rtmp@480p': string;
+    'rtmp@720p': string;
+  }
 }
