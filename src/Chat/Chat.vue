@@ -173,6 +173,9 @@ export default defineComponent({
   },
   mounted() {
     this.height = this.getHeight();
+    setTimeout(() => {
+      this.height = this.getHeight();
+    }, 100);
   },
   methods: {
     refresh() {

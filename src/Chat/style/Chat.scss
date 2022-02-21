@@ -1,6 +1,7 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-chat {
+  background-color: #FFF;
   .v-menu__content {
     left: 154px !important;
     background-color: #FFF;

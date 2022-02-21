@@ -12,7 +12,7 @@
           @click="handleEntryClick(on.click)"
         />
       </template>
-      <section @click.stop>
+      <section v-if="!loading" @click.stop>
         <chat
           ref="chat"
           :loading="chatLoading"
@@ -55,6 +55,7 @@ import { setGroupId, setDev } from '@utils/request';
 import { isLogin, removeAuth } from '@utils/auth';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
+import states from '@utils/states';
 import { getGroupInfo, getMessages, sendMessage, getSettings, getStreams, getStreamInfo } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
@@ -126,10 +127,15 @@ export default defineComponent({
 
     const requestHandler = async (id: string) => {
       try {
+        const storeChats = states.getChat(id);
+        const storeGroupInfo = states.getGroup(id);
         const [info, messages] = await Promise.all([
-          getGroupInfo(id),
-          getMessages(id)
+          storeGroupInfo ? Promise.resolve(storeGroupInfo) : getGroupInfo(id),
+          storeChats ? Promise.resolve(storeChats) : getMessages(id)
         ]);
+        if (!storeChats) states.setChat(id, messages);
+        if (!storeGroupInfo) states.setGroup(id, info);
+
         chats.value = [];
         for (let i = 0; i < messages.length; i++) {
           const msg = messages[i];
