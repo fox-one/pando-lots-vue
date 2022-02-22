@@ -1743,10 +1743,10 @@
     jsonwebtoken "^8.5.1"
     node-forge "^0.10.0"
 
-"@foxone/mixin-sdk-jsbridge@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/@foxone/mixin-sdk-jsbridge/-/mixin-sdk-jsbridge-0.5.0.tgz#1957acd7bdde60804e1bd9af950a1076e0e9b80a"
-  integrity sha512-8rjGKrlkyIqh7tiWIfLPVyE+1wca9dLi2aBo52QdwTue7FRoKLDoLW98J/CxkrvDhYqyVEzOqBcMJu3/KY/isQ==
+"@foxone/mixin-sdk-jsbridge@~0.5.1":
+  version "0.5.1"
+  resolved "https://registry.npmjs.org/@foxone/mixin-sdk-jsbridge/-/mixin-sdk-jsbridge-0.5.1.tgz#4928773c5f4d15d4ce786553c915c0a06d62b656"
+  integrity sha512-9kFb1JDl8/ohiAtSnbi3RLWQoa05uzPcMxD7O/SS0MPQ/YekR/IutnmxzHaz1x+xrGioLINwILyz6MVNpufoug==
   dependencies:
     ajax-maker "~0.0.20"
     crypto-js "^4.0.0"
