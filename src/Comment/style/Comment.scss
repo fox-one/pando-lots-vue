@@ -22,6 +22,16 @@
         }
       }
     }
+    .v-input__append-inner {
+      .v-input__icon {
+        button {
+          color: #000 !important;
+          svg {
+            color: #000 !important;
+          }
+        }
+      }
+    }
     .v-text-field__details {
       display: none;
     }
