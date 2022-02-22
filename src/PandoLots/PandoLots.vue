@@ -39,8 +39,8 @@
           :fennec="!fennec"
           :group-id="groupInfo.id"
           :client-id="groupInfo.client_id"
-          @login:mixin="handleMixinLogin"
-          @login:fennec="handleFennecLogin"
+          @login:mixin="handleLogin('mixin', $event)"
+          @login:fennec="handleLogin('fennec', $event)"
           @error="$emit('error', $event)"
         />
       </section>
@@ -292,47 +292,28 @@ export default defineComponent({
       this.chatLoading = false;
       this.chatDOM?.refresh();
     },
-    handleMixinLogin(code: string) {
-      authMixin(this.groupId, code).then((res) => {
-        if (res.token) {
-          setToken({
-            token: res.token,
-            groupId: this.groupId
-          });
-          getUserInfo()
-            .then(res => {
-              setUser({
-                user: res,
-                groupId: this.groupId
-              });
-              this.userInfo = res;
-              this.login = true;
+    handleLogin(type: 'mixin' | 'fennec', code: string) {
+      (type === 'fennec' ? authFennec : authMixin)(this.groupId, code)
+        .then((res) => {
+          if (res.token) {
+            setToken({
+              token: res.token,
+              groupId: this.groupId
             });
-        } else {
-          this.$emit('error', res);
-        }
-      }).catch(e => this.$emit('error', e));
-    },
-    handleFennecLogin(token: string) {
-      authFennec(this.groupId, token).then((res) => {
-        if (res.token) {
-          setToken({
-            token: res.token,
-            groupId: this.groupId
-          });
-          getUserInfo()
-            .then(res => {
-              setUser({
-                user: res,
-                groupId: this.groupId
+            getUserInfo()
+              .then(res => {
+                setUser({
+                  user: res,
+                  groupId: this.groupId
+                });
+                this.userInfo = res;
+                this.login = true;
               });
-              this.userInfo = res;
-              this.login = true;
-            });
-        } else {
-          this.$emit('error', res);
-        }
-      }).catch(e => this.$emit('error', e));
+          } else {
+            this.$emit('error', res);
+          }
+        })
+        .catch(e => this.$emit('error', e));
     }
   }
 });
