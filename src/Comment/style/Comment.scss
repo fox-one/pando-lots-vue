@@ -13,8 +13,10 @@
       background-color: #F5F5F5 !important;
       border-radius: 8px;
       input {
+        color: #000;
         font-weight: 500;
         font-size: 16px;
+        caret-color: #000;
         &::placeholder {
           color: #CCC;
         }

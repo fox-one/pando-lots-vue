@@ -55,6 +55,7 @@
       cursor: pointer;
     }
     &-menu + .v-menu__content {
+      top: 32px !important;
       right: 32px !important;
       left: auto !important;
       border-radius: 0;
