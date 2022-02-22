@@ -17,7 +17,7 @@ export function setDev(dev: boolean) {
 const request = async function <T extends Record<string, any>>(opts): Promise<T> {
   if (process.env.APP_ENV === 'development') isDev = true;
 
-  const token = getToken(groupId);
+  const token = getToken(groupId) || opts.token;
   let headers = {} as Record<string, any>;
   if (token) headers.Authorization = `Bearer ${token}`;
   if (opts.headers) headers = Object.assign(headers, opts.headers);

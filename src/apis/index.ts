@@ -52,17 +52,19 @@ export const authMixin = async function (groupId: string, code: string) {
   });
 };
 
-export const getUserInfo = async function () {
+export const getUserInfo = async function (token?: string) {
   return request<API.User>({
     method: 'get',
     url: '/users/me',
+    token
   });
 };
 
-export const getSettings = async function () {
+export const getSettings = async function (token?: string) {
   return request<API.GroupSettings>({
     method: 'get',
-    url: '/settings/full'
+    url: '/settings/full',
+    token
   });
 };
 

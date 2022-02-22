@@ -288,48 +288,42 @@ export default defineComponent({
     },
     async handleGroupChange(id: string) {
       this.chatLoading = true;
+      setGroupId(id);
       await this.requestHandler(id);
       this.chatLoading = false;
       this.chatDOM?.refresh();
     },
     handleLogin(type: 'mixin' | 'fennec', code: string) {
-      this.loading = true;
+      this.chatLoading = true;
       (type === 'fennec' ? authFennec : authMixin)(this.groupId, code)
-        .then((res) => {
+        .then(async (res) => {
           if (res.token) {
-            setToken({
-              token: res.token,
-              groupId: this.groupId
-            });
-            setTimeout(async () => {
-              const [user, settings] = await Promise.all([
-                getUserInfo(),
-                getSettings()
-              ]);
+            setToken({ token: res.token, groupId: this.groupId });
+            const [user, settings] = await Promise.all([
+              getUserInfo(res.token),
+              getSettings(res.token)
+            ]);
+            setUser({ user: user, groupId: this.groupId });
+            this.userInfo = user;
 
-              setUser({
-                user: user,
-                groupId: this.groupId
-              });
-              this.userInfo = user;
-              switch(settings['group-mode']) {
-                case 'lecture':
-                  this.status = 'lecturing';
-                  break;
-                case 'mute':
-                  this.status = 'mute';
-                  break;
-              }
-              this.login = true;
-            });
+            switch(settings['group-mode']) {
+              case 'lecture':
+                this.status = 'lecturing';
+                break;
+              case 'mute':
+                this.status = 'mute';
+                break;
+            }
+
+            this.login = true;
           } else {
             this.$emit('error', res);
           }
-          this.loading = false;
+          this.chatLoading = false;
         })
         .catch(e => {
           this.$emit('error', e);
-          this.loading = false;
+          this.chatLoading = false;
         });
     }
   }
