@@ -1,9 +1,23 @@
 declare namespace API {
-  export type MessageType = 'PLAIN_TEXT' | 'PLAIN_IMAGE';
+  export type MessageType =
+    'PLAIN_TEXT' |
+    'PLAIN_IMAGE' |
+    'PLAIN_VIDEO' |
+    'PLAIN_DATA' |
+    'PLAIN_AUDIO' |
+    'PLAIN_STICKER';
 
   export type UserState = 'pending' | 'paid' | 'unverified' | 'blocked';
 
   export type Role = 'owner' | 'admin' | 'lecturer' | 'user';
+
+  export interface Attachment {
+    id: string;
+    size: number;
+    mime_type: string;
+    view_url: string;
+    thumb_url: string;
+  }
 
   export interface Message {
     id: string;
@@ -13,13 +27,7 @@ declare namespace API {
     category: MessageType;
     data: string;
     text: string;
-    attachment: {
-      id: string;
-      size: number;
-      mime_type: string;
-      view_url: string;
-      thumb_url: string;
-    };
+    attachment: Attachment;
     created_at: string;
   }
 

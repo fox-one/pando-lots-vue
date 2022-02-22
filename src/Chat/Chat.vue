@@ -1,5 +1,5 @@
 <template>
-  <div ref="menuParentRef"  :class="classes()" >
+  <div ref="menuParentRef"  :class="[classes(), classes(isMobile ? 'mobile' : 'pc')].join(' ')" >
     <v-layout ref="topRef" column :class="classes('header', 'pa-6')">
       <h2
         :class="classes('header-title', 'd-flex align-center')"
@@ -22,7 +22,7 @@
         <f-icon-horn-4-p-fill style="width: 16px; height: 16px" />
         <span class="ml-3" v-html="communityWithId" />
       </div>
-      <stream v-if="status === 'stream'" class="mt-6" />
+      <stream v-if="status === 'stream'" :urls="source" class="mt-6" />
     </v-layout>
     <f-scroll
       ref="scroll"
@@ -38,7 +38,7 @@
           </i>
           <span :class="classes('chat-limit-txt', 'ml-4')">{{ chatLimit }}</span>
         </div>
-        <item v-for="(chat, ind) in chats" :key="ind" :chat="chat" :download="download" class="px-6 mt-6" />
+        <item v-for="(chat, ind) in chatData" :key="ind" :chat="chat" :download="download" class="px-6 mt-6" />
       </section>
     </f-scroll>
     <v-menu v-model="showMenu" :class="classes('menu-wrapper')" :attach="menuParentRef" nudge-top="-64">
@@ -66,6 +66,9 @@ import {
 import classnames from '@utils/classnames';
 import { isMobile } from '@utils/ua';
 import { toThousandSeparator } from '@utils/number';
+import Socket from '@utils/socket';
+import { WS_BASE } from '@utils/constants';
+import { isDev } from '@utils/request';
 import { FIconCrowdFill, FIconHorn4PFill, FIconBell, FIconChevronDown } from '@foxone/icons';
 import { VLayout, VMenu } from 'vuetify/lib';
 import { scrollWrapperHeight } from '@foxone/vue-scroll';
@@ -80,6 +83,10 @@ export interface Chat {
   name: string;
   created_at: string;
   origin: string;
+  // eslint-disable-next-line no-undef
+  category: API.MessageType;
+  // eslint-disable-next-line no-undef
+  attachment: API.Attachment;
 }
 
 export default defineComponent({
@@ -122,8 +129,8 @@ export default defineComponent({
       default: 'chat',
     },
     source: {
-      type: Array as PropType<{[key: string]: string}[]>,
-      default: () => [],
+      type: Object as PropType<{[key: string]: string}>,
+      default: () => ({}),
     },
     chats: {
       type: Array as PropType<Chat[]>,
@@ -135,16 +142,24 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { group } = props;
+    const { group, chats, isLogin } = props;
     const classes = classnames('chat');
     const download = group.download;
     const scroll = ref<any>(null);
     const menuParentRef = ref<null | HTMLElement>(null);
     const topRef = ref<null | HTMLElement>(null);
     const showMenu = ref(false);
+    const chatData = ref(chats);
+    const socket = ref(new Socket());
+    const onmessage = function(msg) {
+      chatData.value.push(msg);
+    };
+
     onMounted(() => {
       setTimeout(() => {
         scroll.value.scrollTo(0, scroll.value.scroll.maxScrollY, 100);
+        const url = `${WS_BASE[isDev ? 'dev' : 'prod']}/${group.id}`;
+        isLogin && socket.value.connect(url, { onmessage });
       }, 300);
     });
 
@@ -155,7 +170,9 @@ export default defineComponent({
       topRef,
       chatLimit: $t('chat_limit'),
       download,
-      showMenu
+      showMenu,
+      isMobile,
+      chatData
     };
   },
   data: function() {

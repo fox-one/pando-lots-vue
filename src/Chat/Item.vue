@@ -7,12 +7,17 @@
       </v-avatar>
       <i :class="classes('avatar-icon', classes(`avatar-icon-${chat.origin}`))" />
     </div>
-    <div class="ml-4">
+    <div :class="classes('data', 'ml-4 flex-grow-0')">
       <div class="mb-1" :class="classes('info')">
         <span :class="classes('name')">{{ chat.name }}</span>
         <span :class="classes('time')">{{ createAt }}</span>
       </div>
       <div v-if="chat.only_mixin" :class="[classes('content', 'py-3 px-4'), classes('content-only-mixin')].join(' ')" v-html="onlyMixinMsg" />
+      <v-img
+        v-else-if="imgUrl"
+        :src="imgUrl"
+        width="100%"
+      />
       <div
         v-else
         :class="classes('content', 'py-3 px-4')"
@@ -60,7 +65,7 @@ export default defineComponent({
     const createAt = dayjs(chat?.created_at).format('MM/DD HH:mm');
     const onlyMixinMsg = $t('chat_only_mixin', { learn_more: `<a href="${download}" class=${classes('learn-more')}>${$t('learn_more')}</a>` });
 
-    return { classes, createAt, onlyMixinMsg };
+    return { classes, createAt, onlyMixinMsg, imgUrl: chat.category === 'PLAIN_IMAGE' ? chat?.attachment?.view_url : '' };
   },
   computed: {
 

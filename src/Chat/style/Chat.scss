@@ -2,6 +2,10 @@
 
 .#{$prefix}-chat {
   background-color: #FFF;
+  &-pc {
+    max-width: 400px;
+  }
+
   .v-menu__content {
     left: 154px !important;
     background-color: #FFF;
@@ -88,6 +92,7 @@
 }
 
 .#{$prefix}-chat-item {
+  width: 100%;
   &-self {
     justify-content: flex-end;
   }
@@ -125,6 +130,10 @@
     // &-fennec {
     //   background-image: url(../../assets/images/png/fennec.png);
     // }
+  }
+
+  &-data {
+    width: calc(100% - 32px - 16px);
   }
 
   &-content {
