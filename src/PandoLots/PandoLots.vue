@@ -293,6 +293,7 @@ export default defineComponent({
       this.chatDOM?.refresh();
     },
     handleLogin(type: 'mixin' | 'fennec', code: string) {
+      this.loading = true;
       (type === 'fennec' ? authFennec : authMixin)(this.groupId, code)
         .then((res) => {
           if (res.token) {
@@ -300,20 +301,36 @@ export default defineComponent({
               token: res.token,
               groupId: this.groupId
             });
-            getUserInfo()
-              .then(res => {
-                setUser({
-                  user: res,
-                  groupId: this.groupId
-                });
-                this.userInfo = res;
-                this.login = true;
+            setTimeout(async () => {
+              const [user, settings] = await Promise.all([
+                getUserInfo(),
+                getSettings()
+              ]);
+
+              setUser({
+                user: user,
+                groupId: this.groupId
               });
+              this.userInfo = user;
+              switch(settings['group-mode']) {
+                case 'lecture':
+                  this.status = 'lecturing';
+                  break;
+                case 'mute':
+                  this.status = 'mute';
+                  break;
+              }
+              this.login = true;
+            });
           } else {
             this.$emit('error', res);
           }
+          this.loading = false;
         })
-        .catch(e => this.$emit('error', e));
+        .catch(e => {
+          this.$emit('error', e);
+          this.loading = false;
+        });
     }
   }
 });
