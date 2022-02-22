@@ -8,6 +8,7 @@
           :loading="loading"
           :theme-color="themeColor"
           @click="handleEntryClick(on.click)"
+          @error="$emit('error', $event)"
         />
       </template>
       <section v-if="!loading" @click.stop>
@@ -19,21 +20,26 @@
           :groups="groups"
           :status="status"
           :source="source"
-          :is-login="isLogin"
+          :is-login="login"
           :theme-color="themeColor"
           @select:group="handleGroupChange"
+          @error="$emit('error', $event)"
         />
         <comment
-          v-if="isLogin"
+          v-if="login"
           :status="status"
           @send="handleSend"
           @upload="handleUpload"
           @disconnect="handleLogout"
+          @error="$emit('error', $event)"
         />
         <connect-wallet
           v-else
           :fennec="!fennec"
           :client-id="groupInfo.client_id"
+          @login:mixin="handleMixinLogin"
+          @login:fennec="handleFennecLogin"
+          @error="$emit('error', $event)"
         />
       </section>
     </wrapper>
@@ -50,11 +56,11 @@ import {
 import classnames from '@utils/classnames';
 import $fennec from '@utils/fennec';
 import { setGroupId, setDev } from '@utils/request';
-import { isLogin, removeAuth } from '@utils/auth';
+import { isLogin, removeAuth, setToken } from '@utils/auth';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
 import states from '@utils/states';
-import { getGroupInfo, getMessages, sendMessage, getSettings, getStreams, getStreamInfo } from '@apis/index';
+import { authFennec, authMixin, getGroupInfo, getMessages, sendMessage, getSettings, getStreams, getStreamInfo } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
@@ -213,21 +219,21 @@ export default defineComponent({
     });
 
     return {
+      Entry,
+      entryData,
       classes,
+      requestHandler,
       loading,
       chatLoading,
       showChat,
       groupInfo,
       groups,
-      Entry,
-      entryData,
       chatDOM,
       chats,
-      isLogin: login,
+      login,
       fennec,
       status,
-      source,
-      requestHandler
+      source
     };
   },
   methods: {
@@ -264,6 +270,24 @@ export default defineComponent({
       await this.requestHandler(id);
       this.chatLoading = false;
       this.chatDOM?.refresh();
+    },
+    handleMixinLogin(code: string) {
+      authMixin(this.groupId, code).then((res) => {
+        setToken({
+          token: res.token,
+          groupId: this.groupId
+        });
+        this.login = true;
+      }).catch(e => this.$emit('error', e));
+    },
+    handleFennecLogin(token: string) {
+      authFennec(this.groupId, token).then((res) => {
+        setToken({
+          token: res.token,
+          groupId: this.groupId
+        });
+        this.login = true;
+      }).catch(e => this.$emit('error', e));
     }
   }
 });

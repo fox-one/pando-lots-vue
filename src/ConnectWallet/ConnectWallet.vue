@@ -14,6 +14,7 @@ import { VIcon } from 'vuetify/lib';
 import classnames from '@utils/classnames';
 import fennec from '@utils/fennec';
 import bridge from '@utils/bridge';
+import { getQuerystring } from '@utils/helper';
 import { $t } from '@locale/index';
 
 @Component({
@@ -34,15 +35,29 @@ class ConnectWallet extends Vue {
     return $t('chat_button');
   }
 
-  protected handleAuth(type: string) {
+  public mounted () {
+    const code = getQuerystring('pando_lots_code');
+    if (code) {
+      this.$emit('login:mixin', code);
+    }
+  }
+
+  protected async handleAuth(type: string) {
     if (type === 'mixin') {
       bridge.login({
         profile: true,
         messages: true,
         phone: true
-      }, { client_id: this.clientId });
+      }, { client_id: this.clientId, state: `pando_lots_url:${location.href}` });
     } else if (type === 'fennec') {
       fennec.connect('Pando Lots');
+      const token = await fennec.ctx?.wallet?.signToken({
+        payload: { from: 'pando-lots' },
+      });
+      if (!token) {
+        return this.$emit('error', 'fennec invalid token');
+      }
+      this.$emit('login:fennec', token);
     }
   }
 }

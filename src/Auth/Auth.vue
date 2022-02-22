@@ -47,7 +47,7 @@ import AuthStep1 from './AuthStep1.vue';
 import AuthStep2 from './AuthStep2.vue';
 
 export default defineComponent({
-  name: 'ConnectWallet',
+  name: 'Auth',
   components: {
     VDialog,
     VBottomSheet,
@@ -65,7 +65,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const classes = classnames('connect-wallet');
+    const classes = classnames('auth');
     const show = ref(false);
     const step = ref(1);
     const select = ref('');
