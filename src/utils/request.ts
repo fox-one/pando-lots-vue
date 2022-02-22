@@ -6,10 +6,6 @@ export let groupId;
 
 export let isDev = process.env.APP_ENV === 'development';
 
-export function setGroupId(id: string) {
-  groupId = id;
-}
-
 export function setDev(dev: boolean) {
   isDev = dev;
 }
@@ -17,7 +13,7 @@ export function setDev(dev: boolean) {
 const request = async function <T extends Record<string, any>>(opts): Promise<T> {
   if (process.env.APP_ENV === 'development') isDev = true;
 
-  const token = getToken(groupId) || opts.token;
+  const token = getToken(opts.group_id) || opts.token;
   let headers = {} as Record<string, any>;
   if (token) headers.Authorization = `Bearer ${token}`;
   if (opts.headers) headers = Object.assign(headers, opts.headers);

@@ -81,7 +81,7 @@ export default defineComponent({
     const { value, status } = props;
     const disabled = ref(status === 'mute' || status === 'lecturing');
     const classes = classnames('comment');
-    const placeholder = $t(disabled ? 'chat_only_operator_speak' : 'chat_placeholder');
+    const placeholder = $t(disabled.value ? 'chat_only_operator_speak' : 'chat_placeholder');
     const isShowSend = ref(false);
     const val = ref(value);
     const wrapper = ref(null);

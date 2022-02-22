@@ -57,6 +57,7 @@
   </div>
 </template>
 <script lang="ts">
+/* eslint-disable no-undef */
 import {
   defineComponent,
   PropType,
@@ -69,6 +70,7 @@ import { toThousandSeparator } from '@utils/number';
 import Socket from '@utils/socket';
 import { WS_BASE } from '@utils/constants';
 import { isDev } from '@utils/request';
+import { getToken, getUser } from '@utils/auth';
 import { FIconCrowdFill, FIconHorn4PFill, FIconBell, FIconChevronDown } from '@foxone/icons';
 import { VLayout, VMenu } from 'vuetify/lib';
 import { scrollWrapperHeight } from '@foxone/vue-scroll';
@@ -83,10 +85,9 @@ export interface Chat {
   name: string;
   created_at: string;
   origin: string;
-  // eslint-disable-next-line no-undef
   category: API.MessageType;
-  // eslint-disable-next-line no-undef
   attachment: API.Attachment;
+  speaker_id: string;
 }
 
 export default defineComponent({
@@ -143,23 +144,49 @@ export default defineComponent({
   },
   setup(props) {
     const { group, chats, isLogin } = props;
+    const userInfo = getUser(group.id);
     const classes = classnames('chat');
     const download = group.download;
     const scroll = ref<any>(null);
     const menuParentRef = ref<null | HTMLElement>(null);
     const topRef = ref<null | HTMLElement>(null);
     const showMenu = ref(false);
-    const chatData = ref(chats);
+    const chatData = ref(chats.map(chat => {
+      if (chat.speaker_id === userInfo?.user_id) chat.origin = 'self';
+      return chat;
+    }));
     const socket = ref(new Socket());
-    const onmessage = function(msg) {
-      chatData.value.push(msg);
+    const onmessage = function(msg: {
+      attachment: API.Attachment;
+      category: API.MessageType;
+      created_at: string;
+      data: string;
+      id: string;
+      recipient_ids: string[];
+      speaker_avatar: string;
+      speaker_id: string;
+      speaker_name: string;
+      text:string;
+    }) {
+      const userInfo = getUser(group.id);
+      if (userInfo?.user_id !== msg.speaker_id) {
+        chatData.value.push({
+          avatar_url: msg.speaker_avatar,
+          content: msg.text,
+          name: msg.speaker_name,
+          created_at: msg.created_at,
+          category: msg.category,
+          attachment: msg.attachment,
+          speaker_id: msg.speaker_id,
+        } as any);
+      }
     };
 
     onMounted(() => {
       setTimeout(() => {
         scroll.value.scrollTo(0, scroll.value.scroll.maxScrollY, 100);
         const url = `${WS_BASE[isDev ? 'dev' : 'prod']}/${group.id}`;
-        isLogin && socket.value.connect(url, { onmessage });
+        isLogin && socket.value.connect(url, getToken(group.id), { onmessage });
       }, 300);
     });
 

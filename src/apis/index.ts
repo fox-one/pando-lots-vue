@@ -14,15 +14,17 @@ export const getMessages = async function (groupId: string) {
 export const getGroupInfo = async function (groupId: string) {
   return await request<API.GroupInfo>({
     method: 'get',
-    url: `/groups/${groupId}/public`
+    url: `/groups/${groupId}/public`,
+    group_id: groupId
   });
 };
 
-export const sendMessage = async function (data: { category: API.MessageType, data: string }) {
+export const sendMessage = async function (groupId: string, data: { category: API.MessageType, data: string }) {
   return await request({
     method: 'post',
     url: '/lots/messages',
-    data
+    data,
+    group_id: groupId
   });
 };
 

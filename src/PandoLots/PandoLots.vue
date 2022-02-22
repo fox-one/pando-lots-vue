@@ -57,7 +57,7 @@ import {
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import $fennec from '@utils/fennec';
-import { setGroupId, setDev } from '@utils/request';
+import { setDev } from '@utils/request';
 import {
   isLogin,
   removeAuth,
@@ -65,6 +65,7 @@ import {
   setUser,
   getUser
 } from '@utils/auth';
+import base64 from '@utils/base64';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
 import states from '@utils/states';
@@ -118,7 +119,6 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const { type, groupId, dev } = props;
-    setGroupId(groupId);
     setDev(dev);
     const classes = classnames();
     const loading = ref(true);
@@ -179,6 +179,7 @@ export default defineComponent({
             content: msg.text,
             origin: 'mixin',
             category: msg.category,
+            speaker_id: msg.speaker_id,
             attachment: msg.attachment,
             only_mixin: !~supportMessages.indexOf(msg.category)
           });
@@ -260,14 +261,16 @@ export default defineComponent({
   methods: {
     handleSend(val: string) {
       if (!val) return;
-      sendMessage({
+      sendMessage(this.groupId, {
         category: 'PLAIN_TEXT',
-        data: val
+        data: base64.encode(val) 
       }).then(() => {
         this.chats.push({
           created_at: new Date().toISOString(),
           content: val,
-          origin: 'self'
+          origin: 'self',
+          name: this.userInfo.full_name,
+          speaker_id: this.userInfo.user_id
         });
       });
     },
@@ -275,8 +278,8 @@ export default defineComponent({
       console.info('handleUpload', files);
     },
     handleLogout() {
-      console.info('handleLogout');
       removeAuth(this.groupId);
+      this.login = false;
     },
     handleEntryClick(cb) {
       const groups = getGroups();
@@ -288,7 +291,6 @@ export default defineComponent({
     },
     async handleGroupChange(id: string) {
       this.chatLoading = true;
-      setGroupId(id);
       await this.requestHandler(id);
       this.chatLoading = false;
       this.chatDOM?.refresh();

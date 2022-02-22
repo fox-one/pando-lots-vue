@@ -11,7 +11,8 @@ export default class Socket {
   private callbacks: any = {};
   private connecting: boolean;
   private websocket: any = {};
-  private url: any;
+  private url: string;
+  private token: string;
 
   public constructor() {
     this.MAX_RETRY_NUM = 3;
@@ -19,27 +20,30 @@ export default class Socket {
     this.times = 0;
     this.callbacks = {};
     this.connecting = false;
+    this.url = '';
+    this.token = '';
   }
 
-  public connect(url, opts) {
+  public connect(url: string, token: string, opts: Record<string, Function>) {
     if (this.connecting) {
       return;
     }
     this.connecting = true;
     this.callbacks = opts;
     execute(this.callbacks.onconnect);
-    this.websocket = new WebSocket(url);
+    this.websocket = new WebSocket(url, token);
     this.websocket.onopen = this._onopen.bind(this);
     this.websocket.onclose = this._onclose.bind(this);
     this.websocket.onmessage = this._onmessage.bind(this);
     this.websocket.onerror = this._onerror.bind(this);
     this.url = url;
+    this.token = token;
   }
 
   public reconnect() {
     if (this.times < this.MAX_RETRY_NUM) {
       this.times += 1;
-      this.connect(this.url, this.callbacks);
+      this.connect(this.url, this.token, this.callbacks);
     } else {
       this.times = 0;
       execute(this.callbacks.onfail);
