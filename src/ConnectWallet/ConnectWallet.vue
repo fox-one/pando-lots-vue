@@ -58,7 +58,11 @@ class ConnectWallet extends Vue {
         profile: true,
         messages: true,
         phone: true
-      }, { client_id: this.clientId, state: `pando_lots_url:${location.href}` });
+      }, {
+        client_id: this.clientId,
+        state: `pando_lots_url:${location.href}`,
+        code_challenge: false
+      });
     } else if (type === 'fennec') {
       fennec.connect('Pando Lots');
       const token = await fennec.ctx?.wallet?.signToken({
