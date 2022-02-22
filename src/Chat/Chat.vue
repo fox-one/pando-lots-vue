@@ -188,6 +188,14 @@ export default defineComponent({
       return $t('chat_title', { id: `<a href="${this.download}" class="${this.classes('header-id-link')}">${this.group.id}</a>` });
     }
   },
+  watch: {
+    chats() {
+      this.chatData = this.chats;
+      setTimeout(() => {
+        this.scroll.scrollTo(0, this.scroll.scroll.maxScrollY, 100);
+      }, 300);
+    }
+  },
   mounted() {
     this.height = this.getHeight();
     setTimeout(() => {

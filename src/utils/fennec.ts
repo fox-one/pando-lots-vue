@@ -1,4 +1,4 @@
-import fennec from '@foxone/fennec-dapp';
+import Fennec from '@foxone/fennec-dapp';
 export { default as Fennec } from '@foxone/fennec-dapp';
 
-export default new fennec();
+export default new Fennec();

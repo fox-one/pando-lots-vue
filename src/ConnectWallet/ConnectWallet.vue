@@ -14,7 +14,7 @@ import { VIcon } from 'vuetify/lib';
 import classnames from '@utils/classnames';
 import fennec from '@utils/fennec';
 import bridge from '@utils/bridge';
-import { getQuerystring } from '@utils/helper';
+import { getQuerystring, removeQuery } from '@utils/helper';
 import { $t } from '@locale/index';
 
 @Component({
@@ -39,6 +39,7 @@ class ConnectWallet extends Vue {
     const code = getQuerystring('pando_lots_code');
     if (code) {
       this.$emit('login:mixin', code);
+      removeQuery('pando_lots_code');
     }
   }
 

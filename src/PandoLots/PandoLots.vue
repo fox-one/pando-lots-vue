@@ -273,20 +273,28 @@ export default defineComponent({
     },
     handleMixinLogin(code: string) {
       authMixin(this.groupId, code).then((res) => {
-        setToken({
-          token: res.token,
-          groupId: this.groupId
-        });
-        this.login = true;
+        if (res.token) {
+          setToken({
+            token: res.token,
+            groupId: this.groupId
+          });
+          this.login = true;
+        } else {
+          this.$emit('error', res);
+        }
       }).catch(e => this.$emit('error', e));
     },
     handleFennecLogin(token: string) {
       authFennec(this.groupId, token).then((res) => {
-        setToken({
-          token: res.token,
-          groupId: this.groupId
-        });
-        this.login = true;
+        if (res.token) {
+          setToken({
+            token: res.token,
+            groupId: this.groupId
+          });
+          this.login = true;
+        } else {
+          this.$emit('error', res);
+        }
       }).catch(e => this.$emit('error', e));
     }
   }
