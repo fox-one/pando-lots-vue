@@ -1,4 +1,4 @@
-import { setStore, getStore } from './storage';
+import { setStore, getStore, removeStore } from './storage';
 
 export function setToken(data: { token: string, groupId: string }) {
   const tokens = getStore('tokens') ?? {};
@@ -41,4 +41,16 @@ export function isLogin(groupId: string) {
   const tokens = getToken(groupId);
   const user = getUser(groupId);
   return !!tokens && !!user;
+}
+
+export function setAuthGroup(groupId: string) {
+  setStore('auth_group', groupId);
+}
+
+export function getAuthGroup(): string {
+  return getStore('auth_group');
+}
+
+export function removeAuthGroup() {
+  removeStore('auth_group');
 }

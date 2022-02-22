@@ -14,6 +14,11 @@ import { VIcon } from 'vuetify/lib';
 import classnames from '@utils/classnames';
 import fennec from '@utils/fennec';
 import bridge from '@utils/bridge';
+import {
+  setAuthGroup,
+  getAuthGroup,
+  removeAuthGroup
+} from '@utils/auth';
 import { getQuerystring, removeQuery } from '@utils/helper';
 import { $t } from '@locale/index';
 
@@ -29,6 +34,8 @@ class ConnectWallet extends Vue {
 
   @Prop({ type: String, default: '' }) protected clientId!: string;
 
+  @Prop({ type: String, default: '' }) protected groupId!: string;
+
   protected classes = classnames('connect-wallet');
 
   protected get btnText () {
@@ -37,7 +44,8 @@ class ConnectWallet extends Vue {
 
   public mounted () {
     const code = getQuerystring('pando_lots_code');
-    if (code) {
+    if (code && this.groupId === getAuthGroup()) {
+      removeAuthGroup();
       this.$emit('login:mixin', code);
       removeQuery('pando_lots_code');
     }
@@ -45,6 +53,7 @@ class ConnectWallet extends Vue {
 
   protected async handleAuth(type: string) {
     if (type === 'mixin') {
+      setAuthGroup(this.groupId);
       bridge.login({
         profile: true,
         messages: true,

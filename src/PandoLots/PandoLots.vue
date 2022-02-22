@@ -36,6 +36,7 @@
         <connect-wallet
           v-else
           :fennec="!fennec"
+          :group-id="groupInfo.id"
           :client-id="groupInfo.client_id"
           @login:mixin="handleMixinLogin"
           @login:fennec="handleFennecLogin"
@@ -56,11 +57,24 @@ import {
 import classnames from '@utils/classnames';
 import $fennec from '@utils/fennec';
 import { setGroupId, setDev } from '@utils/request';
-import { isLogin, removeAuth, setToken } from '@utils/auth';
+import {
+  isLogin,
+  removeAuth,
+  setToken
+} from '@utils/auth';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
 import states from '@utils/states';
-import { authFennec, authMixin, getGroupInfo, getMessages, sendMessage, getSettings, getStreams, getStreamInfo } from '@apis/index';
+import {
+  authFennec,
+  authMixin,
+  getGroupInfo,
+  getMessages,
+  sendMessage,
+  getSettings,
+  getStreams,
+  getStreamInfo
+} from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
 import EntryCard from '../EntryCard';
