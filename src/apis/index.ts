@@ -27,7 +27,7 @@ export const sendMessage = async function (data: { category: API.MessageType, da
 };
 
 export const authFennec = async function (groupId: string, token: string) {
-  return await request({
+  return await request<API.Auth>({
     method: 'post',
     url: `/groups/${groupId}/auth/fennec`,
     data: {
@@ -40,7 +40,7 @@ export const authFennec = async function (groupId: string, token: string) {
 };
 
 export const authMixin = async function (groupId: string, code: string) {
-  return await request({
+  return await request<API.Auth>({
     method: 'post',
     url: `/groups/${groupId}/auth/mixin`,
     data: {

@@ -309,4 +309,29 @@ declare namespace API {
     'rtmp@480p': string;
     'rtmp@720p': string;
   }
+
+  export interface Auth {
+    active_at: string;
+    avatar_url: string;
+    bio: string;
+    blocked: number;
+    created_at: string;
+    divided_at: string;
+    divided_to: string;
+    expired_at: string;
+    full_name: string;
+    group_id: string;
+    identity_number: number;
+    joined_at: string;
+    policies: any;
+    provider: string;
+    refresh_token: string;
+    role: string;
+    state: string;
+    subscribed_at: string;
+    token: string;
+    uiam_id: number;
+    user_id: string;
+    version: number;
+  }
 }

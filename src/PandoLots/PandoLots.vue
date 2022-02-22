@@ -27,6 +27,7 @@
         />
         <comment
           v-if="login"
+          :name="userInfo.full_name"
           :status="status"
           @send="handleSend"
           @upload="handleUpload"
@@ -60,7 +61,9 @@ import { setGroupId, setDev } from '@utils/request';
 import {
   isLogin,
   removeAuth,
-  setToken
+  setToken,
+  setUser,
+  getUser
 } from '@utils/auth';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
@@ -73,7 +76,8 @@ import {
   sendMessage,
   getSettings,
   getStreams,
-  getStreamInfo
+  getStreamInfo,
+  getUserInfo
 } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
@@ -135,6 +139,7 @@ export default defineComponent({
     });
     const groups = ref(getGroups());
     const source = ref<Record<string, string>>({});
+    const userInfo = ref(getUser(groupId));
 
     const Entry = type === 'button' ? EntryButton : EntryCard;
     const entryData = ref({
@@ -151,6 +156,7 @@ export default defineComponent({
 
     const requestHandler = async (id: string) => {
       login.value = isLogin(id);
+      userInfo.value = getUser(id);
       try {
         const storeGroupInfo = states.getGroup(id);
         const [info, messages, urls, stream, settings] = await Promise.all([
@@ -240,6 +246,7 @@ export default defineComponent({
       loading,
       chatLoading,
       showChat,
+      userInfo,
       groupInfo,
       groups,
       chatDOM,
@@ -292,7 +299,15 @@ export default defineComponent({
             token: res.token,
             groupId: this.groupId
           });
-          this.login = true;
+          getUserInfo()
+            .then(res => {
+              setUser({
+                user: res,
+                groupId: this.groupId
+              });
+              this.userInfo = res;
+              this.login = true;
+            });
         } else {
           this.$emit('error', res);
         }
@@ -305,7 +320,15 @@ export default defineComponent({
             token: res.token,
             groupId: this.groupId
           });
-          this.login = true;
+          getUserInfo()
+            .then(res => {
+              setUser({
+                user: res,
+                groupId: this.groupId
+              });
+              this.userInfo = res;
+              this.login = true;
+            });
         } else {
           this.$emit('error', res);
         }
