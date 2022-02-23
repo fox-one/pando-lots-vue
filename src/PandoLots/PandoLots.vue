@@ -11,7 +11,8 @@
           @error="$emit('error', $event)"
         />
       </template>
-      <section v-if="!loading" @click.stop>
+      <hello-model v-if="showHelloModel" @click="handleFirstLogin" />
+      <section v-else-if="!loading" @click.stop>
         <chat
           ref="chatDOM"
           :loading="chatLoading"
@@ -29,6 +30,8 @@
           v-if="login"
           :name="userInfo.full_name"
           :status="status"
+          :uploading="uploading"
+          :theme-color="themeColor"
           @send="handleSend"
           @upload="handleUpload"
           @disconnect="handleLogout"
@@ -68,6 +71,7 @@ import {
 import base64 from '@utils/base64';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
+import { encodeFileImageToBlurhash } from '@utils/image';
 import states from '@utils/states';
 import {
   authFennec,
@@ -78,7 +82,8 @@ import {
   getSettings,
   getStreams,
   getStreamInfo,
-  getUserInfo
+  getUserInfo,
+  uploadAttachment
 } from '@apis/index';
 import Wrapper from '../Wrapper';
 import EntryButton from '../EntryButton';
@@ -87,6 +92,9 @@ import Comment from '../Comment';
 import ConnectWallet from '../ConnectWallet';
 import Chat from '../Chat';
 import HelloModel from '../HelloModel';
+import { getStore, setStore } from '@utils/storage';
+
+const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
 
 export default defineComponent({
   name: 'PandoLots',
@@ -123,10 +131,12 @@ export default defineComponent({
     const classes = classnames();
     const loading = ref(true);
     const chatLoading = ref(false);
-
-    const login = ref(isLogin(groupId));
+    const uploading = ref(false);
     const showChat = ref(false);
     const fennec = ref(false);
+    const showHelloModel = ref(false);
+    const login = ref(isLogin(groupId));
+
     const chatDOM = ref<null | any>(null);
     const status = ref('chat');
     const chats = ref<any[]>([]);
@@ -151,8 +161,9 @@ export default defineComponent({
       }
     });
 
-
-    const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
+    if (!isLogin && getStore('first_login') === void 0) {
+      setStore('first_login', true);
+    }
 
     const requestHandler = async (id: string) => {
       login.value = isLogin(id);
@@ -245,7 +256,9 @@ export default defineComponent({
       classes,
       requestHandler,
       loading,
+      uploading,
       chatLoading,
+      showHelloModel,
       showChat,
       userInfo,
       groupInfo,
@@ -266,6 +279,7 @@ export default defineComponent({
         data: base64.encode(val) 
       }).then(() => {
         this.chats.push({
+          category: 'PLAIN_TEXT',
           created_at: new Date().toISOString(),
           content: val,
           origin: 'self',
@@ -274,8 +288,47 @@ export default defineComponent({
         });
       });
     },
-    handleUpload(files) {
-      console.info('handleUpload', files);
+    async handleUpload(files: File[]) {
+      const file = files[0];
+      if (!~file.type.indexOf('image')) {
+        this.$emit('error', 'The file type must be image');
+        return;
+      }
+      // 2 MB
+      if (file.size / (1024 * 1024) > 2) {
+        this.$emit('error', 'The file size is too large');
+        return;
+      }
+
+      this.uploading = true;
+      const formData = new FormData();
+      formData.append('file', file);
+      const [ uploadData, blurhashData ] = await Promise.all([
+        uploadAttachment(this.groupId, formData),
+        encodeFileImageToBlurhash(file)
+      ]);
+      const payload = {
+        category: 'PLAIN_IMAGE',
+        attachment_id: uploadData.attachment_id,
+        size: file.size,
+        created_at: new Date().toISOString(),
+        mime_type: file.type,
+        thumbnail: blurhashData.thumbnail,
+        height: blurhashData.height,
+        width: blurhashData.width,
+      };
+      const data = base64.encode(JSON.stringify(payload));
+      sendMessage(this.groupId, {
+        category: 'PLAIN_IMAGE',
+        data
+      }).then((res) => {
+        this.chats.push({
+          ...res,
+          origin: 'self',
+          name: this.userInfo.full_name
+        });
+        this.uploading = false;
+      });
     },
     handleLogout() {
       removeAuth(this.groupId);
@@ -300,6 +353,7 @@ export default defineComponent({
       (type === 'fennec' ? authFennec : authMixin)(this.groupId, code)
         .then(async (res) => {
           if (res.token) {
+            if (getStore('first_login')) this.showHelloModel = true;
             setToken({ token: res.token, groupId: this.groupId });
             const [user, settings] = await Promise.all([
               getUserInfo(res.token),
@@ -327,6 +381,10 @@ export default defineComponent({
           this.$emit('error', e);
           this.chatLoading = false;
         });
+    },
+    handleFirstLogin () {
+      this.showHelloModel = false;
+      setStore('first_login', false);
     }
   }
 });

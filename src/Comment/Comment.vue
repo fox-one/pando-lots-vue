@@ -29,7 +29,8 @@
           <div :class="classes('settings', 'pa-4')" @click="$emit('disconnect')" >{{ settings.disconnect }}</div>
         </v-menu>
       </v-layout>
-      <div :class="classes('upload', 'd-inline-flex')">
+      <f-loading v-if="uploading" :color="themeColor" :loading="uploading" :class="classes('loading')" />
+      <div v-else :class="classes('upload', 'd-inline-flex')">
         <input type="file" :class="classes('upload-input')" accept="image/*" @change="e => $emit('upload', e.target.files)" >
         <f-icon-picture style="width: 24px; height: 24px; cursor: pointer" />
       </div>
@@ -67,6 +68,14 @@ export default defineComponent({
     name: {
       type: String,
       default: ''
+    },
+    uploading: {
+      type: Boolean,
+      default: false
+    },
+    themeColor: {
+      type: String,
+      default: '#F5F5F5',
     },
     value: {
       type: String,

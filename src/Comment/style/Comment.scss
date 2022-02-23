@@ -72,4 +72,11 @@
       opacity: 0;
     }
   }
+
+  &-loading {
+    .v-progress-circular {
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
 }

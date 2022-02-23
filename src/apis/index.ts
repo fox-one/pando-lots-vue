@@ -19,7 +19,10 @@ export const getGroupInfo = async function (groupId: string) {
   });
 };
 
-export const sendMessage = async function (groupId: string, data: { category: API.MessageType, data: string }) {
+export const sendMessage = async function (groupId: string, data: {
+  category: API.MessageType,
+  data: string
+}) {
   return await request({
     method: 'post',
     url: '/lots/messages',
@@ -87,6 +90,18 @@ export const getStreams = async function (groupId: string) {
     headers: {
       group_id: groupId
     }
+  });
+};
+
+export const uploadAttachment = async function (groupId: string, data: FormData) {
+  return request<{
+    attachment_id: string;
+    view_url: string;
+  }>({
+    method: 'post',
+    url: '/lots/upload_attachment',
+    group_id: groupId,
+    data
   });
 };
 

@@ -1,5 +1,5 @@
 <template>
-  <v-layout :class="classes(void 0, 'px-12')" column align-center justify-center>
+  <v-layout :class="classes(void 0, 'pa-12')" column align-center justify-center @click.stop>
     <v-img :class="classes('bg', 'mb-10')" :src="bgSrc" />
     <h1 :class="classes('title', 'mb-6')">{{ txt.title }}</h1>
     <p :class="classes('desc', 'mb-6')">{{ txt.desc }}</p>
