@@ -160,8 +160,8 @@ export default defineComponent({
         total: 0
       }
     });
-
-    if (!isLogin && getStore('first_login') === void 0) {
+    
+    if (!login.value && getStore('first_login') == void 0) {
       setStore('first_login', true);
     }
 
