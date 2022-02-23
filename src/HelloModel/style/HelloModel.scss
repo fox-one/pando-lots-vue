@@ -4,6 +4,15 @@
   height: 100%;
   font-weight: 500;
   font-size: 14px;
+  &-pc {
+    max-width: 400px;
+    height: calc(100vh - 64px);
+  }
+
+  &-wrapper {
+    height: 100%;
+  }
+
   &-title {
     font-weight: bold;
     font-size: 20px;
@@ -23,6 +32,7 @@
   &-btn {
     width: 164px;
     height: 56px;
+    margin: auto;
     color: #FFF;
     font-weight: 600;
     font-size: 16px;
@@ -32,5 +42,12 @@
     border-radius: 100px;
     cursor: pointer;
     user-select: none;
+
+    &-wrapper {
+      position: relative;
+      z-index: 10;
+      padding: 44px 0;
+      background-color: #FFF;
+    }
   }
 }
