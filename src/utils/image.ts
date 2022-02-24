@@ -1,6 +1,3 @@
-import base64 from './base64';
-
-
 export const readFile = (file: File) => new Promise<string>((resolve, reject) => {
   const reader = new FileReader();
   reader.readAsDataURL(file);
@@ -33,11 +30,9 @@ export const getImageData = image => {
 export const encodeImageToBase64 = async (src: string) => {
   const image = await loadImage(src);
   const imageData = getImageData(image);
-  const thumbnail = base64.encode(imageData.data.toString());
   return {
     width: imageData.width,
-    height: imageData.height,
-    thumbnail
+    height: imageData.height
   };
 };
 

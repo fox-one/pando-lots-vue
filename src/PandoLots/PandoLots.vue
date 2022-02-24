@@ -308,7 +308,6 @@ export default defineComponent({
         size: file.size,
         created_at: new Date().toISOString(),
         mime_type: file.type,
-        thumbnail: imgData.thumbnail,
         height: imgData.height,
         width: imgData.width,
       };
