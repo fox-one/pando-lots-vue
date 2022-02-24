@@ -22,13 +22,28 @@ storiesOf('PandoLots', module)
       PandoLots
     },
     template: `<div>
+      <br /> 
+      <br /> 
+      <br /> 
       <pando-lots dev group-id="7000103413" theme-color="#EE4596" />
-      <pando-lots dev group-id="7000103417" theme-color="#88E108" />
+      <br /> 
+      <br /> 
+      <br /> 
+      <pando-lots dev group-id="7000104299" theme-color="#88E108" />
     </div>`
   }))
   .add('button', () => ({
     components: {
       PandoLots
     },
-    template: `<pando-lots dev group-id="7000103413" type="button" />`
+    template: `<div>
+      <br /> 
+      <br /> 
+      <br /> 
+      <pando-lots dev group-id="7000103413" type="button" theme-color="#EE4596" />
+      <br /> 
+      <br /> 
+      <br /> 
+      <pando-lots dev group-id="7000104299" type="button" theme-color="#88E108" />
+    </div>`
   }));
