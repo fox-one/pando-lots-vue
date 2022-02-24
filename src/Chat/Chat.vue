@@ -182,15 +182,22 @@ export default defineComponent({
       }
     };
 
+    const connectSocket = () => {
+      setTimeout(() => {
+        const url = `${WS_BASE[isDev ? 'dev' : 'prod']}/${group.id}`;
+        isLogin && socket.value.connect(url, getToken(group.id), { onmessage });
+      }, 100);
+    };
+
     onMounted(() => {
       setTimeout(() => {
         scroll.value.scrollTo(0, scroll.value.scroll.maxScrollY, 100);
-        const url = `${WS_BASE[isDev ? 'dev' : 'prod']}/${group.id}`;
-        isLogin && socket.value.connect(url, getToken(group.id), { onmessage });
+        connectSocket();
       }, 300);
     });
 
     return {
+      socket,
       classes,
       scroll,
       menuParentRef,
@@ -199,7 +206,8 @@ export default defineComponent({
       download,
       showMenu,
       isMobile,
-      chatData
+      chatData,
+      connectSocket
     };
   },
   data: function() {

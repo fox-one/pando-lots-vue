@@ -10,7 +10,7 @@ export default class Socket {
   private times: number;
   private callbacks: any = {};
   private connecting: boolean;
-  private websocket: any = {};
+  private websocket: WebSocket = {} as any;
   private url: string;
   private token: string;
 
@@ -38,6 +38,10 @@ export default class Socket {
     this.websocket.onerror = this._onerror.bind(this);
     this.url = url;
     this.token = token;
+  }
+
+  public disconnect() {
+    this.websocket.close(1000);
   }
 
   public reconnect() {

@@ -289,8 +289,8 @@ export default defineComponent({
         this.$emit('error', 'The file type must be image');
         return;
       }
-      // 2 MB
-      if (file.size / (1024 * 1024) > 2) {
+      // 5 MB
+      if (file.size / (1024 * 1024) > 5) {
         this.$emit('error', 'The file size is too large');
         return;
       }
@@ -308,7 +308,7 @@ export default defineComponent({
         size: file.size,
         created_at: new Date().toISOString(),
         mime_type: file.type,
-        thumbnail: blurhashData.thumbnail,
+        // thumbnail: blurhashData.thumbnail,
         height: blurhashData.height,
         width: blurhashData.width,
       };
@@ -327,6 +327,7 @@ export default defineComponent({
     },
     handleLogout() {
       removeAuth(this.groupId);
+      this.chatDOM?.socket.disconnect();
       this.login = false;
     },
     handleEntryClick(cb) {
@@ -344,7 +345,9 @@ export default defineComponent({
       this.chatLoading = true;
       await this.requestHandler(id);
       this.chatLoading = false;
+      this.chatDOM?.socket.disconnect();
       this.chatDOM?.refresh();
+      this.chatDOM?.connectSocket();
     },
     handleLogin(type: 'mixin' | 'fennec', code: string) {
       this.chatLoading = true;

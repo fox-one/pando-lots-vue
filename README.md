@@ -26,9 +26,9 @@ pnpm i -S @foxone/pando-lots-vue
 - In any **.vue file
 
   ```html
-  <pando-lots dev type="card" group-id="7000103413" theme-color="#88E108" />
+  <pando-lots dev type="card" group-id="7000103413" theme-color="#88E108" @error="handleError" />
   
-  <pando-lots dev type="button" group-id="7000103417" theme-color="#EE4596" />
+  <pando-lots dev type="button" group-id="7000103417" theme-color="#EE4596" @error="handleError" />
   ```
 
 ## Dev

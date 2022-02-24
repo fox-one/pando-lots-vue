@@ -34,11 +34,11 @@ export const getImageData = image => {
 export const encodeImageToBlurhash = async (src: string) => {
   const image = await loadImage(src);
   const imageData = getImageData(image);
-  const thumbnail = encode(imageData.data, imageData.width, imageData.height, 1, 1);
+  // const thumbnail = encode(imageData.data, imageData.width, imageData.height, 1, 1);
   return {
     width: imageData.width,
     height: imageData.height,
-    thumbnail
+    // thumbnail
   };
 };
 
