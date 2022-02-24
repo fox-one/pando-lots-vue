@@ -15,9 +15,21 @@ pnpm i -S @foxone/pando-lots-vue
 ```
 
 ### Usage
-```js
-import UI from '@foxone/pando-lots-vue';
-```
+- Import
+  ```js
+  import PandoLots from '@foxone/pando-lots-vue';
+  import "@foxone/pando-lots-vue/lib/index.css";
+
+  Vue.use(PandoLots);
+  ```
+
+- In any **.vue file
+
+  ```html
+  <pando-lots dev type="card" group-id="7000103413" theme-color="#88E108" />
+  
+  <pando-lots dev type="button" group-id="7000103417" theme-color="#EE4596" />
+  ```
 
 ## Dev
 For debugging or maintenance, you can clone the whole git repository and run the project:

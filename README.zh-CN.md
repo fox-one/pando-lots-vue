@@ -15,9 +15,21 @@ pnpm i -S @foxone/pando-lots-vue
 ```
 
 ### 使用
-```js
-import UI from '@foxone/pando-lots-vue';
-```
+- 引入
+  ```js
+  import PandoLots from '@foxone/pando-lots-vue';
+  import "@foxone/pando-lots-vue/lib/index.css";
+
+  Vue.use(PandoLots);
+  ```
+
+- 在某个 **.vue 文件中
+
+  ```html
+  <pando-lots dev group-id="7000103413" theme-color="#88E108" />
+  
+  <pando-lots dev type="button" group-id="7000103417" theme-color="#EE4596" />
+  ```
 
 ## 开发
 对于调试或维护，可以将项目 clone 到本地，然后启动项目。
