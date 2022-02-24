@@ -22,13 +22,13 @@ storiesOf('PandoLots', module)
       PandoLots
     },
     template: `<div>
-      <pando-lots group-id="7000103413" theme-color="#EE4596" />
-      <pando-lots group-id="7000103417" theme-color="#88E108" />
+      <pando-lots dev group-id="7000103413" theme-color="#EE4596" />
+      <pando-lots dev group-id="7000103417" theme-color="#88E108" />
     </div>`
   }))
   .add('button', () => ({
     components: {
       PandoLots
     },
-    template: `<pando-lots group-id="7000103413" type="button" />`
+    template: `<pando-lots dev group-id="7000103413" type="button" />`
   }));
