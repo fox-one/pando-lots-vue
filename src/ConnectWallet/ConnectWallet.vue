@@ -1,5 +1,5 @@
 <template>
-  <f-auth-method-modal :fennec="fennec" @auth="handleAuth">
+  <f-auth-method-modal :fennec="hasFennec" @auth="handleAuth">
     <template #activator="{ on }">
       <div :class="classes(void 0, 'd-flex align-center justify-center')">
         <f-button height="56" :class="classes('btn')" v-on="on"> {{ btnText }} </f-button>
@@ -30,11 +30,11 @@ import { $t } from '@locale/index';
   }
 })
 class ConnectWallet extends Vue {
-  @Prop({ type: Boolean, default: false }) protected fennec!: boolean;
-
   @Prop({ type: String, default: '' }) protected clientId!: string;
 
   @Prop({ type: String, default: '' }) protected groupId!: string;
+
+  protected hasFennec = false;
 
   protected classes = classnames('connect-wallet');
 
@@ -49,6 +49,9 @@ class ConnectWallet extends Vue {
       this.$emit('login:mixin', code);
       removeQuery('pando_lots_code');
     }
+    setTimeout(() => {
+      this.hasFennec = fennec?.isAvailable() ?? false;
+    }, 200);
   }
 
   protected async handleAuth(type: string) {

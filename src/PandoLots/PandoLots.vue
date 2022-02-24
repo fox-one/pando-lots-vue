@@ -39,7 +39,6 @@
         />
         <connect-wallet
           v-else
-          :fennec="!fennec"
           :group-id="groupInfo.id"
           :client-id="groupInfo.client_id"
           @login:mixin="handleLogin('mixin', $event)"
@@ -59,7 +58,6 @@ import {
   PropType
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
-import $fennec from '@utils/fennec';
 import { setDev } from '@utils/request';
 import {
   isLogin,
@@ -234,9 +232,6 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      setTimeout(() => {
-        fennec.value = $fennec?.isAvailable() ?? false;
-      }, 200);
       const { info, messages = [] } = await requestHandler(groupId) || {};
       entryData.value.title = info?.name ?? '';
       const lastLen = messages.length - (type === 'button' ? 2 : 3);
@@ -336,6 +331,9 @@ export default defineComponent({
     },
     handleEntryClick(cb) {
       const groups = getGroups();
+      if (getStore('first_login') && this.login) {
+        this.showHelloModel = true;
+      }
       if (!groups[this.groupId]) {
         setGroup(this.groupId, this.groupInfo);
       }
@@ -353,7 +351,6 @@ export default defineComponent({
       (type === 'fennec' ? authFennec : authMixin)(this.groupId, code)
         .then(async (res) => {
           if (res.token) {
-            if (getStore('first_login')) this.showHelloModel = true;
             setToken({ token: res.token, groupId: this.groupId });
             const [user, settings] = await Promise.all([
               getUserInfo(res.token),

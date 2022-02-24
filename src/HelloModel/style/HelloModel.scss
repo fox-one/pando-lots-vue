@@ -2,15 +2,19 @@
 
 .#{$prefix}-hello-model {
   height: 100%;
+  overflow: hidden;
+  color: #000;
   font-weight: 500;
   font-size: 14px;
+  text-align: center;
+  background-color: #FFF;
   &-pc {
     max-width: 400px;
     height: calc(100vh - 64px);
   }
 
-  &-wrapper {
-    height: 100%;
+  &-mobile &-btn-wrapper {
+    border-top: 1px solid #F5F5F5;
   }
 
   &-title {
@@ -46,6 +50,7 @@
     &-wrapper {
       position: relative;
       z-index: 10;
+      width: 100%;
       padding: 44px 0;
       background-color: #FFF;
     }
