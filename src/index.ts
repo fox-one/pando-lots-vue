@@ -4,6 +4,8 @@ import PandoLots from './PandoLots';
 
 import type { VueConstructor } from 'vue';
 
+import '@foxone/vue-scroll/lib/index.css';
+import '@foxone/uikit/build/index.min.css';
 
 install.installed = false;
 function install(Vue: VueConstructor<Vue>) {

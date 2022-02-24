@@ -286,12 +286,12 @@ export default defineComponent({
     async handleUpload(files: File[]) {
       const file = files[0];
       if (!~file.type.indexOf('image')) {
-        this.$emit('error', 'The file type must be image');
+        this.$emit('error', { message: 'The file type must be image' });
         return;
       }
       // 5 MB
       if (file.size / (1024 * 1024) > 5) {
-        this.$emit('error', 'The file size is too large');
+        this.$emit('error', { message: 'The file size is too large' });
         return;
       }
 

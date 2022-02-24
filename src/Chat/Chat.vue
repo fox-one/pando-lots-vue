@@ -22,7 +22,7 @@
         <f-icon-horn-4-p-fill style="width: 16px; height: 16px" />
         <span class="ml-3" v-html="communityWithId" />
       </div>
-      <stream v-if="status === 'stream'" :urls="source" class="mt-6" />
+      <stream v-if="status === 'stream'" :urls="source" class="mt-6" @error="$emit('error', $event)" />
     </v-layout>
     <f-scroll
       ref="scroll"

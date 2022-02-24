@@ -72,7 +72,7 @@ class ConnectWallet extends Vue {
         payload: { from: 'pando-lots' },
       });
       if (!token) {
-        return this.$emit('error', 'fennec invalid token');
+        return this.$emit('error', { message: 'fennec invalid token' });
       }
       this.$emit('login:fennec', token);
     }
