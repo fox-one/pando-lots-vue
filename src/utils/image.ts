@@ -1,5 +1,4 @@
-import { encode } from 'blurhash';
-import { timeslice } from 'peeler-js';
+import base64 from './base64';
 
 
 export const readFile = (file: File) => new Promise<string>((resolve, reject) => {
@@ -31,21 +30,21 @@ export const getImageData = image => {
 };
 
 
-export const encodeImageToBlurhash = async (src: string) => {
+export const encodeImageToBase64 = async (src: string) => {
   const image = await loadImage(src);
   const imageData = getImageData(image);
-  // const thumbnail = encode(imageData.data, imageData.width, imageData.height, 1, 1);
+  const thumbnail = base64.encode(imageData.data.toString());
   return {
     width: imageData.width,
     height: imageData.height,
-    // thumbnail
+    thumbnail
   };
 };
 
-export const encodeFileImageToBlurhash = async (file: File) => {
+export const decodeFileImage = async (file: File) => {
   try {
     const src = await readFile(file);
-    return encodeImageToBlurhash(src);
+    return encodeImageToBase64(src);
     // eslint-disable-next-line no-empty
   } catch (e) {
     return Promise.reject(e);

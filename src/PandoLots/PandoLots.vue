@@ -69,7 +69,7 @@ import {
 import base64 from '@utils/base64';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
-import { encodeFileImageToBlurhash } from '@utils/image';
+import { decodeFileImage } from '@utils/image';
 import states from '@utils/states';
 import {
   authFennec,
@@ -298,9 +298,9 @@ export default defineComponent({
       this.uploading = true;
       const formData = new FormData();
       formData.append('file', file);
-      const [ uploadData, blurhashData ] = await Promise.all([
+      const [ uploadData, imgData ] = await Promise.all([
         uploadAttachment(this.groupId, formData),
-        encodeFileImageToBlurhash(file)
+        decodeFileImage(file)
       ]);
       const payload = {
         category: 'PLAIN_IMAGE',
@@ -308,9 +308,9 @@ export default defineComponent({
         size: file.size,
         created_at: new Date().toISOString(),
         mime_type: file.type,
-        // thumbnail: blurhashData.thumbnail,
-        height: blurhashData.height,
-        width: blurhashData.width,
+        thumbnail: imgData.thumbnail,
+        height: imgData.height,
+        width: imgData.width,
       };
       const data = base64.encode(JSON.stringify(payload));
       sendMessage(this.groupId, {
