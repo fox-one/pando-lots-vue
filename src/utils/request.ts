@@ -2,8 +2,6 @@ import axios from 'axios';
 import { getToken, removeAuth } from '@utils/auth';
 import { API_BASE, AUTH_FAIL } from './constants';
 
-export let groupId;
-
 export let isDev = process.env.APP_ENV === 'development';
 
 export function setDev(dev: boolean) {
@@ -27,7 +25,10 @@ const request = async function <T extends Record<string, any>>(opts): Promise<T>
       headers,
     });
     return Promise.resolve(res as any);
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.name === AUTH_FAIL) {
+      removeAuth(opts.group_id);
+    }
     return Promise.reject(e);
   }
 };
@@ -35,7 +36,12 @@ const request = async function <T extends Record<string, any>>(opts): Promise<T>
 axios.interceptors.response.use(
   function (res) {
     const code = res?.data?.code;
-    if (code === AUTH_FAIL) removeAuth(groupId);
+    if (code === AUTH_FAIL) {
+      const err = new Error();
+      err.message = res?.data?.message;
+      err.name = code;
+      throw err;
+    }
     return res.data;
   },
   function (err) {

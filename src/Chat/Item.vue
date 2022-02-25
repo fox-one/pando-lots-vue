@@ -65,10 +65,12 @@ export default defineComponent({
     const createAt = dayjs(chat?.created_at).format('MM/DD HH:mm');
     const onlyMixinMsg = $t('chat_only_mixin', { learn_more: `<a href="${download}" class=${classes('learn-more')}>${$t('learn_more')}</a>` });
 
-    return { classes, createAt, onlyMixinMsg, imgUrl: chat.category === 'PLAIN_IMAGE' ? chat?.attachment?.view_url : '' };
+    return { classes, createAt, onlyMixinMsg };
   },
   computed: {
-
+    imgUrl(): string {
+      return this.chat.category === 'PLAIN_IMAGE' ? this.chat?.attachment?.view_url : '';
+    }
   }
 });
 </script>

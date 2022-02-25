@@ -38,7 +38,7 @@
           </i>
           <span :class="classes('chat-limit-txt', 'ml-4')">{{ chatLimit }}</span>
         </div>
-        <item v-for="(chat, ind) in chatData" :key="ind" :chat="chat" :download="download" class="px-6 mt-6" />
+        <item v-for="(chat, ind) in chatData" :key="chat.id || ind" :chat="chat" :download="download" class="px-6 mt-6" />
       </section>
     </f-scroll>
     <v-menu v-model="showMenu" :class="classes('menu-wrapper')" :attach="menuParentRef" nudge-top="-64">
@@ -236,6 +236,13 @@ export default defineComponent({
     setTimeout(() => {
       this.height = this.getHeight();
     }, 100);
+  },
+  updated() {
+    const height = this.getHeight();
+    if (this.height !== height) {
+      this.height = height;
+      this.refresh();
+    }
   },
   methods: {
     refresh() {

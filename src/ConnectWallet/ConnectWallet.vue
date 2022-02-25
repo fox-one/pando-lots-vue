@@ -2,7 +2,7 @@
   <f-auth-method-modal :fennec="hasFennec" @auth="handleAuth">
     <template #activator="{ on }">
       <div :class="classes(void 0, 'd-flex align-center justify-center')">
-        <f-button height="56" :class="classes('btn')" v-on="on"> {{ btnText }} </f-button>
+        <f-button :loading="loading" height="56" :class="classes('btn')" v-on="on"> {{ btnText }} </f-button>
       </div>
     </template>
   </f-auth-method-modal>
@@ -33,6 +33,8 @@ class ConnectWallet extends Vue {
   @Prop({ type: String, default: '' }) protected clientId!: string;
 
   @Prop({ type: String, default: '' }) protected groupId!: string;
+
+  @Prop({ type: Boolean, default: false }) protected loading!: string;
 
   protected hasFennec = false;
 

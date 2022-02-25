@@ -41,6 +41,7 @@
           v-else
           :group-id="groupInfo.id"
           :client-id="groupInfo.client_id"
+          :loading="loginLoading"
           @login:mixin="handleLogin('mixin', $event)"
           @login:fennec="handleLogin('fennec', $event)"
           @error="$emit('error', $event)"
@@ -129,6 +130,7 @@ export default defineComponent({
     const classes = classnames();
     const loading = ref(true);
     const chatLoading = ref(false);
+    const loginLoading = ref(false);
     const uploading = ref(false);
     const showChat = ref(false);
     const fennec = ref(false);
@@ -173,7 +175,7 @@ export default defineComponent({
           getMessages(id),
           getStreams(id),
           getStreamInfo(id),
-          login.value ? getSettings() : Promise.resolve({})
+          login.value ? getSettings(id) : Promise.resolve({})
         ]);
         if (!storeGroupInfo) states.setGroup(id, info);
 
@@ -216,6 +218,8 @@ export default defineComponent({
             case 'mute':
               status.value = 'mute';
               break;
+            default:
+              status.value = 'chat';
           }
         }
 
@@ -234,12 +238,12 @@ export default defineComponent({
     onMounted(async () => {
       const { info, messages = [] } = await requestHandler(groupId) || {};
       entryData.value.title = info?.name ?? '';
-      const lastLen = messages.length - (type === 'button' ? 2 : 3);
-      for (let i = lastLen; i < messages.length; i++) {
-        const msg = messages[i];
-        entryData.value.members.avatars.push(msg?.speaker_avatar || '');
+      const count = type === 'button' ? 2 : 3;
+      const users: any[] = [...(info?.active_users ?? []), ...messages.slice(messages.length - count)].slice(0, count);
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        entryData.value.members.avatars.push(user?.avatar_url || user?.speaker_avatar || '');
       }
-      entryData.value.members.avatars.reverse();
       entryData.value.members.total = info?.members_count.paid ?? 0;
       entryData.value.status = status.value;
       loading.value = false;
@@ -253,6 +257,7 @@ export default defineComponent({
       loading,
       uploading,
       chatLoading,
+      loginLoading,
       showHelloModel,
       showChat,
       userInfo,
@@ -349,36 +354,53 @@ export default defineComponent({
       this.chatDOM?.connectSocket();
     },
     handleLogin(type: 'mixin' | 'fennec', code: string) {
-      this.chatLoading = true;
+      this.loginLoading = true;
       (type === 'fennec' ? authFennec : authMixin)(this.groupId, code)
         .then(async (res) => {
           if (res.token) {
             setToken({ token: res.token, groupId: this.groupId });
-            const [user, settings] = await Promise.all([
+            const [user, settings, urls, stream] = await Promise.all([
               getUserInfo(res.token),
-              getSettings(res.token)
+              getSettings(res.token),
+              getStreams(this.groupId),
+              getStreamInfo(this.groupId)
             ]);
             setUser({ user: user, groupId: this.groupId });
             this.userInfo = user;
 
-            switch(settings['group-mode']) {
-              case 'lecture':
-                this.status = 'lecturing';
-                break;
-              case 'mute':
-                this.status = 'mute';
-                break;
+            Object.keys(urls).forEach(k => {
+              if (~k.indexOf('hls')) {
+                this.source[k] = urls[k];
+              }
+            });
+            if (stream && !stream.disabled && Object.keys(this.source).length) {
+              this.status = 'stream';
+            } else {
+              switch(settings['group-mode']) {
+                case 'lecture':
+                  this.status = 'lecturing';
+                  break;
+                case 'mute':
+                  this.status = 'mute';
+                  break;
+                default:
+                  this.status = 'chat';
+              }
+            }
+
+            if (getStore('first_login')) {
+              this.showHelloModel = true;
             }
 
             this.login = true;
           } else {
             this.$emit('error', res);
           }
-          this.chatLoading = false;
+          this.loginLoading = false;
         })
         .catch(e => {
           this.$emit('error', e);
-          this.chatLoading = false;
+          this.loginLoading = false;
         });
     },
     handleFirstLogin () {

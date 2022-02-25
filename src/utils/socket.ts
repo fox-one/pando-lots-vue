@@ -41,7 +41,7 @@ export default class Socket {
   }
 
   public disconnect() {
-    this.websocket.close(1000);
+    this.websocket?.close?.(1000);
   }
 
   public reconnect() {
