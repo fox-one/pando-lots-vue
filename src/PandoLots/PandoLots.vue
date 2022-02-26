@@ -67,7 +67,7 @@ import {
   setUser,
   getUser
 } from '@utils/auth';
-import base64 from '@utils/base64';
+import base64 from 'js-base64';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
 import { decodeFileImage } from '@utils/image';

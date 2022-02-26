@@ -1,10 +1,12 @@
 <template>
   <div :class="classes('wrapper')">
-    <content-loader v-if="loading" primary-color="#F5F5F5">
-      <circle cx="30" cy="27.5" r="27.5" /> 
-      <rect x="30" y="0" rx="0" ry="0" width="100" height="55" />
-      <circle cx="130" cy="27.5" r="27.5" /> 
-    </content-loader>
+    <div v-if="loading" style="width: 146px; height: 60px">
+      <content-loader primary-color="#F5F5F5">
+        <circle cx="80" cy="65" r="65" /> 
+        <rect x="90" y="0" rx="0" ry="0" width="240" height="130" />
+        <circle cx="320" cy="65" r="65" /> 
+      </content-loader>
+    </div>
     <v-layout v-else align-center :class="classes(void 0, 'py-3 pl-3 pr-4')" @click="$emit('click')">
       <v-avatar
         v-for="(url, index) in avatars"

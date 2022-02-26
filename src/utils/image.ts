@@ -27,7 +27,7 @@ export const getImageData = image => {
 };
 
 
-export const encodeImageToBase64 = async (src: string) => {
+export const decodeImage = async (src: string) => {
   const image = await loadImage(src);
   const imageData = getImageData(image);
   return {
@@ -39,7 +39,7 @@ export const encodeImageToBase64 = async (src: string) => {
 export const decodeFileImage = async (file: File) => {
   try {
     const src = await readFile(file);
-    return encodeImageToBase64(src);
+    return decodeImage(src);
     // eslint-disable-next-line no-empty
   } catch (e) {
     return Promise.reject(e);

@@ -238,13 +238,12 @@ export default defineComponent({
     }, 100);
   },
   updated() {
-    this.$nextTick(() => {
-      const height = this.getHeight();
-      if (this.height !== height) {
-        this.height = height;
-        this.refresh();
-      }
-    });
+    if (!this.topRef?.clientHeight) return;
+    const height = this.getHeight();
+    if (this.height !== height) {
+      this.height = height;
+      this.refresh();
+    }
   },
   methods: {
     refresh() {
