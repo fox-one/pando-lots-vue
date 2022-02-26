@@ -67,7 +67,7 @@ import {
   setUser,
   getUser
 } from '@utils/auth';
-import base64 from 'js-base64';
+import { encode } from 'js-base64';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
 import { decodeFileImage } from '@utils/image';
@@ -280,7 +280,7 @@ export default defineComponent({
       if (!val) return;
       sendMessage(this.groupId, {
         category: 'PLAIN_TEXT',
-        data: base64.encode(val) 
+        data: encode(val) 
       }).then(() => {
         this.chats.push({
           category: 'PLAIN_TEXT',
@@ -320,7 +320,7 @@ export default defineComponent({
         height: imgData.height,
         width: imgData.width,
       };
-      const data = base64.encode(JSON.stringify(payload));
+      const data = encode(JSON.stringify(payload));
       sendMessage(this.groupId, {
         category: 'PLAIN_IMAGE',
         data
