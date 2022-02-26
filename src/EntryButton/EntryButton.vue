@@ -1,7 +1,9 @@
 <template>
   <div :class="classes('wrapper')">
     <content-loader v-if="loading" primary-color="#F5F5F5">
-      <rect x="16" y="16" rx="0" ry="0" width="380" height="200" />
+      <circle cx="30" cy="27.5" r="27.5" /> 
+      <rect x="30" y="0" rx="0" ry="0" width="100" height="55" />
+      <circle cx="130" cy="27.5" r="27.5" /> 
     </content-loader>
     <v-layout v-else align-center :class="classes(void 0, 'py-3 pl-3 pr-4')" @click="$emit('click')">
       <v-avatar

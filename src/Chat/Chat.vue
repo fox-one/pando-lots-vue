@@ -238,11 +238,13 @@ export default defineComponent({
     }, 100);
   },
   updated() {
-    const height = this.getHeight();
-    if (this.height !== height) {
-      this.height = height;
-      this.refresh();
-    }
+    this.$nextTick(() => {
+      const height = this.getHeight();
+      if (this.height !== height) {
+        this.height = height;
+        this.refresh();
+      }
+    });
   },
   methods: {
     refresh() {
@@ -250,7 +252,7 @@ export default defineComponent({
     },
     getHeight () {
       const bottomHeight = this.isLogin ? 148 : 143;
-      const topHeight = this.topRef?.clientHeight ?? 0;
+      const topHeight = this.topRef?.clientHeight ?? this.topRef?.offsetHeight ?? 0;
       const gapHeight = isMobile ? 56 : 64;
       return scrollWrapperHeight(gapHeight + topHeight + bottomHeight);
     }
