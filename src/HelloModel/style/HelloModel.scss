@@ -14,6 +14,7 @@
   }
 
   &-mobile &-btn-wrapper {
+    padding: 44px 0;
     border-top: 1px solid #F5F5F5;
   }
 
@@ -30,7 +31,7 @@
 
   &-rule {
     text-align: left;
-    background: url(../../assets/images/svg/warning.svg) no-repeat left top / 16px;
+    background: url(../../assets/images/svg/warning.svg) no-repeat left 3px / 16px;
   }
 
   &-btn {
@@ -51,7 +52,6 @@
       position: relative;
       z-index: 10;
       width: 100%;
-      padding: 44px 0;
       background-color: #FFF;
     }
   }

@@ -1,9 +1,11 @@
 <template>
-  <div :class="[classes(void 0, 'pt-12'), classes(isMobile ? 'mobile' : 'pc')].join(' ')" @click.stop>
+  <div :class="[classes(void 0, 'd-flex flex-column justify-center align-center'), classes(isMobile ? 'mobile' : 'pc')].join(' ')" @click.stop>
     <f-scroll
       :pulldown="false"
       :pullup="false"
-      :height="height"
+      :max-height="height"
+      class="flex-grow-0"
+      style="width: 100%"
     >
       <v-layout class="px-12" column align-center justify-center>
         <v-img :class="classes('bg', 'mb-10')" :src="bgSrc" />
@@ -11,10 +13,10 @@
         <p :class="classes('desc', 'mb-6')">{{ txt.desc }}</p>
         <p :class="classes('rule', 'pl-7 mb-6')">{{ txt.rule1 }}</p>
         <p :class="classes('rule', 'pl-7 mb-6')">{{ txt.rule2 }}</p>
-        <p :class="classes('rule', 'pl-7 mb-12')">{{ txt.rule3 }}</p>
+        <p :class="classes('rule', 'pl-7 mb-0')">{{ txt.rule3 }}</p>
       </v-layout>
     </f-scroll>
-    <div :class="classes('btn-wrapper')">
+    <div :class="classes('btn-wrapper', 'pt-12')">
       <div :class="classes('btn')" @click="$emit('click')">{{ txt.btn }}</div>
     </div>
   </div>

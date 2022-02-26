@@ -3,7 +3,7 @@
     <content-loader v-if="loading" primary-color="#F5F5F5">
       <rect x="16" y="16" rx="0" ry="0" width="380" height="200" />
     </content-loader>
-    <v-layout v-else align-center :class="classes(void 0, 'pa-3')" @click="$emit('click')">
+    <v-layout v-else align-center :class="classes(void 0, 'py-3 pl-3 pr-4')" @click="$emit('click')">
       <v-avatar
         v-for="(url, index) in avatars"
         v-show="index < 3"

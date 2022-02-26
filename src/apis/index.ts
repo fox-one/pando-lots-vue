@@ -65,10 +65,11 @@ export const getUserInfo = async function (token?: string) {
   });
 };
 
-export const getSettings = async function (groupId?: string) {
+export const getSettings = async function (token?: string, groupId?: string) {
   return request<API.GroupSettings>({
     method: 'get',
     url: '/settings/full',
+    token,
     group_id: groupId,
   });
 };

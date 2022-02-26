@@ -7,7 +7,11 @@
   background-color: #FFF;
   border-top: 1px solid #F5F5F5;
   &-input {
+    .v-input__control {
+      height: 51px;
+    }
     .v-input__slot {
+      min-height: 0 !important;
       margin: 0;
       padding: 0 16px !important;
       background-color: #F5F5F5 !important;

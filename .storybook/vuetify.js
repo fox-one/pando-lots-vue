@@ -119,7 +119,7 @@ export default function () {
       }
     },
     theme: {
-      dark: isDark,
+      dark: false,
       options: {
         customProperties: true,
       },

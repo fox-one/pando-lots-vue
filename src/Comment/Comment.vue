@@ -9,10 +9,16 @@
         :disabled="disabled"
         :placeholder="placeholder"
         :class="[classes('input'), disabled ? classes('input-disabled') : '' ].join(' ')"
-        clear-icon="$close"
+        height="51px"
         clearable
-        height="50px"
-      />
+        :clear-icon="''"
+      >
+        <template #append>
+          <i v-show="val" @click="handleClear">
+            <f-icon-clear-3-p-fill style="cursor: pointer; width: 18px; height: 18px; color: #000" />
+          </i>
+        </template>
+      </v-text-field>
       <div v-if="isShowSend" :class="classes('btn', 'ml-3 d-flex align-center justify-center flex-shrink-0')" @click="handleSend">
         <f-icon-send-fill />
       </div>
@@ -20,7 +26,7 @@
     <v-layout ref="wrapper" justify-space-between align-center>
       <v-layout align-center>
         {{ name }}
-        <v-menu :attach="wrapper" offset-x offset-y top right>
+        <v-menu :attach="wrapper" offset-y top nudge-right="8" nudge-top="4">
           <template #activator="{ on }">
             <i class="d-inline-flex" v-on="on" >
               <f-icon-setting class="ml-2" style="width: 24px; height: 24px; cursor: pointer" />
@@ -29,7 +35,7 @@
           <div :class="classes('settings', 'pa-4')" @click="$emit('disconnect')" >{{ settings.disconnect }}</div>
         </v-menu>
       </v-layout>
-      <f-loading v-if="uploading" :color="themeColor" :loading="uploading" :class="classes('loading')" />
+      <f-loading v-if="uploading" color="#000" :loading="uploading" :class="classes('loading')" />
       <div v-else :class="[classes('upload', 'd-inline-flex'), disabled ? classes('upload-disabled') : ''].join(' ')">
         <input
           type="file"
@@ -52,7 +58,7 @@ import {
   PropType
 } from '@vue/composition-api';
 import { VLayout, VTextField, VMenu } from 'vuetify/lib';
-import { FIconSetting, FIconPicture, FIconSendFill } from '@foxone/icons';
+import { FIconSetting, FIconPicture, FIconSendFill, FIconClear3PFill } from '@foxone/icons';
 import classnames from '@utils/classnames';
 import { $t } from '@locale/index';
 
@@ -64,7 +70,8 @@ export default defineComponent({
     VMenu,
     FIconSetting,
     FIconPicture,
-    FIconSendFill
+    FIconSendFill,
+    FIconClear3PFill
   },
   model: {
     prop: 'value',
@@ -124,6 +131,10 @@ export default defineComponent({
       if (!this.val) return;
       this.$emit('send', this.val);
       this.val = '';
+    },
+    handleClear() {
+      this.val = '';
+      this.$emit('input', '');
     }
   }
 });

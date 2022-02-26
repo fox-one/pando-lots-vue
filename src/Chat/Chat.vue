@@ -15,7 +15,7 @@
         />
       </h2>
       <div :class="classes('header-total', 'd-flex align-center mt-6')">
-        <f-icon-crowd-fill style="width: 16px; height: 16px" />
+        <f-icon-crowd-fill style="width: 18px; height: 18px" />
         <span class="ml-3">{{ total }}</span>
       </div>
       <div :class="classes('header-id', 'd-flex align-center mt-4')">
@@ -36,7 +36,7 @@
           <i :class="classes('chat-limit-icon', 'flex-shrink-0')">
             <f-icon-bell />
           </i>
-          <span :class="classes('chat-limit-txt', 'ml-4')">{{ chatLimit }}</span>
+          <span :class="classes('chat-limit-txt', 'ml-4 font-weight-medium')">{{ chatLimit }}</span>
         </div>
         <item v-for="(chat, ind) in chatData" :key="chat.id || ind" :chat="chat" :download="download" class="px-6 mt-6" />
       </section>
@@ -249,7 +249,7 @@ export default defineComponent({
       this.scroll.refresh();
     },
     getHeight () {
-      const bottomHeight = this.isLogin ? 153 : 143;
+      const bottomHeight = this.isLogin ? 148 : 143;
       const topHeight = this.topRef?.clientHeight ?? 0;
       const gapHeight = isMobile ? 56 : 64;
       return scrollWrapperHeight(gapHeight + topHeight + bottomHeight);

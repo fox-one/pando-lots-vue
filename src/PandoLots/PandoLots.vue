@@ -136,6 +136,7 @@ export default defineComponent({
     const fennec = ref(false);
     const showHelloModel = ref(false);
     const login = ref(isLogin(groupId));
+    const currentGroupId = ref(groupId);
 
     const chatDOM = ref<null | any>(null);
     const status = ref('chat');
@@ -175,7 +176,7 @@ export default defineComponent({
           getMessages(id),
           getStreams(id),
           getStreamInfo(id),
-          login.value ? getSettings(id) : Promise.resolve({})
+          login.value ? getSettings(void 0, id) : Promise.resolve({})
         ]);
         if (!storeGroupInfo) states.setGroup(id, info);
 
@@ -195,6 +196,7 @@ export default defineComponent({
             only_mixin: !~supportMessages.indexOf(msg.category)
           });
         }
+        // set group info
         groupInfo.value = {
           name: info.name,
           id: info.identity_number,
@@ -202,7 +204,7 @@ export default defineComponent({
           download: isIOS ? info.app_info.download_url_ios : info.app_info.download_url_android,
           client_id: info.client_id
         };
-
+        // set group streams
         Object.keys(urls).forEach(k => {
           if (~k.indexOf('hls')) {
             source.value[k] = urls[k];
@@ -236,10 +238,11 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      const { info, messages = [] } = await requestHandler(groupId) || {};
+      const { info } = await requestHandler(groupId) || {};
       entryData.value.title = info?.name ?? '';
       const count = type === 'button' ? 2 : 3;
-      const users: any[] = [...(info?.active_users ?? []), ...messages.slice(messages.length - count)].slice(0, count);
+      // empty string is placeholder for empty active_users cases
+      const users: any[] = [...(info?.active_users ?? []), '', '', ''].slice(0, count);
       for (let i = 0; i < users.length; i++) {
         const user = users[i];
         entryData.value.members.avatars.push(user?.avatar_url || user?.speaker_avatar || '');
@@ -268,7 +271,8 @@ export default defineComponent({
       login,
       fennec,
       status,
-      source
+      source,
+      currentGroupId
     };
   },
   methods: {
@@ -334,18 +338,23 @@ export default defineComponent({
       this.chatDOM?.socket.disconnect();
       this.login = false;
     },
-    handleEntryClick(cb) {
+    async handleEntryClick(cb) {
       const groups = getGroups();
       if (getStore('first_login') && this.login) {
         this.showHelloModel = true;
       }
       if (!groups[this.groupId]) {
         setGroup(this.groupId, this.groupInfo);
+        groups[this.groupId] = this.groupInfo;
       }
-      this.groups = getGroups();
+      this.groups = groups;
+      if (this.currentGroupId !== this.groupId) {
+        this.handleGroupChange(this.groupId);
+      }
       cb();
     },
     async handleGroupChange(id: string) {
+      this.currentGroupId = id;
       this.chatLoading = true;
       await this.requestHandler(id);
       this.chatLoading = false;
@@ -361,7 +370,7 @@ export default defineComponent({
             setToken({ token: res.token, groupId: this.groupId });
             const [user, settings, urls, stream] = await Promise.all([
               getUserInfo(res.token),
-              getSettings(res.token),
+              getSettings(res.token, this.groupId),
               getStreams(this.groupId),
               getStreamInfo(this.groupId)
             ]);
