@@ -24,6 +24,7 @@
           :is-login="login"
           :theme-color="themeColor"
           @select:group="handleGroupChange"
+          @preview="handlePreview"
           @error="$emit('error', $event)"
         />
         <comment
@@ -48,6 +49,12 @@
         />
       </section>
     </wrapper>
+    <image-gallery
+      :index="previewIndex"
+      :is-open="isPreview"
+      :items="previews"
+      @close="isPreview = false; previewIndex = null"
+    />
   </div>
 </template>
 
@@ -70,8 +77,9 @@ import {
 import { encode } from 'js-base64';
 import { isIOS } from '@utils/ua';
 import { getGroups, setGroup } from '@utils/group';
-import { decodeFileImage } from '@utils/image';
+import { decodeFileImage, getImgWH } from '@utils/image';
 import states from '@utils/states';
+import { getStore, setStore } from '@utils/storage';
 import {
   authFennec,
   authMixin,
@@ -91,7 +99,7 @@ import Comment from '../Comment';
 import ConnectWallet from '../ConnectWallet';
 import Chat from '../Chat';
 import HelloModel from '../HelloModel';
-import { getStore, setStore } from '@utils/storage';
+import ImageGallery from '../ImageGallery';
 
 const supportMessages = ['PLAIN_TEXT', 'PLAIN_IMAGE'];
 
@@ -104,7 +112,8 @@ export default defineComponent({
     Comment,
     ConnectWallet,
     Chat,
-    HelloModel
+    HelloModel,
+    ImageGallery
   },
   props: {
     type: {
@@ -135,6 +144,9 @@ export default defineComponent({
     const showChat = ref(false);
     const fennec = ref(false);
     const showHelloModel = ref(false);
+    const isPreview = ref(false);
+    const previewIndex = ref(0);
+    const previews = ref<any[]>([]);
     const login = ref(isLogin(groupId));
     const currentGroupId = ref(groupId);
 
@@ -185,6 +197,7 @@ export default defineComponent({
         for (let i = 0; i < messages.length; i++) {
           const msg = messages[i];
           chats.value.push({
+            id: msg.id,
             name: msg.speaker_name,
             avatar_url: msg.speaker_avatar,
             created_at: msg.created_at,
@@ -272,7 +285,10 @@ export default defineComponent({
       fennec,
       status,
       source,
-      currentGroupId
+      currentGroupId,
+      isPreview,
+      previews,
+      previewIndex
     };
   },
   methods: {
@@ -281,8 +297,9 @@ export default defineComponent({
       sendMessage(this.groupId, {
         category: 'PLAIN_TEXT',
         data: encode(val) 
-      }).then(() => {
+      }).then((res) => {
         this.chats.push({
+          ...res,
           category: 'PLAIN_TEXT',
           created_at: new Date().toISOString(),
           content: val,
@@ -415,6 +432,12 @@ export default defineComponent({
     handleFirstLogin () {
       this.showHelloModel = false;
       setStore('first_login', false);
+    },
+    async handlePreview(src: string) {
+      const previewData = await getImgWH([src]);
+      this.previewIndex = 0;
+      this.previews.splice(0, this.previews.length, ...previewData);
+      this.isPreview = true;
     }
   }
 });

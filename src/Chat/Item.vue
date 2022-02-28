@@ -17,6 +17,8 @@
         v-else-if="imgUrl"
         :src="imgUrl"
         width="100%"
+        style="cursor: pointer"
+        @click="$emit('preview', imgUrl)"
       />
       <div
         v-else

@@ -12,6 +12,7 @@
         height="51px"
         clearable
         :clear-icon="''"
+        @keydown="handleKeyDown"
       >
         <template #append>
           <i v-show="val" @click="handleClear">
@@ -135,6 +136,11 @@ export default defineComponent({
     handleClear() {
       this.val = '';
       this.$emit('input', '');
+    },
+    handleKeyDown(e) {
+      if (e.keyCode === 13) {
+        this.handleSend();
+      }
     }
   }
 });

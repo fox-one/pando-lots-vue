@@ -38,7 +38,7 @@
           </i>
           <span :class="classes('chat-limit-txt', 'ml-4 font-weight-medium')">{{ chatLimit }}</span>
         </div>
-        <item v-for="(chat, ind) in chatData" :key="chat.id || ind" :chat="chat" :download="download" class="px-6 mt-6" />
+        <item v-for="(chat, ind) in chatData" :key="chat.id || ind" :chat="chat" :download="download" class="px-6 mt-6" @preview="$emit('preview', $event)" />
       </section>
     </f-scroll>
     <v-menu v-model="showMenu" :class="classes('menu-wrapper')" :attach="menuParentRef" nudge-top="-64">
@@ -80,6 +80,7 @@ import Stream from '../Stream';
 import { $t } from '@locale/index';
 
 export interface Chat {
+  id: string;
   avatar_url: string;
   content: string;
   name: string;
