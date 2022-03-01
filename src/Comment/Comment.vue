@@ -101,10 +101,8 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
-    const { value, status } = props;
-    const disabled = ref(status === 'mute' || status === 'lecturing');
+    const { value } = props;
     const classes = classnames('comment');
-    const placeholder = $t(disabled.value ? 'chat_only_operator_speak' : 'chat_placeholder');
     const isShowSend = ref(false);
     const val = ref(value);
     const wrapper = ref(null);
@@ -120,7 +118,15 @@ export default defineComponent({
       }
     });
 
-    return { disabled, classes, placeholder, isShowSend, val, wrapper, settings };
+    return { classes, isShowSend, val, wrapper, settings };
+  },
+  computed: {
+    disabled(): boolean {
+      return this.status === 'mute' || this.status === 'lecturing';
+    },
+    placeholder(): string {
+      return $t(this.disabled ? 'chat_only_operator_speak' : 'chat_placeholder');
+    }
   },
   watch: {
     value: function (val) {

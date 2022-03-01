@@ -156,7 +156,7 @@ export default defineComponent({
       default: '#F5F5F5',
     }
   },
-  setup(props) {
+  setup(props, ctx) {
     const { group, chats, isLogin } = props;
     const classes = classnames('chat');
     const userInfo = getUser(group.id);
@@ -221,10 +221,14 @@ export default defineComponent({
       }
     };
 
+    const onfail = function () {
+      ctx.emit('error', { message: 'WebSocket connect failed!' });
+    };
+
     const connectSocket = () => {
       setTimeout(() => {
         const url = `${WS_BASE[isDev ? 'dev' : 'prod']}/${group.id}`;
-        isLogin && socket.value.connect(url, getToken(group.id), { onmessage });
+        isLogin && socket.value.connect(url, getToken(group.id), { onmessage, onfail });
       }, 100);
     };
 

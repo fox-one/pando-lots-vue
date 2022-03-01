@@ -15,8 +15,8 @@ export default class Socket {
   private token: string;
 
   public constructor() {
-    this.MAX_RETRY_NUM = 3;
-    this.INTERVAL = 1000;
+    this.MAX_RETRY_NUM = 5;
+    this.INTERVAL = 2000;
     this.times = 0;
     this.callbacks = {};
     this.connecting = false;
@@ -33,7 +33,6 @@ export default class Socket {
     execute(this.callbacks.onconnect);
     this.websocket = new WebSocket(url, token);
     this.websocket.onopen = this._onopen.bind(this);
-    this.websocket.onclose = this._onclose.bind(this);
     this.websocket.onmessage = this._onmessage.bind(this);
     this.websocket.onerror = this._onerror.bind(this);
     this.url = url;
@@ -64,12 +63,6 @@ export default class Socket {
   }
 
   public _onerror() {
-    setTimeout(() => {
-      this.reconnect();
-    }, this.INTERVAL);
-  }
-
-  public _onclose() {
     setTimeout(() => {
       this.reconnect();
     }, this.INTERVAL);
