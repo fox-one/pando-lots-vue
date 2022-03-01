@@ -46,4 +46,21 @@ storiesOf('PandoLots', module)
       <br /> 
       <pando-lots dev group-id="7000104299" type="button" theme-color="#88E108" />
     </div>`
+  }))
+  .add('custom entry', () => ({
+    components: {
+      PandoLots
+    },
+    template: `<div>
+      <br /> 
+      <br /> 
+      <br /> 
+      <pando-lots dev group-id="7000104299" theme-color="#88E108">
+        <template #activator="{ on }">
+          <f-button color='primary' v-on="on">
+            Custom Entry
+          </f-button>
+        </template>
+      </pando-lots>
+    </div>`
   }));

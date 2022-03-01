@@ -2,14 +2,16 @@
   <div :class="classes()">
     <wrapper>
       <template #activator="{ on }">
-        <component
-          v-bind="entryData"
-          :is="Entry"
-          :loading="loading"
-          :theme-color="themeColor"
-          @click="handleEntryClick(on.click)"
-          @error="$emit('error', $event)"
-        />
+        <slot name="activator" v-bind="{ on }">
+          <component
+            v-bind="entryData"
+            :is="Entry"
+            :loading="loading"
+            :theme-color="themeColor"
+            @click="handleEntryClick(on.click)"
+            @error="$emit('error', $event)"
+          />
+        </slot>
       </template>
       <hello-model v-if="showHelloModel" @click="handleFirstLogin" />
       <section v-else-if="!loading" @click.stop>

@@ -38,7 +38,15 @@
           </i>
           <span :class="classes('chat-limit-txt', 'ml-4 font-weight-medium')">{{ chatLimit }}</span>
         </div>
-        <item v-for="(chat, ind) in chatData" :key="chat.id || ind" :chat="chat" :download="download" class="px-6 mt-6" @preview="$emit('preview', $event)" />
+        <item
+          v-for="(chat, ind) in chatData"
+          :key="chat.id || ind"
+          v-intersect="(entries) => { if(ind >= chatData.length - 1) handleBottomIntersect(entries)}"
+          :chat="chat"
+          :download="download"
+          class="px-6 mt-6"
+          @preview="$emit('preview', $event)"
+        />
       </section>
     </f-scroll>
     <v-menu v-model="showMenu" :class="classes('menu-wrapper')" :attach="menuParentRef" nudge-top="-64">
@@ -62,7 +70,8 @@ import {
   defineComponent,
   PropType,
   onMounted,
-  ref
+  ref,
+  nextTick
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import { isMobile } from '@utils/ua';
@@ -73,6 +82,7 @@ import { isDev } from '@utils/request';
 import { getToken, getUser } from '@utils/auth';
 import { FIconCrowdFill, FIconHorn4PFill, FIconBell, FIconChevronDown } from '@foxone/icons';
 import { VLayout, VMenu } from 'vuetify/lib';
+import { Intersect } from 'vuetify/lib/directives';
 import { scrollWrapperHeight } from '@foxone/vue-scroll';
 import FScroll from '@foxone/vue-scroll/es/Scroll';
 import Item from './Item.vue';
@@ -93,6 +103,9 @@ export interface Chat {
 
 export default defineComponent({
   name: 'Chat',
+  directives: {
+    intersect: Intersect
+  },
   components: {
     FScroll,
     Item,
@@ -145,18 +158,28 @@ export default defineComponent({
   },
   setup(props) {
     const { group, chats, isLogin } = props;
-    const userInfo = getUser(group.id);
     const classes = classnames('chat');
+    const userInfo = getUser(group.id);
     const download = group.download;
-    const scroll = ref<any>(null);
-    const menuParentRef = ref<null | HTMLElement>(null);
-    const topRef = ref<null | HTMLElement>(null);
-    const showMenu = ref(false);
     const chatData = ref(chats.map(chat => {
       if (chat.speaker_id === userInfo?.user_id) chat.origin = 'self';
       return chat;
     }));
+
+    const scroll = ref<any>(null);
     const socket = ref(new Socket());
+    const menuParentRef = ref<null | HTMLElement>(null);
+    const topRef = ref<null | HTMLElement>(null);
+
+    const showMenu = ref(false);
+    const isBottomIntersect = ref(false);
+
+    const scrollToBottom = () =>{
+      const scroller = scroll.value;
+      scroller.refresh();
+      scroller.scrollTo(0, scroller?.scroll.maxScrollY, 100);
+    };
+
     const onmessage = function(msg: {
       attachment: API.Attachment;
       category: API.MessageType;
@@ -169,17 +192,32 @@ export default defineComponent({
       speaker_name: string;
       text:string;
     }) {
+      let isRepeat = false;
       const userInfo = getUser(group.id);
-      if (userInfo?.user_id !== msg.speaker_id) {
+      for (let i = chatData.value.length - 1; i >= 0; i--) {
+        const chat = chatData.value[i];
+        if (chat.id === msg.id) {
+          isRepeat = true;
+          break;
+        }
+      }
+      if (!isRepeat) {
         chatData.value.push({
+          id: msg.id,
           avatar_url: msg.speaker_avatar,
           content: msg.text,
           name: msg.speaker_name,
           created_at: msg.created_at,
+          origin: userInfo?.user_id === msg.speaker_id ? 'self' : 'mixin',
           category: msg.category,
           attachment: msg.attachment,
           speaker_id: msg.speaker_id,
-        } as any);
+        });
+        if (isBottomIntersect.value) {
+          nextTick(() => {
+            scrollToBottom();
+          });
+        }
       }
     };
 
@@ -192,7 +230,7 @@ export default defineComponent({
 
     onMounted(() => {
       setTimeout(() => {
-        scroll.value.scrollTo(0, scroll.value.scroll.maxScrollY, 100);
+        scrollToBottom();
         connectSocket();
       }, 300);
     });
@@ -206,6 +244,7 @@ export default defineComponent({
       chatLimit: $t('chat_limit'),
       download,
       showMenu,
+      isBottomIntersect,
       isMobile,
       chatData,
       connectSocket
@@ -255,6 +294,9 @@ export default defineComponent({
       const topHeight = this.topRef?.clientHeight ?? this.topRef?.offsetHeight ?? 0;
       const gapHeight = isMobile ? 56 : 64;
       return scrollWrapperHeight(gapHeight + topHeight + bottomHeight);
+    },
+    handleBottomIntersect(entries: any) {
+      this.isBottomIntersect = entries[0].isIntersecting;
     }
   }
 });
