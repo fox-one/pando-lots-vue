@@ -93,13 +93,16 @@ const events = [
 ];
 
 @Component
-export default class ImageGallery extends Vue {
+class ImageGallery extends Vue {
   @Prop({ default: 0, type: Number }) public index!: number;
+
   @Prop({ default: false, type: Boolean }) public isOpen!: boolean;
+
   @Prop({ default: [], type: Array, required: true }) public items!: ImageViewData[];
+
   @Prop({ default: () => ({}), type: Object }) public options!: Record<string, any>;
 
-  public pswp;
+  public pswp: any = null;
 
   public mounted() {
     if (this.isOpen) this.openPhotoSwipe(this.items, this.options);
@@ -168,7 +171,7 @@ export default class ImageGallery extends Vue {
   }
 
   @Watch('items', { deep: true })
-  protected handleItemChange() {
+  public handleItemChange() {
     if (this.pswp && this.isOpen) {
       this.pswp.invalidateCurrItems();
       this.$nextTick(() => this.pswp.updateSize(true));
@@ -176,7 +179,7 @@ export default class ImageGallery extends Vue {
   }
 
   @Watch('isOpen')
-  protected handleOpen(isOpen) {
+  public handleOpen(isOpen) {
     if (isOpen) {
       this.openPhotoSwipe(this.items, this.options);
     } else {
@@ -184,4 +187,6 @@ export default class ImageGallery extends Vue {
     }
   }
 }
+
+export default ImageGallery;
 </script>
