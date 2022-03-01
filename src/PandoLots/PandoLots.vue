@@ -2,7 +2,12 @@
   <div :class="classes()">
     <wrapper>
       <template #activator="{ on }">
-        <slot name="activator" v-bind="{ on }">
+        <slot name="activator" v-bind="{
+          on: {...on, click: () => handleEntryClick(on.click)},
+          data: entryData,
+          loading,
+          themeColor
+        }">
           <component
             v-bind="entryData"
             :is="Entry"

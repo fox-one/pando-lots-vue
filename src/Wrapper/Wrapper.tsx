@@ -80,7 +80,7 @@ export default defineComponent({
             click: this.handleActivatorClick,
             value: this.isShow
           }
-        }) }
+        }) ?? this.$slots.activator }
       </div>
     );
   }
