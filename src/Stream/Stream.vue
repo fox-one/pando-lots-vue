@@ -12,7 +12,6 @@ import {
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import HlsPlayer from 'xgplayer-hls.js';
-// import './.xgplayer/skin';
 
 export default defineComponent({
   name: 'Stream',
