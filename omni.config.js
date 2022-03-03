@@ -53,7 +53,7 @@ module.exports = {
     autoBuild: false,
 
     // 发布到npm仓库时，根据当前版本号自动设置 tag (auto set tag according to the current version)
-    autoTag: false,
+    autoTag: true,
 
     // 发布的git仓库地址 (project git repo url)
     git: 'git@github.com:fox-one/pando-lots-vue.git',
