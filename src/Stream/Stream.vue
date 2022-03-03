@@ -16,17 +16,21 @@ import HlsPlayer from 'xgplayer-hls.js';
 export default defineComponent({
   name: 'Stream',
   props: {
+    id: {
+      type: String,
+      default: ''
+    },
     urls: {
       type: Object,
       default: () => ({})
     }
   },
   setup(props, ctx) {
-    const { urls } = props;
+    const { id, urls } = props;
     const url = urls['hls'] || '';
     const player = ref<HlsPlayer | null>(null);
     const classes = classnames('stream');
-    const videoId = 'pando-lots-video';
+    const videoId = id || 'pando-lots-video';
     onMounted(() => {
       player.value = new HlsPlayer({
         url,
