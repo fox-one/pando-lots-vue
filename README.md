@@ -26,11 +26,30 @@ pnpm i -S @foxone/pando-lots-vue
 - In any **.vue file
 
   ```html
-  <pando-lots dev type="card" group-id="7000103413" theme-color="#88E108" @error="handleError" />
+  <pando-lots
+    type="card"
+    group-id="7000103413"
+    theme-color="#88E108"
+    @error="handleError"
+    api-base="https://dev-courses-api.firesbox.com/v1"
+    ws-base="wss://dev-courses-ws.firesbox.com"
+  />
   
-  <pando-lots dev type="button" group-id="7000103417" theme-color="#EE4596" @error="handleError" />
+  <pando-lots
+    type="button"
+    group-id="7000103417"
+    theme-color="#EE4596"
+    @error="handleError"
+    api-base="https://dev-courses-api.firesbox.com/v1"
+    ws-base="wss://dev-courses-ws.firesbox.com"
+  />
 
-  <pando-lots dev group-id="7000104299" theme-color="#88E108">
+  <pando-lots
+    group-id="7000104299"
+    theme-color="#88E108"
+    api-base="https://dev-courses-api.firesbox.com/v1"
+    ws-base="wss://dev-courses-ws.firesbox.com"
+  >
     <template #activator="{ on }">
       <button v-on="on">
         Custom Entry
