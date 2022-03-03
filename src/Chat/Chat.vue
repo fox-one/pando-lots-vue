@@ -24,6 +24,9 @@
       </div>
       <stream v-if="status === 'stream'" :urls="source" class="mt-6" @error="$emit('error', $event)" />
     </v-layout>
+    <div v-if="isReconnect" :class="classes('reconnect')">
+      {{ chatReconnect }}
+    </div>
     <f-scroll
       ref="scroll"
       :pulldown="false"
@@ -71,12 +74,13 @@ import {
   PropType,
   onMounted,
   ref,
+  toRefs,
   nextTick
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import { isMobile } from '@utils/ua';
 import { toThousandSeparator } from '@utils/number';
-import Socket from '@utils/socket';
+import Socket, { wsBase } from '@utils/socket';
 import { getToken, getUser } from '@utils/auth';
 import { FIconCrowdFill, FIconHorn4PFill, FIconBell, FIconChevronDown } from '@foxone/icons';
 import { VLayout, VMenu } from 'vuetify/lib';
@@ -154,18 +158,15 @@ export default defineComponent({
     themeColor: {
       type: String,
       default: '#F5F5F5',
-    },
-    wsBase: {
-      type: String,
-      default: 'wss://supergroup-api.mixin.fan',
     }
   },
   setup(props, ctx) {
-    const { group, chats, isLogin, wsBase } = props;
+    const { group, chats, isLogin } = toRefs(props);
     const classes = classnames('chat');
-    const userInfo = getUser(group.id);
-    const download = group.download;
-    const chatData = ref(chats.map(chat => {
+    const isReconnect = ref(false);
+    const userInfo = getUser(group.value.id);
+    const download = group.value.download;
+    const chatData = ref(chats.value.map(chat => {
       if (chat.speaker_id === userInfo?.user_id) chat.origin = 'self';
       return chat;
     }));
@@ -197,7 +198,7 @@ export default defineComponent({
       text:string;
     }) {
       let isRepeat = false;
-      const userInfo = getUser(group.id);
+      const userInfo = getUser(group.value.id);
       for (let i = chatData.value.length - 1; i >= 0; i--) {
         const chat = chatData.value[i];
         if (chat.id === msg.id) {
@@ -226,14 +227,33 @@ export default defineComponent({
     };
 
     const onfail = function () {
+      isReconnect.value = true;
       ctx.emit('error', { message: 'WebSocket connect failed!' });
+    };
+
+    const onerror = function () {
+      isReconnect.value = true;
+    };
+
+    const onconnected = function () {
+      isReconnect.value = false;
     };
 
     const connectSocket = () => {
       setTimeout(() => {
-        const url = `${wsBase}/${group.id}`;
-        isLogin && socket.value.connect(url, getToken(group.id), { onmessage, onfail });
+        const url = `${wsBase[group.value.id]}/${group.value.id}`;
+        isLogin.value && socket.value.connect(url, getToken(group.value.id), {
+          onmessage,
+          onfail,
+          onerror,
+          onconnected
+        });
       }, 100);
+    };
+
+    const closeSocket = () => {
+      isReconnect.value = false;
+      socket.value.disconnect();
     };
 
     onMounted(() => {
@@ -246,17 +266,20 @@ export default defineComponent({
     return {
       socket,
       classes,
+      isReconnect,
       scroll,
       menuParentRef,
       topRef,
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      chatLimit: $t('chat_limit', { total: '' + group.total_history }),
+      chatLimit: $t('chat_limit', { total: '' + group.value.total_history }),
+      chatReconnect: $t('chat_reconnect'),
       download,
       showMenu,
       isBottomIntersect,
       isMobile,
       chatData,
-      connectSocket
+      connectSocket,
+      closeSocket
     };
   },
   data: function() {
@@ -278,21 +301,18 @@ export default defineComponent({
       setTimeout(() => {
         this.scroll.scrollTo(0, this.scroll.scroll.maxScrollY, 100);
       }, 300);
+    },
+    isReconnect() {
+      this.calcHeight();
     }
   },
   mounted() {
-    this.height = this.getHeight();
     setTimeout(() => {
       this.height = this.getHeight();
     }, 100);
   },
   updated() {
-    if (!this.topRef?.clientHeight) return;
-    const height = this.getHeight();
-    if (this.height !== height) {
-      this.height = height;
-      this.refresh();
-    }
+    this.calcHeight();
   },
   methods: {
     refresh() {
@@ -302,10 +322,19 @@ export default defineComponent({
       const bottomHeight = this.isLogin ? 148 : 143;
       const topHeight = this.topRef?.clientHeight ?? this.topRef?.offsetHeight ?? 0;
       const gapHeight = isMobile ? 56 : 64;
-      return scrollWrapperHeight(gapHeight + topHeight + bottomHeight);
+      const bannerHeight = this.isReconnect ? 49 : 0;
+      return scrollWrapperHeight(gapHeight + topHeight + bannerHeight + bottomHeight);
     },
     handleBottomIntersect(entries: any) {
       this.isBottomIntersect = entries[0].isIntersecting;
+    },
+    calcHeight() {
+      if (!this.topRef?.clientHeight) return;
+      const height = this.getHeight();
+      if (this.height !== height) {
+        this.height = height;
+        this.refresh();
+      }
     }
   }
 });

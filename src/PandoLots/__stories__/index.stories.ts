@@ -36,7 +36,7 @@ storiesOf('PandoLots', module)
       <br /> 
       <pando-lots
         api-base="https://dev-courses-api.firesbox.com/v1"
-        ws-base="wss://xuexi-courses-ws.firesbox.com"
+        ws-base="wss://dev-courses-ws.firesbox.com"
         group-id="7000104299"
         theme-color="#88E108"
       />
@@ -48,6 +48,15 @@ storiesOf('PandoLots', module)
         ws-base="wss://supergroup-ws.mixin.fan"
         group-id="7000103488"
         theme-color="#00ceb7"
+      />
+      <br />
+      <br />
+      <br />
+      <pando-lots
+        group-id="7000103191"
+        theme-color="#9e9d24"
+        api-base="https://xuexi-courses-api.firesbox.com/v1"
+        ws-base="wss://xuexi-courses-ws.firesbox.com"
       />
     </div>`
   }))

@@ -30,7 +30,6 @@
           :source="source"
           :is-login="login"
           :theme-color="themeColor"
-          :ws-base="wsBase"
           @select:group="handleGroupChange"
           @preview="handlePreview"
           @error="$emit('error', $event)"
@@ -75,6 +74,7 @@ import {
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import { setApiBase } from '@utils/request';
+import { setWsBase } from '@utils/socket';
 import {
   isLogin,
   removeAuth,
@@ -146,8 +146,9 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const { type, groupId, apiBase } = props;
+    const { type, groupId, apiBase, wsBase } = props;
     setApiBase(groupId, apiBase);
+    setWsBase(groupId, wsBase);
     const classes = classnames();
     const loading = ref(true);
     const chatLoading = ref(false);
@@ -366,7 +367,7 @@ export default defineComponent({
     },
     handleLogout() {
       removeAuth(this.groupId);
-      this.chatDOM?.socket.disconnect();
+      this.chatDOM?.closeSocket();
       this.login = false;
     },
     async handleEntryClick(cb) {
@@ -387,9 +388,9 @@ export default defineComponent({
     async handleGroupChange(id: string) {
       this.currentGroupId = id;
       this.chatLoading = true;
+      this.chatDOM?.closeSocket();
       await this.requestHandler(id);
       this.chatLoading = false;
-      this.chatDOM?.socket.disconnect();
       this.chatDOM?.refresh();
       this.chatDOM?.connectSocket();
     },

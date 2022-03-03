@@ -56,7 +56,7 @@ class ConnectWallet extends Vue {
     }, 200);
   }
 
-  protected async handleAuth(type: string) {
+  protected handleAuth(type: string) {
     if (type === 'mixin') {
       setAuthGroup(this.groupId);
       bridge.login({
@@ -70,13 +70,15 @@ class ConnectWallet extends Vue {
       });
     } else if (type === 'fennec') {
       fennec.connect('Pando Lots');
-      const token = await fennec.ctx?.wallet?.signToken({
-        payload: { from: 'pando-lots' },
-      });
-      if (!token) {
-        return this.$emit('error', { message: 'fennec invalid token' });
-      }
-      this.$emit('login:fennec', token);
+      setTimeout(async () => {
+        const token = await fennec.ctx?.wallet?.signToken({
+          payload: { from: 'pando-lots' },
+        });
+        if (!token) {
+          return this.$emit('error', { message: 'fennec invalid token' });
+        }
+        this.$emit('login:fennec', token);
+      }, 300);
     }
   }
 }
