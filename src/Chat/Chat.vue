@@ -77,8 +77,6 @@ import classnames from '@utils/classnames';
 import { isMobile } from '@utils/ua';
 import { toThousandSeparator } from '@utils/number';
 import Socket from '@utils/socket';
-import { WS_BASE } from '@utils/constants';
-import { isDev } from '@utils/request';
 import { getToken, getUser } from '@utils/auth';
 import { FIconCrowdFill, FIconHorn4PFill, FIconBell, FIconChevronDown } from '@foxone/icons';
 import { VLayout, VMenu } from 'vuetify/lib';
@@ -156,10 +154,14 @@ export default defineComponent({
     themeColor: {
       type: String,
       default: '#F5F5F5',
+    },
+    wsBase: {
+      type: String,
+      default: 'wss://supergroup-api.mixin.fan',
     }
   },
   setup(props, ctx) {
-    const { group, chats, isLogin } = props;
+    const { group, chats, isLogin, wsBase } = props;
     const classes = classnames('chat');
     const userInfo = getUser(group.id);
     const download = group.download;
@@ -229,7 +231,7 @@ export default defineComponent({
 
     const connectSocket = () => {
       setTimeout(() => {
-        const url = `${WS_BASE[isDev ? 'dev' : 'prod']}/${group.id}`;
+        const url = `${wsBase}/${group.id}`;
         isLogin && socket.value.connect(url, getToken(group.id), { onmessage, onfail });
       }, 100);
     };

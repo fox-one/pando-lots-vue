@@ -7,7 +7,8 @@ export const getMessages = async function (groupId: string) {
     url: 'lots/latest_messages',
     headers: {
       group_id: groupId
-    }
+    },
+    group_id: groupId
   });
 };
 
@@ -37,7 +38,8 @@ export const authFennec = async function (groupId: string, token: string) {
     url: `/groups/${groupId}/auth/fennec`,
     data: {
       token
-    }
+    },
+    group_id: groupId
   }).then(res => {
     setToken({ token: res.token, groupId });
     return res;
@@ -50,27 +52,29 @@ export const authMixin = async function (groupId: string, code: string) {
     url: `/groups/${groupId}/auth/mixin`,
     data: {
       code
-    }
+    },
+    group_id: groupId
   }).then(res => {
     setToken({ token: res.token, groupId });
     return res;
   });
 };
 
-export const getUserInfo = async function (token?: string) {
+export const getUserInfo = async function (groupId: string, token?: string) {
   return request<API.User>({
     method: 'get',
     url: '/users/me',
-    token
+    token,
+    group_id: groupId
   });
 };
 
-export const getSettings = async function (token?: string, groupId?: string) {
+export const getSettings = async function (groupId: string, token?: string) {
   return request<API.GroupSettings>({
     method: 'get',
     url: '/settings/full',
     token,
-    group_id: groupId,
+    group_id: groupId
   });
 };
 
@@ -80,7 +84,8 @@ export const getStreamInfo = async function (groupId: string) {
     url: '/stream/info',
     headers: {
       group_id: groupId
-    }
+    },
+    group_id: groupId
   });
 };
 
@@ -90,7 +95,8 @@ export const getStreams = async function (groupId: string) {
     url: '/stream/urls',
     headers: {
       group_id: groupId
-    }
+    },
+    group_id: groupId
   });
 };
 

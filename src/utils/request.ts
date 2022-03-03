@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { getToken, removeAuth } from '@utils/auth';
-import { API_BASE, AUTH_FAIL } from './constants';
+import { AUTH_FAIL } from './constants';
 
-export let isDev = process.env.APP_ENV === 'development';
+const apiBase = {} as Record<string, string>;
 
-export function setDev(dev: boolean) {
-  isDev = dev;
+export function setApiBase(id: string, base: string) {
+  apiBase[id] = base;
 }
 
 const request = async function <T extends Record<string, any>>(opts): Promise<T> {
-  if (process.env.APP_ENV === 'development') isDev = true;
-
   const token = getToken(opts.group_id) || opts.token;
   let headers = {} as Record<string, any>;
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -19,7 +17,7 @@ const request = async function <T extends Record<string, any>>(opts): Promise<T>
   try {
     const res = await axios({
       method: opts.method || 'get',
-      baseURL: API_BASE[isDev ? 'dev' : 'prod'] || '',
+      baseURL: apiBase[opts.group_id] || '',
       url: opts.url || '',
       data: opts.data || {},
       headers,

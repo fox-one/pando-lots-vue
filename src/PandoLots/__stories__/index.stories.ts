@@ -25,11 +25,30 @@ storiesOf('PandoLots', module)
       <br /> 
       <br /> 
       <br /> 
-      <pando-lots dev group-id="7000103413" theme-color="#EE4596" />
+      <pando-lots
+        api-base="https://dev-courses-api.firesbox.com/v1"
+        ws-base="wss://dev-courses-ws.firesbox.com"
+        group-id="7000103413"
+        theme-color="#EE4596"
+      />
       <br /> 
       <br /> 
       <br /> 
-      <pando-lots dev group-id="7000104299" theme-color="#88E108" />
+      <pando-lots
+        api-base="https://dev-courses-api.firesbox.com/v1"
+        ws-base="wss://dev-courses-ws.firesbox.com"
+        group-id="7000104299"
+        theme-color="#88E108"
+      />
+      <br />
+      <br />
+      <br />
+      <pando-lots
+        api-base="https://supergroup-api.mixin.fan/v1"
+        ws-base="wss://supergroup-api.mixin.fan"
+        group-id="7000103488"
+        theme-color="#00ceb7"
+      />
     </div>`
   }))
   .add('button', () => ({
@@ -40,11 +59,11 @@ storiesOf('PandoLots', module)
       <br /> 
       <br /> 
       <br /> 
-      <pando-lots dev group-id="7000103413" type="button" theme-color="#EE4596" />
+      <pando-lots api-base="https://dev-courses-api.firesbox.com/v1" group-id="7000103413" type="button" theme-color="#EE4596" />
       <br /> 
       <br /> 
       <br /> 
-      <pando-lots dev group-id="7000104299" type="button" theme-color="#88E108" />
+      <pando-lots api-base="https://dev-courses-api.firesbox.com/v1" group-id="7000104299" type="button" theme-color="#88E108" />
     </div>`
   }))
   .add('custom entry', () => ({

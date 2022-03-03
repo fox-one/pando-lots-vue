@@ -30,6 +30,7 @@
           :source="source"
           :is-login="login"
           :theme-color="themeColor"
+          :ws-base="wsBase"
           @select:group="handleGroupChange"
           @preview="handlePreview"
           @error="$emit('error', $event)"
@@ -73,7 +74,7 @@ import {
   PropType
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
-import { setDev } from '@utils/request';
+import { setApiBase } from '@utils/request';
 import {
   isLogin,
   removeAuth,
@@ -135,14 +136,18 @@ export default defineComponent({
       type: String,
       default: '#F5F5F5',
     },
-    dev: {
-      type: Boolean,
-      default: false
+    apiBase: {
+      type: String,
+      default: 'https://supergroup-api.mixin.fan/v1',
+    },
+    wsBase: {
+      type: String,
+      default: 'wss://supergroup-api.mixin.fan',
     }
   },
   setup(props, ctx) {
-    const { type, groupId, dev } = props;
-    setDev(dev);
+    const { type, groupId, apiBase } = props;
+    setApiBase(groupId, apiBase);
     const classes = classnames();
     const loading = ref(true);
     const chatLoading = ref(false);
@@ -194,9 +199,9 @@ export default defineComponent({
         const [info, messages, urls, stream, settings] = await Promise.all([
           storeGroupInfo ? Promise.resolve(storeGroupInfo) : getGroupInfo(id),
           getMessages(id),
-          getStreams(id),
+          login.value ? getStreams(id).catch(() => ({})) : Promise.resolve({}),
           getStreamInfo(id),
-          login.value ? getSettings(void 0, id) : Promise.resolve({})
+          login.value ? getSettings(id, void 0) : Promise.resolve({})
         ]);
         if (!storeGroupInfo) states.setGroup(id, info);
 
@@ -395,8 +400,8 @@ export default defineComponent({
           if (res.token) {
             setToken({ token: res.token, groupId: this.groupId });
             const [user, settings, urls, stream] = await Promise.all([
-              getUserInfo(res.token),
-              getSettings(res.token, this.groupId),
+              getUserInfo(this.groupId, res.token),
+              getSettings(this.groupId, res.token),
               getStreams(this.groupId),
               getStreamInfo(this.groupId)
             ]);
