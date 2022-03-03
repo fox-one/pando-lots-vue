@@ -5,7 +5,7 @@
       <rect x="96" y="16" rx="3" ry="3" width="120" height="16" /> 
       <rect x="96" y="56" rx="3" ry="3" width="240" height="24" /> 
     </content-loader>
-    <v-layout v-else :class="classes(void 0, 'pa-4')" row align-center @click="$emit('click')">
+    <v-layout v-else :class="classes(void 0, 'px-4 py-3 ma-0')" row align-center @click="$emit('click')">
       <div :class="[classes('left', 'mr-4'), classes(status)].join(' ')" />
       <v-layout column align-start>
         <h3 :class="classes('title')">{{ `#${title}` }}</h3>
