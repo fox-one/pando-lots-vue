@@ -1,5 +1,36 @@
 @import '../../styles/variable.scss';
 
 .#{$prefix}-stream {
-  display: block;
+  background-color: #2e353f;
+  color: white;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  ::v-deep .player-btn-label {
+    content: " ";
+    height: 30px;
+    width: 30px;
+    background-image: url("../../assets/images/png/hd.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0 auto;
+    &.r-480p {
+      background-image: url("../../assets/images/png/480p.png");
+    }
+    &.r-720p {
+      background-image: url("../../assets/images/png/720p.png");
+    }
+    &.settings {
+      background-image: url("../../assets/images/png/settings.png");
+    }
+  }
+
+  &-player {
+    width: 100% !important;
+  }
+
+  .xgplayer-definition {
+    height: 164px;
+  }
 }

@@ -21,5 +21,9 @@ storiesOf('Stream', module)
     components: {
       Stream
     },
-    template: `<Stream>{{'Hello Stream'}}</Stream>`
+    template: `<stream :urls="{
+      'hls': 'https://pili-live-hls.pub-streaming.firesbox.com/xuexi-public/7000103413.m3u8',
+      'hls@480p': 'https://pili-live-hls.pub-streaming.firesbox.com/xuexi-public/7000103413@480p.m3u8',
+      'hls@720p': 'https://pili-live-hls.pub-streaming.firesbox.com/xuexi-public/7000103413@720p.m3u8'
+    }"/>`
   }));

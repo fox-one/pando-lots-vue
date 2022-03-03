@@ -12,6 +12,7 @@ import {
 } from '@vue/composition-api';
 import classnames from '@utils/classnames';
 import HlsPlayer from 'xgplayer-hls.js';
+// import './.xgplayer/skin';
 
 export default defineComponent({
   name: 'Stream',
@@ -46,7 +47,25 @@ export default defineComponent({
         preload: 'auto',
       });
 
-      player?.value.emit('resourceReady', urls);
+      const readyUrls = [
+        {
+          name: 'HD',
+          url: urls['hls'],
+          default: true,
+        },
+        {
+          name: '480p',
+          url: urls['hls@480p'],
+          default: false,
+        },
+        {
+          name: '720p',
+          url: urls['hls@720p'],
+          default: false,
+        },
+      ];
+
+      player?.value.emit('resourceReady', readyUrls);
 
       player?.value.on('play', () => {
         ctx.emit('play');
