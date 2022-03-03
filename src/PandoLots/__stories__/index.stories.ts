@@ -36,7 +36,7 @@ storiesOf('PandoLots', module)
       <br /> 
       <pando-lots
         api-base="https://dev-courses-api.firesbox.com/v1"
-        ws-base="wss://dev-courses-ws.firesbox.com"
+        ws-base="wss://xuexi-courses-ws.firesbox.com"
         group-id="7000104299"
         theme-color="#88E108"
       />
@@ -45,7 +45,7 @@ storiesOf('PandoLots', module)
       <br />
       <pando-lots
         api-base="https://supergroup-api.mixin.fan/v1"
-        ws-base="wss://supergroup-api.mixin.fan"
+        ws-base="wss://supergroup-ws.mixin.fan"
         group-id="7000103488"
         theme-color="#00ceb7"
       />
