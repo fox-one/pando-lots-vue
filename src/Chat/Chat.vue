@@ -16,7 +16,7 @@
       </h2>
       <div :class="classes('header-total', 'd-flex align-center mt-6')">
         <f-icon-crowd-fill style="width: 18px; height: 18px" />
-        <span class="ml-3">{{ total }}</span>
+        <span class="ml-3">{{ totalPerson }}</span>
       </div>
       <div :class="classes('header-id', 'd-flex align-center mt-4')">
         <f-icon-horn-4-p-fill style="width: 16px; height: 16px" />
@@ -132,6 +132,8 @@ export default defineComponent({
         name: string;
         total: number;
         download: string;
+        client_id: string
+        total_history: number;
       }>,
       default: () => ({})
     },
@@ -245,7 +247,8 @@ export default defineComponent({
       scroll,
       menuParentRef,
       topRef,
-      chatLimit: $t('chat_limit'),
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      chatLimit: $t('chat_limit', { total: '' + group.total_history }),
       download,
       showMenu,
       isBottomIntersect,
@@ -260,7 +263,7 @@ export default defineComponent({
     };
   },
   computed: {
-    total(): string {
+    totalPerson(): string {
       return toThousandSeparator(this.group.total ?? 0);
     },
     communityWithId(): string {

@@ -18,7 +18,7 @@
           />
         </slot>
       </template>
-      <hello-model v-if="showHelloModel" @click="handleFirstLogin" />
+      <hello-model v-if="showHelloModel" :total-history="groupInfo.total_history" @click="handleFirstLogin" />
       <section v-else-if="!loading" @click.stop>
         <chat
           ref="chatDOM"
@@ -165,7 +165,8 @@ export default defineComponent({
       id: '',
       total: 0,
       download: '',
-      client_id: ''
+      client_id: '',
+      total_history: 100
     });
     const groups = ref(getGroups());
     const source = ref<Record<string, string>>({});
@@ -222,7 +223,8 @@ export default defineComponent({
           id: info.identity_number,
           total: info.members_count.paid,
           download: isIOS ? info.app_info.download_url_ios : info.app_info.download_url_android,
-          client_id: info.client_id
+          client_id: info.client_id,
+          total_history: info.lots_history_messages_count ?? 100
         };
         // set group streams
         Object.keys(urls).forEach(k => {

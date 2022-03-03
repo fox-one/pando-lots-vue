@@ -48,6 +48,7 @@ declare namespace API {
     invite_to_join: boolean;
     invite_code_required: boolean;
     renew_enabled: boolean;
+    lots_history_messages_count: number;
     payments: {
       type: string;
       payment_url: string;
@@ -281,6 +282,7 @@ declare namespace API {
     tip_all_assets: boolean;
     'video-message-enabled': boolean;
     'welcome-message-url': string;
+    lots_history_messages_count: number;
   }
 
   export interface LiveStream {

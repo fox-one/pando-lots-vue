@@ -41,6 +41,12 @@ export default defineComponent({
     VImg,
     FScroll
   },
+  props: {
+    totalHistory: {
+      type: Number,
+      default: 100
+    }
+  },
   setup(props) {
     const classes = classnames('hello-model');
     const txt = {
@@ -48,7 +54,8 @@ export default defineComponent({
       desc: $t('hello_desc'),
       btn: $t('hello_button'),
       rule1: $t('hello_rules_1'),
-      rule2: $t('hello_rules_2'),
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      rule2: $t('hello_rules_2', { total: '' + props.totalHistory}),
       rule3: $t('hello_rules_3'),
     };
     const height = scrollWrapperHeight('30vh');
