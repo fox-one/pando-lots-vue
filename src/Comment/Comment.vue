@@ -1,5 +1,5 @@
 <template>
-  <v-layout :class="classes(void 0, 'pa-6')" column>
+  <v-layout :class="[classes(void 0, 'pa-6'), classes(isMobile ? 'mobile' : 'pc')].join(' ')" column>
     <v-layout class="mb-6" justify-space-between align-center>
       <v-text-field
         v-model="val"
@@ -60,6 +60,7 @@ import {
 } from '@vue/composition-api';
 import { VLayout, VTextField, VMenu } from 'vuetify/lib';
 import { FIconSetting, FIconPicture, FIconSendFill, FIconClear3PFill } from '@foxone/icons';
+import { isMobile } from '@utils/ua';
 import classnames from '@utils/classnames';
 import { $t } from '@locale/index';
 
@@ -118,7 +119,7 @@ export default defineComponent({
       }
     });
 
-    return { classes, isShowSend, val, wrapper, settings };
+    return { classes, isShowSend, val, wrapper, settings, isMobile };
   },
   computed: {
     disabled(): boolean {

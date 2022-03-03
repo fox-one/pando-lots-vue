@@ -6,6 +6,11 @@
   color: #000;
   background-color: #FFF;
   border-top: 1px solid #F5F5F5;
+
+  &-pc {
+    max-width: 400px;
+  }
+
   &-input {
     .v-input__control {
       height: 51px;
