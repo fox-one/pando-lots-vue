@@ -132,6 +132,10 @@ export default defineComponent({
       type: String,
       default: ''
     },
+    clientId: {
+      type: String,
+      default: ''
+    },
     themeColor: {
       type: String,
       default: '#F5F5F5',
@@ -146,7 +150,7 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const { type, groupId, apiBase, wsBase } = props;
+    const { type, groupId, clientId, apiBase, wsBase } = props;
     setApiBase(groupId, apiBase);
     setWsBase(groupId, wsBase);
     const classes = classnames();
@@ -187,12 +191,12 @@ export default defineComponent({
         total: 0
       }
     });
-    
+
     if (!login.value && getStore('first_login') == void 0) {
       setStore('first_login', true);
     }
 
-    const requestHandler = async (id: string) => {
+    const requestHandler = async (id: string, clientId:string) => {
       login.value = isLogin(id);
       userInfo.value = getUser(id);
       try {
@@ -229,7 +233,7 @@ export default defineComponent({
           id: info.identity_number,
           total: info.members_count.paid,
           download: isIOS ? info.app_info.download_url_ios : info.app_info.download_url_android,
-          client_id: info.client_id,
+          client_id: clientId || info.client_id,
           total_history: info.lots_history_messages_count ?? 100
         };
         // set group streams
@@ -266,7 +270,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      const { info } = await requestHandler(groupId) || {};
+      const { info } = await requestHandler(groupId, clientId) || {};
       entryData.value.title = info?.name ?? '';
       const count = type === 'button' ? 2 : 3;
       // empty string is placeholder for empty active_users cases
@@ -311,7 +315,7 @@ export default defineComponent({
       if (!val) return;
       sendMessage(this.groupId, {
         category: 'PLAIN_TEXT',
-        data: encode(val) 
+        data: encode(val)
       }).then((res) => {
         this.chats.push({
           ...res,
@@ -381,15 +385,15 @@ export default defineComponent({
       }
       this.groups = groups;
       if (this.currentGroupId !== this.groupId) {
-        this.handleGroupChange(this.groupId);
+        this.handleGroupChange(this.groupId, this.clientId);
       }
       cb();
     },
-    async handleGroupChange(id: string) {
+    async handleGroupChange(id: string, clientId:string) {
       this.currentGroupId = id;
       this.chatLoading = true;
       this.chatDOM?.closeSocket();
-      await this.requestHandler(id);
+      await this.requestHandler(id, clientId);
       this.chatLoading = false;
       this.chatDOM?.refresh();
       this.chatDOM?.connectSocket();

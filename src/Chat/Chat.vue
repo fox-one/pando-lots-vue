@@ -58,7 +58,7 @@
           v-for="(val, name) in groups"
           :key="name"
           :class="[classes('menu-item', 'py-3 d-flex justify-space-between align-center'), val.id === group.id ? classes('menu-item-active') : ''].join(' ')"
-          @click="$emit('select:group', val.id)"
+          @click="$emit('select:group', val.id, val.client_id)"
         >
           <span>{{ `#${val.name}` }}</span>
           <i v-if="val.id === group.id" :class="classes('menu-item-icon')" />
