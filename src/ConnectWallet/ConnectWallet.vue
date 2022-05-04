@@ -1,5 +1,11 @@
 <template>
-  <f-auth-method-modal :fennec="hasFennec" @auth="handleAuth">
+  <f-auth-method-modal :fennec="hasFennec"
+                       :client-id="clientId"
+                       :scope="scope"
+                       :is-firesbox="false"
+                       @auth="handleAuth"
+                       @error="handleError"
+  >
     <template #activator="{ on }">
       <div :class="classes(void 0, 'd-flex align-center justify-center')">
         <f-button :loading="loading" height="56" :class="classes('btn')" v-on="on"> {{ btnText }} </f-button>
@@ -36,6 +42,8 @@ class ConnectWallet extends Vue {
 
   @Prop({ type: Boolean, default: false }) protected loading!: string;
 
+  @Prop({ type: String, default: 'PROFILE:READ+MESSAGES:REPRESENT' }) protected scope!: string;
+
   protected hasFennec = false;
 
   protected classes = classnames('connect-wallet');
@@ -56,8 +64,8 @@ class ConnectWallet extends Vue {
     }, 200);
   }
 
-  protected handleAuth(type: string) {
-    if (type === 'mixin') {
+  protected handleAuth(type: any) {
+    if (type.value === 'mixin') {
       setAuthGroup(this.groupId);
       bridge.login({
         profile: true,
@@ -68,7 +76,7 @@ class ConnectWallet extends Vue {
         state: `pando_lots_url:${location.href}`,
         code_challenge: false
       });
-    } else if (type === 'fennec') {
+    } else if (type.value === 'fennec') {
       fennec.connect('Pando Lots');
       setTimeout(async () => {
         const token = await fennec.ctx?.wallet?.signToken({
@@ -80,6 +88,10 @@ class ConnectWallet extends Vue {
         this.$emit('login:fennec', token);
       }, 300);
     }
+  }
+
+  protected handleError(err) {
+    // console.log(err);
   }
 }
 export default ConnectWallet;
