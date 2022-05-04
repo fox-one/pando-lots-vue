@@ -236,6 +236,7 @@ export default defineComponent({
           client_id: clientId || info.client_id,
           total_history: info.lots_history_messages_count ?? 100
         };
+        (console as any).log(groupInfo);
         // set group streams
         Object.keys(urls).forEach(k => {
           if (~k.indexOf('hls')) {
@@ -270,6 +271,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      (console as any).log('onMounted', groupId, clientId);
       const { info } = await requestHandler(groupId, clientId) || {};
       entryData.value.title = info?.name ?? '';
       const count = type === 'button' ? 2 : 3;

@@ -65,6 +65,7 @@ class ConnectWallet extends Vue {
   }
 
   protected handleAuth(type: any) {
+    (console as any).log(type, this.groupId, this.clientId);
     if (type.value === 'mixin') {
       setAuthGroup(this.groupId);
       bridge.login({
