@@ -55,7 +55,7 @@ class ConnectWallet extends Vue {
   protected handleAuth({type, code}) {
     if (type === 'mixin') {
       this.$emit('login:mixin', code);
-    } else if (type.value === 'fennec') {
+    } else if (type === 'fennec') {
       fennec.connect('Pando Lots');
       setTimeout(async () => {
         const token = await fennec.ctx?.wallet?.signToken({
