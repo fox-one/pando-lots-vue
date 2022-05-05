@@ -49,6 +49,7 @@
           v-else
           :group-id="groupInfo.id"
           :client-id="groupInfo.client_id"
+          :scope="groupInfo.scope"
           :loading="loginLoading"
           @login:mixin="handleLogin('mixin', $event)"
           @login:fennec="handleLogin('fennec', $event)"
@@ -176,6 +177,7 @@ export default defineComponent({
       total: 0,
       download: '',
       client_id: '',
+      scope: '',
       total_history: 100
     });
     const groups = ref(getGroups());
@@ -234,9 +236,9 @@ export default defineComponent({
           total: info.members_count.paid,
           download: isIOS ? info.app_info.download_url_ios : info.app_info.download_url_android,
           client_id: clientId || info.client_id,
-          total_history: info.lots_history_messages_count ?? 100
+          total_history: info.lots_history_messages_count ?? 100,
+          scope: info.mixin_oauth_scope.replace(/\+/g, ' ')
         };
-        (console as any).log(groupInfo);
         // set group streams
         Object.keys(urls).forEach(k => {
           if (~k.indexOf('hls')) {
@@ -271,7 +273,6 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      (console as any).log('onMounted', groupId, clientId);
       const { info } = await requestHandler(groupId, clientId) || {};
       entryData.value.title = info?.name ?? '';
       const count = type === 'button' ? 2 : 3;

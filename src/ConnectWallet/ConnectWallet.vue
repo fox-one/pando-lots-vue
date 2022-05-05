@@ -1,10 +1,11 @@
 <template>
-  <f-auth-method-modal :fennec="hasFennec"
-                       :client-id="clientId"
-                       :scope="scope"
-                       :is-firesbox="false"
-                       @auth="handleAuth"
-                       @error="handleError"
+  <f-auth-method-modal 
+    :fennec="hasFennec"
+    :client-id="clientId"
+    :scope="scope"
+    :is-firesbox="false"
+    @auth="handleAuth"
+    @error="handleError"
   >
     <template #activator="{ on }">
       <div :class="classes(void 0, 'd-flex align-center justify-center')">
@@ -19,13 +20,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { VIcon } from 'vuetify/lib';
 import classnames from '@utils/classnames';
 import fennec from '@utils/fennec';
-import bridge from '@utils/bridge';
-import {
-  setAuthGroup,
-  getAuthGroup,
-  removeAuthGroup
-} from '@utils/auth';
-import { getQuerystring, removeQuery } from '@utils/helper';
 import { $t } from '@locale/index';
 
 @Component({
@@ -40,7 +34,7 @@ class ConnectWallet extends Vue {
 
   @Prop({ type: String, default: '' }) protected groupId!: string;
 
-  @Prop({ type: Boolean, default: false }) protected loading!: string;
+  @Prop({ type: Boolean, default: false }) protected loading!: boolean;
 
   @Prop({ type: String, default: 'PROFILE:READ+MESSAGES:REPRESENT' }) protected scope!: string;
 
@@ -53,30 +47,14 @@ class ConnectWallet extends Vue {
   }
 
   public mounted () {
-    const code = getQuerystring('pando_lots_code');
-    if (code && this.groupId === getAuthGroup()) {
-      removeAuthGroup();
-      this.$emit('login:mixin', code);
-      removeQuery('pando_lots_code');
-    }
     setTimeout(() => {
       this.hasFennec = fennec?.isAvailable() ?? false;
     }, 200);
   }
 
-  protected handleAuth(type: any) {
-    (console as any).log(type, this.groupId, this.clientId);
-    if (type.value === 'mixin') {
-      setAuthGroup(this.groupId);
-      bridge.login({
-        profile: true,
-        messages: true,
-        phone: true
-      }, {
-        client_id: this.clientId,
-        state: `pando_lots_url:${location.href}`,
-        code_challenge: false
-      });
+  protected handleAuth({type, code}) {
+    if (type === 'mixin') {
+      this.$emit('login:mixin', code);
     } else if (type.value === 'fennec') {
       fennec.connect('Pando Lots');
       setTimeout(async () => {
@@ -92,7 +70,7 @@ class ConnectWallet extends Vue {
   }
 
   protected handleError(err) {
-    // console.log(err);
+    this.$emit('error');
   }
 }
 export default ConnectWallet;
